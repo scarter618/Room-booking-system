@@ -153,13 +153,17 @@ let S={view:'setup',config:null,msalInstance:null,account:null,token:null,rooms:
 async function loadCfg(){try{const r=await window.storage.get('oq-rooms-cfg');if(r)return JSON.parse(r.value);}catch(e){}return null;}
 async function saveCfg(c){try{await window.storage.set('oq-rooms-cfg',JSON.stringify(c));}catch(e){}}
 
-function initMsal(tid,cid){
+async function initMsal(tid,cid){
   if(window.__msalFailed||!window.msal)return false;
-  try{S.msalInstance=new msal.PublicClientApplication({auth:{clientId:cid,authority:`https://login.microsoftonline.com/${tid}`,redirectUri:location.href.split('?')[0].split('#')[0]},cache:{cacheLocation:'sessionStorage'}});return true;}
-  catch(e){return false;}
+  try{
+    S.msalInstance=new msal.PublicClientApplication({auth:{clientId:cid,authority:`https://login.microsoftonline.com/${tid}`,redirectUri:location.href.split('?')[0].split('#')[0]},cache:{cacheLocation:'sessionStorage'}});
+    await S.msalInstance.initialize();
+    return true;
+  }catch(e){console.error('MSAL init error:',e);return false;}
 }
 async function signIn(tid,cid){
-  if(!initMsal(tid,cid))throw new Error('MSAL library failed to load');
+  const ok=await initMsal(tid,cid);
+  if(!ok)throw new Error('MSAL library failed to load');
   const r=await S.msalInstance.loginPopup({scopes:['https://graph.microsoft.com/Calendars.ReadWrite','https://graph.microsoft.com/Place.Read.All']});
   S.account=r.account;return r.accessToken;
 }
