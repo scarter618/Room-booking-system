@@ -178,10 +178,18 @@ async function initMsal(tid,cid){
     return true;
   }catch(e){console.error('MSAL init error:',e);return false;}
 }
+function isMobile(){return/Mobi|Android|iPad|iPhone|Tablet/i.test(navigator.userAgent)||window.innerWidth<900;}
 async function signIn(tid,cid){
   const ok=await initMsal(tid,cid);
   if(!ok)throw new Error('MSAL library failed to load');
-  const r=await S.msalInstance.loginPopup({scopes:['https://graph.microsoft.com/Calendars.ReadWrite','https://graph.microsoft.com/Place.Read.All']});
+  const scopes=['https://graph.microsoft.com/Calendars.ReadWrite','https://graph.microsoft.com/Place.Read.All'];
+  if(isMobile()){
+    // Save config for after redirect returns
+    sessionStorage.setItem('oq-pending-cfg',JSON.stringify({tenantId:tid,clientId:cid}));
+    await S.msalInstance.loginRedirect({scopes});
+    return null; // page will reload after redirect
+  }
+  const r=await S.msalInstance.loginPopup({scopes});
   S.account=r.account;return r.accessToken;
 }
 async function getToken(){
@@ -631,7 +639,31 @@ return{
     try{await cancelEvent(S.config.rooms[i].email,eid);await loadRoom(i,new Date());render();}
     catch(e){alert('Could not cancel: '+e.message);}
   },
-  init:()=>render()
+  init:async()=>{
+    // Handle redirect return from Microsoft login
+    const pendingCfg=sessionStorage.getItem('oq-pending-cfg');
+    if(pendingCfg&&window.msal){
+      try{
+        const cfg=JSON.parse(pendingCfg);
+        const ok=await initMsal(cfg.tenantId,cfg.clientId);
+        if(ok){
+          const result=await S.msalInstance.handleRedirectPromise();
+          if(result&&result.account){
+            sessionStorage.removeItem('oq-pending-cfg');
+            S.account=result.account;
+            S.config=cfg;
+            const tk=result.accessToken;
+            await afterAuth(cfg,tk);
+            return;
+          }
+        }
+      }catch(e){
+        sessionStorage.removeItem('oq-pending-cfg');
+        console.error('Redirect handle error:',e);
+      }
+    }
+    render();
+  }
 };
 })();
 window.A=App;App.init();
