@@ -1,1 +1,866 @@
-<!-- placeholder -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Room Booking · Oqtima</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+<script src="https://alcdn.msauth.net/browser/3.26.1/js/msal-browser.min.js" onerror="window.__msalFailed=true"></script>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#07111e;--s1:#0e1c30;--s2:#162540;--s3:#1e3050;
+  --bdr:rgba(100,160,220,0.1);--bdr2:rgba(100,160,220,0.18);
+  --accent:#00d4b1;--ad:rgba(0,212,177,0.12);--ab:rgba(0,212,177,0.22);
+  --red:#ff3359;--rd:rgba(255,51,89,0.12);--rb:rgba(255,51,89,0.22);
+  --amber:#ffb020;
+  --tx:#d4e4f7;--tx2:#6688aa;--tx3:#3a5068;
+  --ff:'Syne',sans-serif;--fm:'JetBrains Mono',monospace;
+  --r:10px;--r2:14px;
+}
+html,body{height:100%;background:var(--bg);color:var(--tx);font-family:var(--ff)}
+a{color:var(--accent);text-decoration:none}
+input,button,select{font-family:inherit}
+
+/* NAV */
+.nav{display:flex;align-items:center;justify-content:space-between;padding:0 24px;height:56px;background:var(--s1);border-bottom:1px solid var(--bdr);position:sticky;top:0;z-index:100}
+.nav-brand{font-weight:800;font-size:15px;letter-spacing:.05em;color:var(--accent);display:flex;align-items:center;gap:8px}
+.nav-tabs{display:flex;gap:4px}
+.nav-tab{padding:6px 16px;border-radius:7px;border:none;cursor:pointer;font-family:var(--ff);font-size:13px;font-weight:600;color:var(--tx2);background:transparent;transition:all .15s}
+.nav-tab:hover{color:var(--tx);background:var(--s2)}
+.nav-tab.active{color:var(--accent);background:var(--ad)}
+.nav-right{display:flex;align-items:center;gap:10px}
+.nav-user-info{font-size:12px;color:var(--tx2);font-family:var(--fm)}
+.btn-nav{background:none;border:1px solid var(--bdr2);color:var(--tx2);padding:4px 12px;border-radius:6px;font-size:12px;cursor:pointer;transition:all .15s}
+.btn-nav:hover{border-color:var(--red);color:var(--red)}
+.btn-nav-ghost{background:none;border:1px solid var(--bdr2);color:var(--tx2);padding:4px 12px;border-radius:6px;font-size:12px;cursor:pointer;transition:all .15s}
+.btn-nav-ghost:hover{border-color:var(--accent);color:var(--accent)}
+
+/* MAIN */
+.main{padding:28px 24px;max-width:1120px;margin:0 auto;width:100%}
+
+/* BUTTONS */
+.btn{padding:10px 22px;border-radius:var(--r);border:none;cursor:pointer;font-family:var(--ff);font-size:13px;font-weight:700;transition:all .15s;display:inline-flex;align-items:center;gap:8px}
+.btn-primary{background:var(--accent);color:#07111e}
+.btn-primary:hover{filter:brightness(1.1);transform:translateY(-1px)}
+.btn-primary:disabled{opacity:.4;cursor:not-allowed;transform:none}
+.btn-ghost{background:var(--s2);color:var(--tx2);border:1px solid var(--bdr2)}
+.btn-ghost:hover{background:var(--s3);color:var(--tx)}
+.btn-danger{background:var(--rd);color:var(--red);border:1px solid var(--rb)}
+.btn-danger:hover{background:var(--red);color:#fff}
+.btn-full{width:100%;justify-content:center}
+.btn-sm{padding:5px 12px;font-size:12px}
+.icon-btn{background:var(--s2);border:1px solid var(--bdr);color:var(--tx2);width:32px;height:32px;border-radius:7px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .15s;font-size:16px}
+.icon-btn:hover{color:var(--tx);background:var(--s3)}
+
+/* FORMS */
+.form-group{margin-bottom:16px}
+.form-label{font-size:11px;font-weight:700;color:var(--tx2);letter-spacing:.08em;text-transform:uppercase;margin-bottom:6px;display:block}
+.form-input{width:100%;padding:10px 14px;border-radius:var(--r);background:var(--bg);border:1px solid var(--bdr2);color:var(--tx);font-family:var(--fm);font-size:13px;outline:none;transition:border-color .15s}
+.form-input:focus{border-color:var(--accent)}
+.form-input::placeholder{color:var(--tx3)}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.form-divider{border:none;border-top:1px solid var(--bdr);margin:22px 0}
+.form-section{font-size:11px;font-weight:700;color:var(--tx2);letter-spacing:.08em;text-transform:uppercase;margin-bottom:14px;display:flex;align-items:center;gap:8px}
+.form-section::before{content:'';display:block;width:14px;height:2px;background:var(--accent)}
+
+/* SETUP */
+.setup{max-width:480px;margin:50px auto;background:var(--s1);border:1px solid var(--bdr2);border-radius:18px;padding:38px}
+.setup-logo{font-size:28px;margin-bottom:6px}
+.setup-title{font-size:21px;font-weight:800;margin-bottom:4px}
+.setup-sub{color:var(--tx2);font-size:13px;margin-bottom:28px}
+.hint-box{padding:12px 16px;background:var(--ad);border:1px solid var(--ab);border-radius:var(--r);font-size:12px;color:var(--tx2);line-height:1.7;margin-top:18px}
+.hint-box code{font-family:var(--fm);color:var(--accent);font-size:11px;background:rgba(0,212,177,.1);padding:1px 5px;border-radius:4px;word-break:break-all}
+.divider-or{text-align:center;font-size:12px;color:var(--tx3);margin:14px 0;position:relative}
+.divider-or::before,.divider-or::after{content:'';position:absolute;top:50%;width:40%;height:1px;background:var(--bdr)}
+.divider-or::before{left:0}.divider-or::after{right:0}
+
+/* ROOM PICKER */
+.picker{max-width:600px;margin:40px auto;background:var(--s1);border:1px solid var(--bdr2);border-radius:18px;padding:38px}
+.picker-title{font-size:19px;font-weight:800;margin-bottom:6px}
+.picker-sub{color:var(--tx2);font-size:13px;margin-bottom:26px}
+.room-list{display:flex;flex-direction:column;gap:8px;margin-bottom:22px;max-height:360px;overflow-y:auto}
+.room-item{display:flex;align-items:center;gap:14px;padding:13px 16px;border-radius:var(--r);border:1.5px solid var(--bdr);cursor:pointer;transition:all .15s;background:var(--s2)}
+.room-item:hover{border-color:rgba(0,212,177,.3)}
+.room-item.picked{border-color:var(--accent);background:var(--ad)}
+.room-item-check{width:20px;height:20px;border-radius:5px;border:2px solid var(--bdr2);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:12px;transition:all .15s}
+.room-item.picked .room-item-check{background:var(--accent);border-color:var(--accent);color:#07111e}
+.room-item-info{flex:1}
+.room-item-name{font-weight:700;font-size:14px}
+.room-item-meta{font-size:11px;color:var(--tx2);margin-top:2px;font-family:var(--fm)}
+.room-item-cap{font-size:12px;color:var(--tx3);margin-left:auto;font-family:var(--fm)}
+.pick-count{font-size:12px;color:var(--tx2);margin-bottom:14px}
+.pick-count strong{color:var(--accent)}
+
+/* CARDS */
+.card{background:var(--s1);border:1px solid var(--bdr);border-radius:var(--r2);padding:22px;margin-bottom:16px}
+.card-title{font-size:11px;font-weight:700;color:var(--tx2);text-transform:uppercase;letter-spacing:.07em;margin-bottom:16px;display:flex;align-items:center;gap:8px}
+.card-title::before{content:'';display:block;width:3px;height:14px;border-radius:2px;background:var(--accent)}
+
+/* ALERTS */
+.error-box{padding:12px 16px;background:var(--rd);border:1px solid var(--rb);border-radius:var(--r);color:var(--red);font-size:13px;margin-bottom:14px}
+.success-box{padding:12px 16px;background:var(--ad);border:1px solid var(--ab);border-radius:var(--r);color:var(--accent);font-size:13px;margin-bottom:14px}
+.warn-box{padding:12px 16px;background:rgba(255,176,32,.1);border:1px solid rgba(255,176,32,.3);border-radius:var(--r);color:var(--amber);font-size:13px;margin-bottom:14px}
+
+/* BADGES */
+.badge{display:inline-flex;align-items:center;gap:7px;padding:6px 14px;border-radius:20px;font-size:12px;font-weight:700;letter-spacing:.04em}
+.badge-available{background:var(--ad);color:var(--accent);border:1px solid var(--ab)}
+.badge-busy{background:var(--rd);color:var(--red);border:1px solid var(--rb)}
+.dot{width:7px;height:7px;border-radius:50%;flex-shrink:0}
+.dot-available{background:var(--accent);animation:pulse-g 2s infinite}
+.dot-busy{background:var(--red);animation:pulse-r 2s infinite}
+@keyframes pulse-g{0%,100%{box-shadow:0 0 0 0 rgba(0,212,177,.5)}50%{box-shadow:0 0 0 6px rgba(0,212,177,0)}}
+@keyframes pulse-r{0%,100%{box-shadow:0 0 0 0 rgba(255,51,89,.5)}50%{box-shadow:0 0 0 6px rgba(255,51,89,0)}}
+
+/* PANEL */
+.panel-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+.room-panel{background:var(--s1);border:1px solid var(--bdr);border-radius:18px;overflow:hidden;transition:border-color .3s}
+.room-panel.available{border-color:var(--ab)}
+.room-panel.busy{border-color:var(--rb)}
+.rp-head{padding:22px 24px;display:flex;justify-content:space-between;align-items:flex-start}
+.rp-name{font-size:20px;font-weight:800}
+.rp-cap{font-size:12px;color:var(--tx2);margin-top:3px}
+.rp-body{padding:0 24px 22px}
+.rp-divider{border:none;border-top:1px solid var(--bdr);margin:0 0 18px}
+.rp-label{font-size:10px;font-weight:700;color:var(--tx3);text-transform:uppercase;letter-spacing:.12em;margin-bottom:6px}
+.rp-title{font-size:18px;font-weight:700;line-height:1.3;margin-bottom:6px}
+.rp-meta{font-family:var(--fm);font-size:12px;color:var(--tx2)}
+.rp-free{font-size:26px;font-weight:800;color:var(--accent);margin-bottom:4px}
+.rp-next{font-size:13px;color:var(--tx2);margin-top:8px}
+.rp-next strong{color:var(--tx)}
+.progress{height:4px;background:var(--s3);border-radius:2px;margin-top:12px;overflow:hidden}
+.progress-fill{height:100%;border-radius:2px;transition:width 1s linear}
+.progress-fill.busy{background:var(--red)}
+.rp-foot{padding:14px 24px;border-top:1px solid var(--bdr);display:flex;gap:8px;background:var(--s2)}
+
+/* BOOKING */
+.booking-layout{display:grid;grid-template-columns:270px 1fr;gap:20px;align-items:start}
+.room-opt{padding:11px 15px;border-radius:var(--r);border:1.5px solid var(--bdr);cursor:pointer;transition:all .15s;display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
+.room-opt:hover,.room-opt.sel{border-color:var(--accent);background:var(--ad)}
+.room-opt-name{font-weight:700;font-size:14px}
+.room-opt-s{font-size:11px;font-weight:600}
+.room-opt-s.available{color:var(--accent)}
+.room-opt-s.busy{color:var(--red)}
+.date-nav{display:flex;align-items:center;gap:8px;margin-bottom:8px}
+.date-nav-btn{background:var(--s2);border:1px solid var(--bdr);color:var(--tx2);width:30px;height:30px;border-radius:6px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .15s;font-size:15px}
+.date-nav-btn:hover{background:var(--s3);color:var(--tx)}
+.date-display{flex:1;text-align:center;font-weight:700;font-size:14px}
+
+/* TIMELINE */
+.timeline-wrap{margin-top:8px}
+.timeline-labels{display:flex;justify-content:space-between;margin-bottom:5px}
+.tl-hour{font-family:var(--fm);font-size:10px;color:var(--tx3)}
+.timeline-track{height:42px;background:var(--s2);border-radius:7px;position:relative;overflow:hidden;border:1px solid var(--bdr)}
+.tl-now{position:absolute;top:0;bottom:0;width:2px;background:var(--amber);z-index:2}
+.tl-event{position:absolute;top:5px;bottom:5px;border-radius:4px;display:flex;align-items:center;padding:0 7px;overflow:hidden;font-size:10px;font-weight:600;white-space:nowrap;cursor:default}
+.tl-event.busy{background:var(--red);color:#fff}
+
+/* SLOTS */
+.duration-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:7px}
+.dur-btn{padding:9px 6px;text-align:center;border-radius:8px;border:1.5px solid var(--bdr);cursor:pointer;transition:all .15s;font-size:13px;font-weight:600;font-family:var(--fm)}
+.dur-btn:hover,.dur-btn.sel{border-color:var(--accent);background:var(--ad);color:var(--accent)}
+.slot-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:6px;max-height:180px;overflow-y:auto}
+.slot-btn{padding:8px 5px;text-align:center;border-radius:7px;border:1px solid var(--bdr);cursor:pointer;font-family:var(--fm);font-size:11px;transition:all .15s;color:var(--tx2)}
+.slot-btn:hover{background:var(--ad);border-color:rgba(0,212,177,.3);color:var(--tx)}
+.slot-btn.sel{background:var(--ad);border-color:var(--accent);color:var(--accent)}
+.slot-btn.busy{background:var(--rd);color:var(--tx3);cursor:not-allowed;opacity:.5}
+.booking-confirm{border-color:rgba(0,212,177,.3)!important}
+.booking-details{display:flex;margin-bottom:18px;background:var(--s2);border-radius:var(--r);overflow:hidden;border:1px solid var(--bdr)}
+.bd-item{padding:12px 16px;flex:1;border-right:1px solid var(--bdr)}
+.bd-item:last-child{border-right:none}
+.bd-label{font-size:10px;font-weight:700;color:var(--tx3);text-transform:uppercase;letter-spacing:.1em;margin-bottom:4px}
+.bd-value{font-weight:700;font-size:13px;font-family:var(--fm)}
+
+/* ADMIN */
+.stats-row{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:22px}
+.stat-card{background:var(--s1);border:1px solid var(--bdr);border-radius:var(--r2);padding:18px 20px}
+.stat-value{font-size:30px;font-weight:800;font-family:var(--fm)}
+.stat-label{font-size:11px;color:var(--tx2);font-weight:600;text-transform:uppercase;letter-spacing:.06em;margin-top:4px}
+.admin-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+.events-list{margin-top:14px;display:flex;flex-direction:column;gap:7px}
+.ev-item{display:flex;justify-content:space-between;align-items:center;padding:11px 15px;background:var(--s2);border-radius:var(--r);border:1px solid var(--bdr)}
+.ev-item.current{border-color:var(--rb);background:var(--rd)}
+.ev-title{font-weight:700;font-size:13px;margin-bottom:2px}
+.ev-meta{font-family:var(--fm);font-size:11px;color:var(--tx2)}
+.ev-org{font-size:11px;color:var(--tx3);margin-top:1px}
+.empty{text-align:center;padding:28px;color:var(--tx3);font-size:13px}
+
+/* LOADING */
+.loading{text-align:center;padding:48px 20px;color:var(--tx2)}
+.spinner{width:32px;height:32px;border:3px solid var(--s3);border-top-color:var(--accent);border-radius:50%;animation:spin .8s linear infinite;margin:0 auto 14px}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+@media(max-width:750px){
+  .panel-grid,.admin-grid,.booking-layout{grid-template-columns:1fr}
+  .form-row{grid-template-columns:1fr}
+  .nav-tabs{display:none}
+}
+</style>
+</head>
+<body>
+<div id="app"></div>
+<script>
+const App = (() => {
+
+// ─── STATE ───────────────────────────────────────────
+let S = {
+  view: 'setup',        // setup | pick | panel | booking | admin
+  config: null,         // { tenantId, clientId, rooms: [{name,email,capacity,id}] }
+  msalInstance: null,
+  account: null,
+  token: null,
+  allRooms: [],         // fetched from Places API
+  pickedIdxs: [],       // indices into allRooms for selected rooms (up to 4, default 2)
+  rooms: [],            // active room data [{events,loading,error}]
+  selRoom: 0,
+  bookDate: new Date(),
+  bookStart: null,
+  bookDur: 60,
+  bookMsg: null,
+  setupErr: null,
+  placesErr: null,
+  refreshId: null,
+  clockId: null
+};
+
+// ─── STORAGE ─────────────────────────────────────────
+async function loadCfg() {
+  try { const r = await window.storage.get('oq-rooms-cfg2'); if(r) return JSON.parse(r.value); } catch(e){}
+  return null;
+}
+async function saveCfg(cfg) {
+  try { await window.storage.set('oq-rooms-cfg2', JSON.stringify(cfg)); } catch(e){}
+}
+
+// ─── MSAL ─────────────────────────────────────────────
+function initMsal(cfg) {
+  if (window.__msalFailed || !window.msal) return false;
+  try {
+    S.msalInstance = new msal.PublicClientApplication({
+      auth: {
+        clientId: cfg.clientId,
+        authority: `https://login.microsoftonline.com/${cfg.tenantId}`,
+        redirectUri: location.href.split('?')[0].split('#')[0]
+      },
+      cache: { cacheLocation: 'sessionStorage' }
+    });
+    return true;
+  } catch(e) { return false; }
+}
+
+async function signIn(cfg) {
+  if (!initMsal(cfg)) throw new Error('MSAL library unavailable — use token mode.');
+  const r = await S.msalInstance.loginPopup({
+    scopes: ['https://graph.microsoft.com/Calendars.ReadWrite','https://graph.microsoft.com/Place.Read.All']
+  });
+  S.account = r.account;
+}
+
+async function getToken() {
+  if (S.token && !S.msalInstance) return S.token;
+  if (!S.msalInstance) throw new Error('Not authenticated');
+  try {
+    const r = await S.msalInstance.acquireTokenSilent({
+      scopes: ['https://graph.microsoft.com/Calendars.ReadWrite','https://graph.microsoft.com/Place.Read.All'],
+      account: S.account
+    });
+    return r.accessToken;
+  } catch(e) {
+    const r = await S.msalInstance.acquireTokenPopup({
+      scopes: ['https://graph.microsoft.com/Calendars.ReadWrite','https://graph.microsoft.com/Place.Read.All'],
+      account: S.account
+    });
+    return r.accessToken;
+  }
+}
+
+// ─── GRAPH API ────────────────────────────────────────
+async function gGet(path) {
+  const tk = await getToken();
+  const r = await fetch(`https://graph.microsoft.com/v1.0${path}`, {
+    headers: { Authorization: `Bearer ${tk}` }
+  });
+  if (!r.ok) { const e = await r.json().catch(()=>({})); throw new Error(e?.error?.message || `HTTP ${r.status}`); }
+  return r.json();
+}
+async function gPost(path, body) {
+  const tk = await getToken();
+  const r = await fetch(`https://graph.microsoft.com/v1.0${path}`, {
+    method: 'POST',
+    headers: { Authorization: `Bearer ${tk}`, 'Content-Type': 'application/json' },
+    body: JSON.stringify(body)
+  });
+  if (!r.ok) { const e = await r.json().catch(()=>({})); throw new Error(e?.error?.message || `HTTP ${r.status}`); }
+  return r.status === 204 ? null : r.json();
+}
+async function gDelete(path) {
+  const tk = await getToken();
+  const r = await fetch(`https://graph.microsoft.com/v1.0${path}`, {
+    method: 'DELETE', headers: { Authorization: `Bearer ${tk}` }
+  });
+  if (!r.ok) throw new Error(`HTTP ${r.status}`);
+}
+
+// Fetch all room resources from Places API
+async function fetchAllRooms() {
+  const d = await gGet('/places/microsoft.graph.room?$top=100');
+  return (d.value || []).map(r => ({
+    id:       r.id,
+    name:     r.displayName || r.nickname || r.emailAddress,
+    email:    r.emailAddress,
+    capacity: r.capacity ? String(r.capacity) : '',
+    building: r.building || '',
+    floor:    r.floorLabel || ''
+  }));
+}
+
+async function getRoomEvents(email, date) {
+  const s = new Date(date); s.setHours(0,0,0,0);
+  const e = new Date(date); e.setHours(23,59,59,999);
+  const enc = encodeURIComponent(email);
+  const d = await gGet(`/users/${enc}/calendarView?startDateTime=${s.toISOString()}&endDateTime=${e.toISOString()}&$orderby=start/dateTime&$top=50`);
+  return d.value || [];
+}
+
+async function createBooking(roomEmail, subject, start, end) {
+  return gPost('/me/calendar/events', {
+    subject,
+    start: { dateTime: start.toISOString().replace('Z',''), timeZone: 'UTC' },
+    end:   { dateTime: end.toISOString().replace('Z',''),   timeZone: 'UTC' },
+    attendees: [{ emailAddress: { address: roomEmail }, type: 'required' }]
+  });
+}
+
+async function deleteEvent(roomEmail, eventId) {
+  await gDelete(`/users/${encodeURIComponent(roomEmail)}/calendar/events/${eventId}`);
+}
+
+// ─── UTILS ────────────────────────────────────────────
+function parseT(s) { return new Date(s.endsWith('Z') ? s : s + 'Z'); }
+function fmt(d) { return d.toLocaleTimeString('en-GB', {hour:'2-digit',minute:'2-digit'}); }
+function fmtDate(d) { return d.toLocaleDateString('en-GB', {weekday:'long',day:'numeric',month:'long'}); }
+function fmtShort(d) { return d.toLocaleDateString('en-GB', {day:'numeric',month:'short'}); }
+function now() { return new Date(); }
+function getCurrent(evs) { const n=now(); return evs.find(e=>parseT(e.start.dateTime)<=n&&parseT(e.end.dateTime)>n)||null; }
+function getNext(evs) { const n=now(); return evs.filter(e=>parseT(e.start.dateTime)>n).sort((a,b)=>parseT(a.start.dateTime)-parseT(b.start.dateTime))[0]||null; }
+function progress(ev) { const s=parseT(ev.start.dateTime).getTime(),e=parseT(ev.end.dateTime).getTime(),n=now().getTime(); return Math.min(100,Math.max(0,(n-s)/(e-s)*100)); }
+function minsLeft(dtStr) { return Math.max(0,Math.round((parseT(dtStr)-now())/60000)); }
+function isBusy(evs,start,end) { return evs.some(e=>!(end<=parseT(e.start.dateTime)||start>=parseT(e.end.dateTime))); }
+function tkKey(d) { return `${d.getFullYear()}-${d.getMonth()}-${d.getDate()}-${d.getHours()}-${d.getMinutes()}`; }
+function fromKey(k) { const [y,mo,d,h,m]=k.split('-').map(Number); return new Date(y,mo,d,h,m,0); }
+function activeRooms() { return S.pickedIdxs.map(i => S.allRooms[i]); }
+
+// ─── DATA ─────────────────────────────────────────────
+async function loadRoom(i, date) {
+  if (!S.rooms[i]) S.rooms[i] = {events:[],loading:false,error:null};
+  S.rooms[i] = {...S.rooms[i], loading:true, error:null};
+  render();
+  try {
+    const room = activeRooms()[i];
+    S.rooms[i].events = await getRoomEvents(room.email, date);
+    S.rooms[i].loading = false;
+  } catch(e) {
+    S.rooms[i].loading = false;
+    S.rooms[i].error = e.message;
+  }
+  render();
+}
+async function loadAll(date) {
+  const n = activeRooms().length;
+  S.rooms = Array.from({length:n}, (_,i) => S.rooms[i] || {events:[],loading:false,error:null});
+  await Promise.all(Array.from({length:n},(_,i)=>loadRoom(i,date)));
+}
+
+// ─── RENDER ───────────────────────────────────────────
+function render() {
+  const app = document.getElementById('app');
+  if (!app) return;
+  if (S.view==='setup' || (!S.token && !S.account)) { app.innerHTML = rSetup(); bindSetup(); return; }
+  if (S.view==='pick') { app.innerHTML = rPicker(); bindPicker(); return; }
+  app.innerHTML = `${rNav()}<div class="main">${S.view==='panel'?rPanel():S.view==='booking'?rBooking():rAdmin()}</div>`;
+  bindMain();
+}
+
+function rNav() {
+  const user = S.account ? (S.account.name||S.account.username) : 'Token';
+  return `<nav class="nav">
+    <div class="nav-brand"><span>◈</span> ROOMS</div>
+    <div class="nav-tabs">
+      <button class="nav-tab${S.view==='panel'?' active':''}" data-v="panel">Panel</button>
+      <button class="nav-tab${S.view==='booking'?' active':''}" data-v="booking">Book a Room</button>
+      <button class="nav-tab${S.view==='admin'?' active':''}" data-v="admin">Admin</button>
+    </div>
+    <div class="nav-right">
+      <span class="nav-user-info">${user}</span>
+      <button class="btn-nav-ghost" id="btn-ch-rooms">Change Rooms</button>
+      <button class="btn-nav" id="btn-so">Sign out</button>
+    </div>
+  </nav>`;
+}
+
+// ── SETUP ─────────────────────────────────────────────
+function rSetup() {
+  const uri = location.href.split('?')[0].split('#')[0];
+  return `<div class="main" style="padding-top:40px">
+    <div class="setup">
+      <div class="setup-logo">◈</div>
+      <div class="setup-title">Room Booking System</div>
+      <div class="setup-sub">Sign in with Microsoft to fetch your room resources automatically</div>
+      ${S.setupErr ? `<div class="error-box">${S.setupErr}</div>` : ''}
+      <div class="form-section">Entra App Registration</div>
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">Tenant ID</label>
+          <input class="form-input" id="s-tid" placeholder="xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Client ID</label>
+          <input class="form-input" id="s-cid" placeholder="xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx">
+        </div>
+      </div>
+      <button class="btn btn-primary btn-full" id="btn-msal">Sign in with Microsoft →</button>
+      <div class="divider-or">or paste a Graph Explorer token</div>
+      <div class="form-group">
+        <label class="form-label">Access Token</label>
+        <input class="form-input" id="s-tok" type="password" placeholder="Requires Place.Read.All + Calendars.ReadWrite">
+      </div>
+      <button class="btn btn-ghost btn-full" id="btn-tok">Connect with Token</button>
+      <div class="hint-box">
+        <strong style="color:var(--accent)">One-time Entra setup:</strong><br>
+        1. <a href="https://entra.microsoft.com/#view/Microsoft_AAD_RegisteredApps" target="_blank">entra.microsoft.com</a> → App registrations → New<br>
+        2. Platform: <strong>Single-page application (SPA)</strong><br>
+        3. Redirect URI: <code>${uri}</code><br>
+        4. API permissions → Delegated → <code>Calendars.ReadWrite</code> + <code>Place.Read.All</code><br>
+        5. In Exchange admin: grant delegate access to room mailboxes for your user
+      </div>
+    </div>
+  </div>`;
+}
+
+function bindSetup() {
+  document.getElementById('btn-msal')?.addEventListener('click', async () => {
+    const tid = document.getElementById('s-tid')?.value?.trim();
+    const cid = document.getElementById('s-cid')?.value?.trim();
+    if (!tid || !cid) { S.setupErr='Tenant ID and Client ID are required.'; render(); return; }
+    try {
+      S.setupErr = null;
+      const cfg = { tenantId:tid, clientId:cid, rooms:[] };
+      await signIn(cfg);
+      S.config = cfg;
+      await saveCfg(cfg);
+      await loadRoomPicker();
+    } catch(e) { S.config=null; S.setupErr=`Sign-in failed: ${e.message}`; render(); }
+  });
+  document.getElementById('btn-tok')?.addEventListener('click', async () => {
+    const tok = document.getElementById('s-tok')?.value?.trim();
+    if (!tok) { S.setupErr='Please paste an access token.'; render(); return; }
+    S.token = tok;
+    S.config = { tenantId:'', clientId:'', rooms:[] };
+    await loadRoomPicker();
+  });
+  loadCfg().then(cfg => {
+    if (!cfg) return;
+    const set = (id,v) => { const el=document.getElementById(id); if(el&&v) el.value=v; };
+    set('s-tid', cfg.tenantId); set('s-cid', cfg.clientId);
+  });
+}
+
+// ── ROOM PICKER ───────────────────────────────────────
+async function loadRoomPicker() {
+  S.view = 'pick'; S.placesErr = null; S.allRooms = []; S.pickedIdxs = [];
+  render();
+  try {
+    S.allRooms = await fetchAllRooms();
+    if (S.allRooms.length === 0) {
+      S.placesErr = 'No room resources found. Check Place.Read.All permission and that room mailboxes exist in Exchange.';
+    }
+    // Auto-select saved rooms by email if returning user
+    const saved = await loadCfg();
+    if (saved?.rooms?.length) {
+      saved.rooms.forEach(sr => {
+        const idx = S.allRooms.findIndex(r => r.email === sr.email);
+        if (idx !== -1 && S.pickedIdxs.length < 4) S.pickedIdxs.push(idx);
+      });
+    }
+    render();
+  } catch(e) {
+    S.placesErr = `Could not fetch rooms: ${e.message}`;
+    render();
+  }
+}
+
+function rPicker() {
+  const rooms = S.allRooms, picked = new Set(S.pickedIdxs);
+  const loading = !rooms.length && !S.placesErr;
+  return `<div class="main" style="padding-top:32px">
+    <div class="picker">
+      <div class="picker-title">Select Your Rooms</div>
+      <div class="picker-sub">Choose the rooms to display and manage — fetched from your Microsoft 365 room resources</div>
+      ${S.placesErr ? `<div class="error-box">${S.placesErr}</div>` : ''}
+      ${loading ? `<div class="loading"><div class="spinner"></div>Fetching rooms from Microsoft 365…</div>` : ''}
+      ${rooms.length ? `
+        <div class="pick-count">Select up to 4 rooms · <strong>${picked.size} selected</strong></div>
+        <div class="room-list">
+          ${rooms.map((r,i) => `
+            <div class="room-item${picked.has(i)?' picked':''}" onclick="A.togglePick(${i})">
+              <div class="room-item-check">${picked.has(i)?'✓':''}</div>
+              <div class="room-item-info">
+                <div class="room-item-name">${r.name}</div>
+                <div class="room-item-meta">${r.email}${r.building?` · ${r.building}`:''}${r.floor?` · Floor ${r.floor}`:''}</div>
+              </div>
+              ${r.capacity?`<div class="room-item-cap">👥 ${r.capacity}</div>`:''}
+            </div>`).join('')}
+        </div>
+        <button class="btn btn-primary btn-full" id="btn-confirm-pick" ${picked.size===0?'disabled':''}>
+          Confirm ${picked.size} Room${picked.size!==1?'s':''}  →
+        </button>` : ''}
+      ${S.placesErr ? `
+        <div class="form-divider"></div>
+        <div class="form-section">Manual fallback</div>
+        <div id="manual-rooms">
+          <div class="form-row" style="margin-bottom:10px">
+            <div class="form-group" style="margin:0"><label class="form-label">Room 1 Name</label><input class="form-input" id="m-r1n" placeholder="Sala Barcelona"></div>
+            <div class="form-group" style="margin:0"><label class="form-label">Room 1 Email</label><input class="form-input" id="m-r1e" placeholder="room1@oqtima.com"></div>
+          </div>
+          <div class="form-row" style="margin-bottom:16px">
+            <div class="form-group" style="margin:0"><label class="form-label">Room 2 Name</label><input class="form-input" id="m-r2n" placeholder="Sala Madrid"></div>
+            <div class="form-group" style="margin:0"><label class="form-label">Room 2 Email</label><input class="form-input" id="m-r2e" placeholder="room2@oqtima.com"></div>
+          </div>
+          <button class="btn btn-ghost btn-full" id="btn-manual">Use Manual Rooms</button>
+        </div>` : ''}
+    </div>
+  </div>`;
+}
+
+function bindPicker() {
+  document.getElementById('btn-confirm-pick')?.addEventListener('click', () => {
+    if (!S.pickedIdxs.length) return;
+    confirmRoomSelection();
+  });
+  document.getElementById('btn-manual')?.addEventListener('click', () => {
+    const g = id => document.getElementById(id)?.value?.trim()||'';
+    const r1e=g('m-r1e'), r1n=g('m-r1n'), r2e=g('m-r2e'), r2n=g('m-r2n');
+    if (!r1e) return;
+    S.allRooms = [
+      {name:r1n||r1e.split('@')[0],email:r1e,capacity:'',building:'',floor:''},
+      ...(r2e?[{name:r2n||r2e.split('@')[0],email:r2e,capacity:'',building:'',floor:''}]:[])
+    ];
+    S.pickedIdxs = S.allRooms.map((_,i)=>i);
+    confirmRoomSelection();
+  });
+}
+
+async function confirmRoomSelection() {
+  const rooms = S.pickedIdxs.map(i => S.allRooms[i]);
+  S.config = { ...S.config, rooms };
+  S.rooms = rooms.map(() => ({events:[],loading:false,error:null}));
+  await saveCfg(S.config);
+  S.view = 'panel'; S.selRoom = 0;
+  render();
+  await loadAll(new Date());
+  render();
+  startRefresh();
+}
+
+// ── PANEL ─────────────────────────────────────────────
+function rPanel() {
+  const n = now();
+  return `<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:22px">
+    <div>
+      <h2 style="font-size:22px;font-weight:800">Room Status</h2>
+      <div style="color:var(--tx2);font-size:13px;margin-top:3px">${fmtDate(n)} &nbsp;·&nbsp; <span id="pclock" style="font-family:var(--fm)">${fmt(n)}</span></div>
+    </div>
+    <button class="icon-btn" id="btn-ref" title="Refresh">↻</button>
+  </div>
+  <div class="panel-grid">${activeRooms().map((_,i)=>rRoomPanel(i)).join('')}</div>`;
+}
+
+function rRoomPanel(i) {
+  const room = activeRooms()[i], data = S.rooms[i]||{};
+  if (data.loading) return `<div class="room-panel"><div class="loading"><div class="spinner"></div>Loading ${room.name}…</div></div>`;
+  if (data.error) return `<div class="room-panel"><div style="padding:24px"><div class="error-box">⚠ ${data.error}</div><button class="btn btn-ghost btn-sm" onclick="A.retry(${i})">Retry</button></div></div>`;
+
+  const ev=data.events||[], cur=getCurrent(ev), nxt=getNext(ev), st=cur?'busy':'available';
+  let body='';
+  if (cur) {
+    const ml=minsLeft(cur.end.dateTime), prog=progress(cur);
+    body=`<div class="rp-label">NOW</div>
+      <div class="rp-title">${cur.subject||'Meeting in progress'}</div>
+      <div class="rp-meta">${fmt(parseT(cur.start.dateTime))} – ${fmt(parseT(cur.end.dateTime))} · ${ml} min left</div>
+      <div class="progress"><div class="progress-fill busy" style="width:${prog}%"></div></div>
+      ${nxt?`<div class="rp-next" style="margin-top:16px"><div class="rp-label">NEXT</div>
+        <strong>${nxt.subject||'Upcoming'}</strong><br>
+        <span style="font-family:var(--fm);font-size:12px">${fmt(parseT(nxt.start.dateTime))} – ${fmt(parseT(nxt.end.dateTime))}</span></div>`:''}`;
+  } else if (nxt) {
+    const ml=minsLeft(nxt.start.dateTime);
+    body=`<div class="rp-free">Available</div>
+      <div class="rp-next">Next: <strong>${nxt.subject||'Meeting'}</strong> at ${fmt(parseT(nxt.start.dateTime))} (in ${ml} min)</div>`;
+  } else {
+    body=`<div class="rp-free">Free all day</div><div class="rp-next" style="color:var(--tx3)">No upcoming meetings</div>`;
+  }
+
+  return `<div class="room-panel ${st}">
+    <div class="rp-head">
+      <div><div class="rp-name">${room.name}</div>${room.capacity?`<div class="rp-cap">👥 ${room.capacity} people</div>`:''}</div>
+      <div class="badge badge-${st}"><div class="dot dot-${st}"></div>${st==='busy'?'IN USE':'AVAILABLE'}</div>
+    </div>
+    <hr class="rp-divider">
+    <div class="rp-body">${body}</div>
+    <div class="rp-foot">
+      <button class="btn btn-primary btn-sm" onclick="A.quickBook(${i})" ${st==='busy'?'disabled':''}>＋ Book Now</button>
+      <button class="btn btn-ghost btn-sm" onclick="A.goBook(${i})">Schedule</button>
+    </div>
+  </div>`;
+}
+
+// ── BOOKING ───────────────────────────────────────────
+function rBooking() {
+  const isToday = S.bookDate.toDateString()===new Date().toDateString();
+  const ev = S.rooms[S.selRoom]?.events||[];
+  const slots = genSlots(S.bookDate, ev);
+  const rooms = activeRooms();
+  return `${S.bookMsg?`<div class="${S.bookMsg.ok?'success-box':'error-box'}">${S.bookMsg.text}</div>`:''}
+  <div class="booking-layout">
+    <div>
+      <div class="card">
+        <div class="card-title">Room</div>
+        ${rooms.map((r,i) => {
+          const st = getCurrent(S.rooms[i]?.events||[])?'busy':'available';
+          return `<div class="room-opt${i===S.selRoom?' sel':''}" onclick="A.selRoom(${i})">
+            <div><div class="room-opt-name">${r.name}</div>${r.capacity?`<div style="font-size:11px;color:var(--tx3)">👥 ${r.capacity}</div>`:''}</div>
+            <div class="room-opt-s ${st}">${st==='busy'?'● Busy':'● Free'}</div>
+          </div>`;
+        }).join('')}
+      </div>
+      <div class="card">
+        <div class="card-title">Date</div>
+        <div class="date-nav">
+          <button class="date-nav-btn" id="btn-pd">‹</button>
+          <div class="date-display">${isToday?'Today':fmtShort(S.bookDate)}</div>
+          <button class="date-nav-btn" id="btn-nd">›</button>
+        </div>
+        <div style="text-align:center;font-size:12px;color:var(--tx2);margin-top:6px">${fmtDate(S.bookDate)}</div>
+      </div>
+      <div class="card">
+        <div class="card-title">Duration</div>
+        <div class="duration-grid">
+          ${[30,60,90,120].map(d=>`<div class="dur-btn${S.bookDur===d?' sel':''}" onclick="A.setDur(${d})">${d<60?d+'m':(d/60)+'h'}</div>`).join('')}
+        </div>
+      </div>
+    </div>
+    <div>
+      <div class="card">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px">
+          <div class="card-title" style="margin:0">Timeline — ${rooms[S.selRoom].name}</div>
+          ${S.rooms[S.selRoom]?.loading?'<div style="font-size:12px;color:var(--tx2)">Loading…</div>':''}
+        </div>
+        ${rTimeline(S.bookDate, ev)}
+        <div style="display:flex;gap:14px;margin-top:8px;font-size:11px;color:var(--tx3)">
+          <span><span style="color:var(--red)">■</span> Booked</span>
+          <span><span style="color:var(--amber)">|</span> Now</span>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-title">Pick Start Time</div>
+        <div class="slot-grid">
+          ${slots.map(s=>{
+            const isSel=S.bookStart&&tkKey(fromKey(S.bookStart))===s.key;
+            return `<div class="slot-btn${s.busy?' busy':isSel?' sel':''}" onclick="${s.busy?'':` A.selSlot('${s.key}')`}">${s.lbl}</div>`;
+          }).join('')}
+        </div>
+      </div>
+      ${S.bookStart?rConfirm(ev):''}
+    </div>
+  </div>`;
+}
+
+function rTimeline(date, evs) {
+  const SH=8,EH=20,total=(EH-SH)*60;
+  const n=now(), isToday=date.toDateString()===n.toDateString();
+  const nowPct=isToday?Math.min(100,Math.max(0,((n.getHours()-SH)*60+n.getMinutes())/total*100)):-1;
+  const hrs=Array.from({length:(EH-SH)/2+1},(_,i)=>`<span class="tl-hour">${String(SH+i*2).padStart(2,'0')}:00</span>`).join('');
+  const blocks=evs.map(e=>{
+    const es=parseT(e.start.dateTime),ee=parseT(e.end.dateTime);
+    const lft=Math.max(0,((es.getHours()-SH)*60+es.getMinutes())/total*100);
+    const wid=Math.max(1,((ee-es)/60000)/total*100);
+    if(lft>=100||lft<0) return '';
+    return `<div class="tl-event busy" style="left:${lft}%;width:${Math.min(wid,100-lft)}%" title="${e.subject||'Meeting'} ${fmt(es)}-${fmt(ee)}">${e.subject||'●'}</div>`;
+  }).join('');
+  return `<div class="timeline-wrap">
+    <div class="timeline-labels">${hrs}</div>
+    <div class="timeline-track">
+      ${nowPct>=0?`<div class="tl-now" style="left:${nowPct}%"></div>`:''}
+      ${blocks}
+    </div>
+  </div>`;
+}
+
+function genSlots(date, evs) {
+  const slots=[],d=new Date(date); d.setHours(8,0,0,0);
+  const end=new Date(date); end.setHours(19,0,0,0); const n=now();
+  while(d<end){
+    const s=new Date(d),e=new Date(d.getTime()+S.bookDur*60000);
+    const past=date.toDateString()===n.toDateString()&&s<n;
+    slots.push({key:tkKey(s),lbl:fmt(s),busy:isBusy(evs,s,e)||past});
+    d.setMinutes(d.getMinutes()+30);
+  }
+  return slots;
+}
+
+function rConfirm(evs) {
+  const s=fromKey(S.bookStart),e=new Date(s.getTime()+S.bookDur*60000);
+  const room=activeRooms()[S.selRoom];
+  return `<div class="card booking-confirm">
+    <div class="card-title">Confirm Booking</div>
+    <div class="booking-details">
+      <div class="bd-item"><div class="bd-label">Room</div><div class="bd-value">${room.name}</div></div>
+      <div class="bd-item"><div class="bd-label">Date</div><div class="bd-value">${fmtShort(S.bookDate)}</div></div>
+      <div class="bd-item"><div class="bd-label">Time</div><div class="bd-value">${fmt(s)} – ${fmt(e)}</div></div>
+      <div class="bd-item"><div class="bd-label">Duration</div><div class="bd-value">${S.bookDur}m</div></div>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Meeting Title</label>
+      <input class="form-input" id="b-title" placeholder="e.g. Team standup, Client call…">
+    </div>
+    <div style="display:flex;gap:10px">
+      <button class="btn btn-primary" id="btn-confirm">✓ Confirm Booking</button>
+      <button class="btn btn-ghost" onclick="A.clearBook()">Cancel</button>
+    </div>
+  </div>`;
+}
+
+// ── ADMIN ─────────────────────────────────────────────
+function rAdmin() {
+  const allEvs=[...(S.rooms[0]?.events||[]),...(S.rooms[1]?.events||[])];
+  let busyMins=0;
+  allEvs.forEach(e=>busyMins+=(parseT(e.end.dateTime)-parseT(e.start.dateTime))/60000);
+  const util=Math.round(busyMins/(activeRooms().length*12*60)*100)||0;
+  return `<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:22px">
+    <div><h2 style="font-size:22px;font-weight:800">Admin Overview</h2>
+    <div style="color:var(--tx2);font-size:13px;margin-top:3px">${fmtDate(new Date())}</div></div>
+    <button class="btn btn-ghost btn-sm" id="btn-ref">↻ Refresh</button>
+  </div>
+  <div class="stats-row">
+    <div class="stat-card"><div class="stat-value" style="color:var(--accent)">${allEvs.length}</div><div class="stat-label">Bookings Today</div></div>
+    <div class="stat-card"><div class="stat-value" style="color:var(--amber)">${util}%</div><div class="stat-label">Utilisation (8–20h)</div></div>
+    <div class="stat-card"><div class="stat-value">${activeRooms().length}</div><div class="stat-label">Rooms Active</div></div>
+  </div>
+  <div class="admin-grid">${activeRooms().map((_,i)=>rAdminRoom(i)).join('')}</div>`;
+}
+
+function rAdminRoom(i) {
+  const room=activeRooms()[i], data=S.rooms[i]||{};
+  if(data.loading) return `<div class="card"><div class="loading"><div class="spinner"></div></div></div>`;
+  const evs=data.events||[], cur=getCurrent(evs), st=cur?'busy':'available';
+  const evHtml=evs.length===0?`<div class="empty">No bookings today</div>`:
+    evs.map(e=>{
+      const s=parseT(e.start.dateTime),en=parseT(e.end.dateTime),isc=cur?.id===e.id;
+      return `<div class="ev-item${isc?' current':''}">
+        <div>
+          <div class="ev-title">${e.subject||'(No title)'}</div>
+          <div class="ev-meta">${fmt(s)} – ${fmt(en)} · ${Math.round((en-s)/60000)}min</div>
+          ${e.organizer?.emailAddress?.name?`<div class="ev-org">${e.organizer.emailAddress.name}</div>`:''}
+        </div>
+        <button class="btn btn-danger btn-sm" onclick="A.cancel(${i},'${e.id}')">Cancel</button>
+      </div>`;
+    }).join('');
+  return `<div class="card">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px">
+      <div style="font-size:17px;font-weight:800">${room.name}</div>
+      <div class="badge badge-${st}"><div class="dot dot-${st}"></div>${st==='busy'?'In Use':'Available'}</div>
+    </div>
+    <div style="font-size:11px;color:var(--tx3);margin-bottom:12px;font-family:var(--fm)">${room.email}</div>
+    ${data.error?`<div class="error-box">⚠ ${data.error}</div>`:''}
+    ${rTimeline(new Date(),evs)}
+    <div class="events-list">${evHtml}</div>
+  </div>`;
+}
+
+// ─── BIND MAIN ────────────────────────────────────────
+function bindMain() {
+  document.querySelectorAll('.nav-tab').forEach(b=>b.addEventListener('click',()=>{
+    S.view=b.dataset.v; S.bookMsg=null;
+    const d=S.view==='booking'?S.bookDate:new Date();
+    loadAll(d).then(render); render();
+  }));
+  document.getElementById('btn-so')?.addEventListener('click',()=>{
+    S.config=null;S.token=null;S.account=null;S.msalInstance=null;S.view='setup';
+    stopRefresh(); render();
+  });
+  document.getElementById('btn-ch-rooms')?.addEventListener('click',()=>{
+    stopRefresh(); S.view='pick'; render();
+    // re-bind picker immediately
+    bindPicker();
+  });
+  document.getElementById('btn-ref')?.addEventListener('click',()=>{
+    const d=S.view==='booking'?S.bookDate:new Date(); loadAll(d).then(render);
+  });
+  document.getElementById('btn-pd')?.addEventListener('click',()=>{
+    S.bookDate=new Date(S.bookDate.getTime()-86400000); S.bookStart=null;
+    loadAll(S.bookDate).then(render); render();
+  });
+  document.getElementById('btn-nd')?.addEventListener('click',()=>{
+    S.bookDate=new Date(S.bookDate.getTime()+86400000); S.bookStart=null;
+    loadAll(S.bookDate).then(render); render();
+  });
+  document.getElementById('btn-confirm')?.addEventListener('click', async()=>{
+    const title=document.getElementById('b-title')?.value?.trim();
+    if(!title){S.bookMsg={ok:false,text:'Please enter a meeting title.'};render();return;}
+    const s=fromKey(S.bookStart),e=new Date(s.getTime()+S.bookDur*60000);
+    const room=activeRooms()[S.selRoom];
+    try{
+      await createBooking(room.email,title,s,e);
+      S.bookMsg={ok:true,text:`✓ "${title}" booked in ${room.name} · ${fmt(s)} – ${fmt(e)}`};
+      S.bookStart=null;
+      await loadAll(S.bookDate);
+      render();
+      setTimeout(()=>{S.bookMsg=null;render();},6000);
+    }catch(e){S.bookMsg={ok:false,text:`Booking failed: ${e.message}`};render();}
+  });
+}
+
+// ─── REFRESH ─────────────────────────────────────────
+function startRefresh(){
+  stopRefresh();
+  S.refreshId=setInterval(async()=>{
+    if(S.view==='panel'||S.view==='admin'){await loadAll(new Date());render();}
+  },60000);
+  S.clockId=setInterval(()=>{
+    const el=document.getElementById('pclock');if(el)el.textContent=fmt(now());
+  },1000);
+}
+function stopRefresh(){
+  if(S.refreshId){clearInterval(S.refreshId);S.refreshId=null;}
+  if(S.clockId){clearInterval(S.clockId);S.clockId=null;}
+}
+
+// ─── PUBLIC ───────────────────────────────────────────
+return {
+  togglePick:(i)=>{
+    const idx=S.pickedIdxs.indexOf(i);
+    if(idx>-1) S.pickedIdxs.splice(idx,1);
+    else if(S.pickedIdxs.length<4) S.pickedIdxs.push(i);
+    render(); bindPicker();
+  },
+  retry:    (i)=>{ loadRoom(i,S.view==='booking'?S.bookDate:new Date()).then(render); },
+  quickBook:(i)=>{ S.selRoom=i;S.view='booking';S.bookDate=new Date();loadAll(S.bookDate).then(render);render(); },
+  goBook:   (i)=>{ S.selRoom=i;S.view='booking';render(); },
+  selRoom:  (i)=>{ S.selRoom=i;S.bookStart=null;loadRoom(i,S.bookDate).then(render);render(); },
+  setDur:   (d)=>{ S.bookDur=d;S.bookStart=null;render(); },
+  selSlot:  (k)=>{ S.bookStart=k;render(); },
+  clearBook:()=>{ S.bookStart=null;render(); },
+  cancel: async(i,eid)=>{
+    if(!confirm('Cancel this booking?')) return;
+    try{ await deleteEvent(activeRooms()[i].email,eid); await loadRoom(i,new Date()); render(); }
+    catch(e){ alert('Could not cancel: '+e.message); }
+  },
+  init: async()=>{ render(); }
+};
+})();
+
+window.A = App;
+App.init();
+</script>
+</body>
+</html>
