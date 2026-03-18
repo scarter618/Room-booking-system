@@ -11,10 +11,11 @@
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 :root{
   --bg:#07111e;--s1:#0e1c30;--s2:#162540;--s3:#1e3050;
-  --bdr:rgba(100,160,220,0.1);--bdr2:rgba(100,160,220,0.18);
-  --accent:#00d4b1;--ad:rgba(0,212,177,0.12);--ab:rgba(0,212,177,0.22);
+  --bdr:rgba(255,255,255,0.08);--bdr2:rgba(255,255,255,0.14);
+  --accent:#44ff00;--ad:rgba(68,255,0,0.1);--ab:rgba(68,255,0,0.25);
   --red:#ff3359;--rd:rgba(255,51,89,0.12);--rb:rgba(255,51,89,0.22);
-  --amber:#ffb020;--tx:#d4e4f7;--tx2:#6688aa;--tx3:#3a5068;
+  --green:#44ff00;--gd:rgba(68,255,0,0.08);--gb:rgba(68,255,0,0.2);
+  --amber:#ffb020;--tx:#ffffff;--tx2:#8aa0b8;--tx3:#3a5068;
   --ff:'Syne',sans-serif;--fm:'JetBrains Mono',monospace;--r:10px;--r2:14px;
 }
 html,body{min-height:100%;background:var(--bg);color:var(--tx);font-family:var(--ff)}
@@ -65,32 +66,47 @@ input,button{font-family:inherit}
 .card-title::before{content:'';display:block;width:3px;height:14px;border-radius:2px;background:var(--accent)}
 .error-box{padding:11px 15px;background:var(--rd);border:1px solid var(--rb);border-radius:var(--r);color:var(--red);font-size:13px;margin-bottom:12px}
 .success-box{padding:11px 15px;background:var(--ad);border:1px solid var(--ab);border-radius:var(--r);color:var(--accent);font-size:13px;margin-bottom:12px}
-.badge{display:inline-flex;align-items:center;gap:7px;padding:5px 12px;border-radius:20px;font-size:12px;font-weight:700}
-.badge-available{background:var(--ad);color:var(--accent);border:1px solid var(--ab)}
+.badge{display:inline-flex;align-items:center;gap:7px;padding:6px 14px;border-radius:20px;font-size:12px;font-weight:800;letter-spacing:.04em}
+.badge-available{background:rgba(68,255,0,0.15);color:#44ff00;border:1px solid rgba(68,255,0,0.35)}
 .badge-busy{background:var(--rd);color:var(--red);border:1px solid var(--rb)}
-.dot{width:7px;height:7px;border-radius:50%;flex-shrink:0}
-.dot-available{background:var(--accent);animation:pg 2s infinite}
+.dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.dot-available{background:#44ff00;animation:pg 2s infinite}
 .dot-busy{background:var(--red);animation:pr 2s infinite}
-@keyframes pg{0%,100%{box-shadow:0 0 0 0 rgba(0,212,177,.5)}50%{box-shadow:0 0 0 6px rgba(0,212,177,0)}}
+@keyframes pg{0%,100%{box-shadow:0 0 0 0 rgba(68,255,0,.6)}50%{box-shadow:0 0 0 8px rgba(68,255,0,0)}}
 @keyframes pr{0%,100%{box-shadow:0 0 0 0 rgba(255,51,89,.5)}50%{box-shadow:0 0 0 6px rgba(255,51,89,0)}}
-.panel-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px}
-.room-panel{background:var(--s1);border:1px solid var(--bdr);border-radius:18px;overflow:hidden;transition:border-color .3s}
-.room-panel.available{border-color:var(--ab)}
-.room-panel.busy{border-color:var(--rb)}
-.rp-head{padding:22px 24px;display:flex;justify-content:space-between;align-items:flex-start}
-.rp-name{font-size:20px;font-weight:800}
-.rp-cap{font-size:12px;color:var(--tx2);margin-top:3px}
-.rp-body{padding:0 24px 22px}
-.rp-div{border:none;border-top:1px solid var(--bdr);margin:0 0 18px}
-.rp-lbl{font-size:10px;font-weight:700;color:var(--tx3);text-transform:uppercase;letter-spacing:.12em;margin-bottom:6px}
-.rp-mtitle{font-size:18px;font-weight:700;line-height:1.3;margin-bottom:6px}
-.rp-meta{font-family:var(--fm);font-size:12px;color:var(--tx2)}
-.rp-free{font-size:26px;font-weight:800;color:var(--accent);margin-bottom:4px}
-.rp-next{font-size:13px;color:var(--tx2);margin-top:8px}
+.panel-grid{display:grid;grid-template-columns:1fr 1fr;gap:24px}
+.room-panel{border-radius:22px;overflow:hidden;transition:all .4s;position:relative}
+.room-panel.available{background:linear-gradient(145deg,#0a1f0a 0%,#0d2b0d 40%,#0a1a0a 100%);border:1.5px solid rgba(68,255,0,0.35);box-shadow:0 0 40px rgba(68,255,0,0.08),inset 0 1px 0 rgba(68,255,0,0.15)}
+.room-panel.busy{background:linear-gradient(145deg,#1e0a0f 0%,#2b0d14 40%,#1a0a0e 100%);border:1.5px solid rgba(255,51,89,0.35);box-shadow:0 0 40px rgba(255,51,89,0.08),inset 0 1px 0 rgba(255,51,89,0.1)}
+.room-panel.loading-panel{background:var(--s1);border:1px solid var(--bdr)}
+.rp-status-bar{height:5px;width:100%}
+.rp-status-bar.available{background:linear-gradient(90deg,#44ff00,#22cc00)}
+.rp-status-bar.busy{background:linear-gradient(90deg,#ff3359,#cc1133)}
+.rp-head{padding:24px 26px 18px;display:flex;justify-content:space-between;align-items:flex-start}
+.rp-name{font-size:24px;font-weight:800;letter-spacing:-.01em}
+.rp-cap{font-size:12px;color:var(--tx2);margin-top:4px;display:flex;align-items:center;gap:4px}
+.rp-body{padding:0 26px 22px}
+.rp-div{border:none;border-top:1px solid rgba(255,255,255,0.06);margin:0 0 20px}
+.rp-lbl{font-size:10px;font-weight:700;color:var(--tx3);text-transform:uppercase;letter-spacing:.15em;margin-bottom:8px}
+.rp-mtitle{font-size:20px;font-weight:800;line-height:1.3;margin-bottom:8px}
+.rp-meta{font-family:var(--fm);font-size:13px;color:var(--tx2)}
+.rp-free{font-size:38px;font-weight:800;color:#44ff00;margin-bottom:6px;letter-spacing:-.02em;text-shadow:0 0 30px rgba(68,255,0,0.4)}
+.rp-free-sub{font-size:13px;color:rgba(68,255,0,0.6);margin-bottom:4px}
+.rp-next{font-size:13px;color:var(--tx2);margin-top:12px;padding:10px 14px;background:rgba(255,255,255,0.04);border-radius:8px;border:1px solid rgba(255,255,255,0.06)}
 .rp-next strong{color:var(--tx)}
-.progress{height:4px;background:var(--s3);border-radius:2px;margin-top:12px;overflow:hidden}
-.progress-fill{height:100%;border-radius:2px;transition:width 1s linear;background:var(--red)}
-.rp-foot{padding:14px 24px;border-top:1px solid var(--bdr);display:flex;gap:8px;background:var(--s2)}
+.progress{height:5px;background:rgba(255,255,255,0.06);border-radius:3px;margin-top:14px;overflow:hidden}
+.progress-fill{height:100%;border-radius:3px;transition:width 1s linear;background:linear-gradient(90deg,#ff3359,#ff6680)}
+.rp-foot{padding:16px 26px;border-top:1px solid rgba(255,255,255,0.06);display:flex;gap:10px;background:rgba(0,0,0,0.2)}
+.rp-time-left{display:inline-flex;align-items:center;gap:6px;padding:4px 10px;border-radius:12px;font-family:var(--fm);font-size:12px;font-weight:600;margin-top:10px}
+.rp-time-left.busy{background:rgba(255,51,89,0.15);color:#ff3359;border:1px solid rgba(255,51,89,0.25)}
+/* QUICK BOOK MODAL */
+.qb-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.7);z-index:200;display:flex;align-items:center;justify-content:center;backdrop-filter:blur(4px)}
+.qb-modal{background:#0e1c30;border:1px solid rgba(68,255,0,0.25);border-radius:20px;padding:32px;width:100%;max-width:420px;box-shadow:0 0 60px rgba(68,255,0,0.1)}
+.qb-title{font-size:20px;font-weight:800;margin-bottom:4px}
+.qb-sub{font-size:13px;color:var(--tx2);margin-bottom:24px}
+.qb-dur-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:20px}
+.qb-dur{padding:12px 8px;text-align:center;border-radius:10px;border:1.5px solid var(--bdr2);cursor:pointer;font-size:14px;font-weight:700;font-family:var(--fm);transition:all .15s;color:var(--tx2)}
+.qb-dur:hover,.qb-dur.sel{border-color:#44ff00;background:rgba(68,255,0,0.1);color:#44ff00}
 .booking-layout{display:grid;grid-template-columns:260px 1fr;gap:20px;align-items:start}
 .room-opt{padding:11px 14px;border-radius:var(--r);border:1.5px solid var(--bdr);cursor:pointer;transition:all .15s;display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
 .room-opt:hover,.room-opt.sel{border-color:var(--accent);background:var(--ad)}
@@ -148,7 +164,7 @@ input,button{font-family:inherit}
 <div id="app"></div>
 <script>
 const App=(()=>{
-let S={view:'setup',config:null,msalInstance:null,account:null,token:null,rooms:[],discovered:[],picked:[],selRoom:0,bookDate:new Date(),bookStart:null,bookDur:60,bookMsg:null,err:null,refreshId:null,clockId:null};
+let S={view:'setup',config:null,msalInstance:null,account:null,token:null,rooms:[],discovered:[],picked:[],selRoom:0,bookDate:new Date(),bookStart:null,bookDur:60,bookMsg:null,err:null,refreshId:null,clockId:null,qb:null,qbDur:30,qbErr:null};
 
 async function loadCfg(){try{const r=await window.storage.get('oq-rooms-cfg');if(r)return JSON.parse(r.value);}catch(e){}return null;}
 async function saveCfg(c){try{await window.storage.set('oq-rooms-cfg',JSON.stringify(c));}catch(e){}}
@@ -302,37 +318,78 @@ function rNav(){
 
 function rPanel(){
   const n=now();
-  return`<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:22px">
-    <div><h2 style="font-size:22px;font-weight:800">Room Status</h2>
-      <div style="color:var(--tx2);font-size:13px;margin-top:3px">${fmtDate(n)} &nbsp;&middot;&nbsp; <span id="pclock" style="font-family:var(--fm)">${fmt(n)}</span></div></div>
-    <button class="icon-btn" id="btn-ref">&#8635;</button>
+  return`${rQB()}<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:24px">
+    <div><h2 style="font-size:24px;font-weight:800">Room Status</h2>
+      <div style="color:var(--tx2);font-size:13px;margin-top:3px">${fmtDate(n)} &nbsp;&middot;&nbsp; <span id="pclock" style="font-family:var(--fm)">${fmt(n)}</span>
+      <span style="margin-left:12px;font-size:11px;color:var(--tx3)">&#8635; auto-refreshes every 30s</span></div></div>
+    <button class="icon-btn" id="btn-ref" title="Refresh now">&#8635;</button>
   </div><div class="panel-grid">${S.config.rooms.map((_,i)=>rRP(i)).join('')}</div>`;
 }
 
 function rRP(i){
   const room=S.config.rooms[i],d=S.rooms[i]||{events:[],loading:true};
-  if(d.loading)return`<div class="room-panel"><div class="loading"><div class="spinner"></div>Loading ${room.name}&hellip;</div></div>`;
-  if(d.error)return`<div class="room-panel"><div style="padding:24px"><div class="error-box">&#9888; ${d.error}</div><button class="btn btn-ghost btn-sm" onclick="A.retry(${i})">Retry</button></div></div>`;
+  if(d.loading)return`<div class="room-panel loading-panel"><div class="loading"><div class="spinner"></div>Loading ${room.name}&hellip;</div></div>`;
+  if(d.error)return`<div class="room-panel loading-panel"><div style="padding:24px"><div class="error-box">&#9888; ${d.error}</div><button class="btn btn-ghost btn-sm" onclick="A.retry(${i})">Retry</button></div></div>`;
   const ev=d.events,cur=getCur(ev),nxt=getNxt(ev),st=cur?'busy':'available';
   let body='';
   if(cur){
     const ml=minsLeft(cur.end.dateTime),pr=prog(cur);
-    body=`<div class="rp-lbl">NOW</div><div class="rp-mtitle">${cur.subject||'Meeting in progress'}</div>
-      <div class="rp-meta">${fmt(parseT(cur.start.dateTime))} &ndash; ${fmt(parseT(cur.end.dateTime))} &middot; ${ml} min left</div>
+    const hrs=Math.floor(ml/60),mins=ml%60;
+    const tleft=hrs>0?`${hrs}h ${mins}m left`:`${mins} min left`;
+    body=`<div class="rp-lbl" style="color:rgba(255,51,89,0.7)">NOW IN USE</div>
+      <div class="rp-mtitle">${cur.subject||'Meeting in progress'}</div>
+      <div class="rp-meta">${fmt(parseT(cur.start.dateTime))} &ndash; ${fmt(parseT(cur.end.dateTime))}</div>
+      <div class="rp-time-left busy">&#9679; ${tleft}</div>
       <div class="progress"><div class="progress-fill" style="width:${pr}%"></div></div>
-      ${nxt?`<div class="rp-next" style="margin-top:14px"><div class="rp-lbl">NEXT</div><strong>${nxt.subject||'Meeting'}</strong><br><span style="font-family:var(--fm);font-size:12px">${fmt(parseT(nxt.start.dateTime))} &ndash; ${fmt(parseT(nxt.end.dateTime))}</span></div>`:''}`;
+      ${nxt?`<div class="rp-next"><div style="font-size:10px;font-weight:700;color:var(--tx3);text-transform:uppercase;letter-spacing:.12em;margin-bottom:5px">UP NEXT</div><strong>${nxt.subject||'Meeting'}</strong> &nbsp;<span style="font-family:var(--fm);font-size:12px;color:var(--tx2)">${fmt(parseT(nxt.start.dateTime))} &ndash; ${fmt(parseT(nxt.end.dateTime))}</span></div>`:''}`;
   }else if(nxt){
-    body=`<div class="rp-free">Available</div><div class="rp-next">Next: <strong>${nxt.subject||'Meeting'}</strong> at ${fmt(parseT(nxt.start.dateTime))} (in ${minsLeft(nxt.start.dateTime)} min)</div>`;
+    const ml=minsLeft(nxt.start.dateTime);
+    const hrs=Math.floor(ml/60),mins=ml%60;
+    const tfree=hrs>0?`Free for ${hrs}h ${mins}m`:`Free for ${mins} min`;
+    body=`<div class="rp-free">Available</div>
+      <div class="rp-free-sub">${tfree}</div>
+      <div class="rp-next"><div style="font-size:10px;font-weight:700;color:var(--tx3);text-transform:uppercase;letter-spacing:.12em;margin-bottom:5px">UP NEXT</div><strong>${nxt.subject||'Meeting'}</strong> &nbsp;<span style="font-family:var(--fm);font-size:12px;color:var(--tx2)">${fmt(parseT(nxt.start.dateTime))} &ndash; ${fmt(parseT(nxt.end.dateTime))}</span></div>`;
   }else{
-    body=`<div class="rp-free">Free all day</div><div class="rp-next" style="color:var(--tx3)">No upcoming meetings today</div>`;
+    body=`<div class="rp-free">Available</div><div class="rp-free-sub">Free all day</div>
+      <div class="rp-next" style="color:var(--tx3);background:transparent;border-color:transparent">No upcoming meetings today</div>`;
   }
   return`<div class="room-panel ${st}">
-    <div class="rp-head"><div><div class="rp-name">${room.name}</div>${room.capacity?`<div class="rp-cap">&#128101; ${room.capacity} people</div>`:''}</div>
-      <div class="badge badge-${st}"><div class="dot dot-${st}"></div>${st==='busy'?'IN USE':'AVAILABLE'}</div></div>
+    <div class="rp-status-bar ${st}"></div>
+    <div class="rp-head">
+      <div><div class="rp-name">${room.name}</div>${room.capacity?`<div class="rp-cap">&#128101; ${room.capacity} people</div>`:''}</div>
+      <div class="badge badge-${st}"><div class="dot dot-${st}"></div>${st==='busy'?'IN USE':'AVAILABLE'}</div>
+    </div>
     <hr class="rp-div"><div class="rp-body">${body}</div>
     <div class="rp-foot">
-      <button class="btn btn-primary btn-sm" onclick="A.quickBook(${i})" ${st==='busy'?'disabled':''}>+ Book Now</button>
+      <button class="btn btn-sm${st==='available'?' btn-primary':' btn-ghost'}" onclick="A.openQB(${i})" ${st==='busy'?'disabled':''} style="${st==='available'?'background:#44ff00;color:#07111e;font-weight:800':''}">&#9889; Book Now</button>
       <button class="btn btn-ghost btn-sm" onclick="A.goBook(${i})">Schedule</button>
+    </div>
+  </div>`;
+}
+
+function rQB(){
+  if(S.qb===null)return'';
+  const room=S.config.rooms[S.qb],dur=S.qbDur||30;
+  const s=new Date(),e=new Date(s.getTime()+dur*60000);
+  return`<div class="qb-overlay" onclick="if(event.target===this)A.closeQB()">
+    <div class="qb-modal">
+      <div class="qb-title">&#9889; Book Now</div>
+      <div class="qb-sub">${room.name} &nbsp;&middot;&nbsp; Starting ${fmt(s)}</div>
+      <div class="form-group"><label class="form-label">Meeting Title</label>
+        <input class="form-input" id="qb-title" placeholder="e.g. Quick sync, Client call…" autofocus></div>
+      <div class="form-label" style="margin-bottom:8px">Duration</div>
+      <div class="qb-dur-grid">
+        ${[15,30,45,60].map(d=>`<div class="qb-dur${dur===d?' sel':''}" onclick="A.setQBDur(${d})">${d}m</div>`).join('')}
+      </div>
+      <div style="background:rgba(68,255,0,0.06);border:1px solid rgba(68,255,0,0.15);border-radius:10px;padding:12px 14px;margin-bottom:20px;font-family:var(--fm);font-size:13px">
+        <span style="color:#44ff00;font-weight:700">${fmt(s)}</span> <span style="color:var(--tx3)">→</span> <span style="color:#44ff00;font-weight:700">${fmt(e)}</span>
+        <span style="color:var(--tx3);margin-left:8px">${dur} min</span>
+      </div>
+      <div style="display:flex;gap:10px">
+        <button class="btn btn-primary btn-full" id="btn-qb-confirm" style="background:#44ff00;color:#07111e;font-weight:800">Confirm Booking</button>
+        <button class="btn btn-ghost btn-sm" onclick="A.closeQB()">Cancel</button>
+      </div>
+      ${S.qbErr?`<div class="error-box" style="margin-top:12px">${S.qbErr}</div>`:''}
     </div>
   </div>`;
 }
@@ -524,6 +581,18 @@ function bindMain(){
   document.getElementById('btn-ref')?.addEventListener('click',()=>{loadAll(S.view==='booking'?S.bookDate:new Date()).then(render);});
   document.getElementById('btn-pd')?.addEventListener('click',()=>{S.bookDate=new Date(S.bookDate.getTime()-86400000);S.bookStart=null;loadAll(S.bookDate).then(render);render();});
   document.getElementById('btn-nd')?.addEventListener('click',()=>{S.bookDate=new Date(S.bookDate.getTime()+86400000);S.bookStart=null;loadAll(S.bookDate).then(render);render();});
+  document.getElementById('btn-qb-confirm')?.addEventListener('click',async()=>{
+    const title=document.getElementById('qb-title')?.value?.trim();
+    if(!title){S.qbErr='Please enter a meeting title.';render();return;}
+    const s=new Date(),e=new Date(s.getTime()+S.qbDur*60000),room=S.config.rooms[S.qb];
+    try{
+      await createBooking(room.email,title,s,e);
+      S.qb=null;S.qbErr=null;
+      S.bookMsg={ok:true,text:`&#9889; "${title}" booked in ${room.name} &middot; ${fmt(s)} &ndash; ${fmt(e)}`};
+      await loadAll(new Date());render();
+      setTimeout(()=>{S.bookMsg=null;render();},7000);
+    }catch(err){S.qbErr=`Failed: ${err.message}`;render();}
+  });
   document.getElementById('btn-confirm')?.addEventListener('click',async()=>{
     const title=document.getElementById('b-title')?.value?.trim();
     if(!title){S.bookMsg={ok:false,text:'Please enter a meeting title.'};render();return;}
@@ -539,7 +608,7 @@ function bindMain(){
 
 function startRefresh(){
   stopRefresh();
-  S.refreshId=setInterval(async()=>{if(S.view==='panel'||S.view==='admin'){await loadAll(new Date());render();}},60000);
+  S.refreshId=setInterval(async()=>{if(S.view==='panel'||S.view==='admin'){await loadAll(new Date());render();}},30000);
   S.clockId=setInterval(()=>{const el=document.getElementById('pclock');if(el)el.textContent=fmt(now());},1000);
 }
 function stopRefresh(){if(S.refreshId){clearInterval(S.refreshId);S.refreshId=null;}if(S.clockId){clearInterval(S.clockId);S.clockId=null;}}
@@ -547,6 +616,9 @@ function stopRefresh(){if(S.refreshId){clearInterval(S.refreshId);S.refreshId=nu
 return{
   togglePick:(i)=>{if(S.picked.includes(i))S.picked=S.picked.filter(x=>x!==i);else if(S.picked.length<2)S.picked=[...S.picked,i];render();},
   retry:(i)=>{loadRoom(i,S.view==='booking'?S.bookDate:new Date()).then(render);},
+  openQB:(i)=>{S.qb=i;S.qbDur=30;S.qbErr=null;render();},
+  closeQB:()=>{S.qb=null;S.qbErr=null;render();},
+  setQBDur:(d)=>{S.qbDur=d;render();},
   quickBook:(i)=>{S.selRoom=i;S.view='booking';S.bookDate=new Date();loadAll(S.bookDate).then(render);render();},
   goBook:(i)=>{S.selRoom=i;S.view='booking';render();},
   selRoom:(i)=>{S.selRoom=i;S.bookStart=null;loadRoom(i,S.bookDate).then(render);render();},
