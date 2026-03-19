@@ -357,14 +357,14 @@ function rRP(i){
       <div class="rp-meta">${fmt(parseT(cur.start.dateTime))} &ndash; ${fmt(parseT(cur.end.dateTime))}</div>
       <div class="rp-time-left busy">&#9679; ${tleft}</div>
       <div class="progress"><div class="progress-fill" style="width:${pr}%"></div></div>
-      ${nxt?`<div class="rp-next"><div style="font-size:10px;font-weight:700;color:var(--tx3);text-transform:uppercase;letter-spacing:.12em;margin-bottom:5px">UP NEXT</div><strong>${nxt.subject||'Meeting'}</strong> &nbsp;<span style="font-family:var(--fm);font-size:12px;color:var(--tx2)">${fmt(parseT(nxt.start.dateTime))} &ndash; ${fmt(parseT(nxt.end.dateTime))}</span></div>`:''}`;
+      ${nxt?`<div class="rp-next"><div style="font-size:10px;font-weight:700;color:#ff4400;text-transform:uppercase;letter-spacing:.12em;margin-bottom:5px">UP NEXT</div><strong>${nxt.subject||'Meeting'}</strong> &nbsp;<span style="font-family:var(--fm);font-size:12px;color:#ff4400;font-weight:700">${fmt(parseT(nxt.start.dateTime))} &ndash; ${fmt(parseT(nxt.end.dateTime))}</span></div>`:''}`;
   }else if(nxt){
     const ml=minsLeft(nxt.start.dateTime);
     const hrs=Math.floor(ml/60),mins=ml%60;
     const tfree=hrs>0?`Free for ${hrs}h ${mins}m`:`Free for ${mins} min`;
     body=`<div class="rp-free">Available</div>
       <div class="rp-free-sub">${tfree}</div>
-      <div class="rp-next"><div style="font-size:10px;font-weight:700;color:var(--tx3);text-transform:uppercase;letter-spacing:.12em;margin-bottom:5px">UP NEXT</div><strong>${nxt.subject||'Meeting'}</strong> &nbsp;<span style="font-family:var(--fm);font-size:12px;color:var(--tx2)">${fmt(parseT(nxt.start.dateTime))} &ndash; ${fmt(parseT(nxt.end.dateTime))}</span></div>`;
+      <div class="rp-next"><div style="font-size:10px;font-weight:700;color:#ff4400;text-transform:uppercase;letter-spacing:.12em;margin-bottom:5px">UP NEXT</div><strong>${nxt.subject||'Meeting'}</strong> &nbsp;<span style="font-family:var(--fm);font-size:12px;color:#ff4400;font-weight:700">${fmt(parseT(nxt.start.dateTime))} &ndash; ${fmt(parseT(nxt.end.dateTime))}</span></div>`;
   }else{
     body=`<div class="rp-free">Available</div><div class="rp-free-sub">Free all day</div>
       <div class="rp-next" style="color:var(--tx3);background:transparent;border-color:transparent">No upcoming meetings today</div>`;
