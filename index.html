@@ -1,899 +1,3 @@
-
-Room booking system
-/
-best way to use https://outlook.office.com/bookings/homepage
-
-Mar 18
-
-Synthesized comprehensive Microsoft Bookings guidance for administrative implementation
-Synthesized comprehensive Microsoft Bookings guidance for administrative implementation
-Here's a practical breakdown of getting the most out of Microsoft Bookings, keeping your M365/Oqtima context in mind:
-
-Two modes — pick the right one
-Personal Bookings — your own shareable scheduling link. Great for ad-hoc "book time with me" links you put in your email signature. You define your availability, create meeting types, publish a page, and share the link — anyone can then see your free slots and book directly. 
-Microsoft Learn
-
-Shared Bookings — team/department-level. You add multiple staff members, define various services, and manage appointments for the whole group 
-Meetergo
- — useful if Oqtima wants a centralized "IT support slot booking" or meeting room booking flow.
-
-Setup best practices
-Custom domain — the default domain uses .onmicrosoft.com, which can cause booking confirmation emails to land in spam. Change it to something like @bookings.oqtima.com for deliverability and professionalism. 
-Microsoft Learn
-
-Multiple admins — always have at least two administrators on your Bookings calendar to avoid lockout situations if one person is unavailable or leaves. 
-University of Oregon
-
-Buffer time — enable buffer time per service to add extra breathing room on staff calendars between appointments 
-Princeton
- — handy for IT support sessions.
-
-Lead time — configure a minimum lead time so you're not getting same-day bookings you can't handle.
-
-Intake form / custom fields — you can add dropdown, multiple-choice, or open-ended text questions to the intake form per service, and mark them as required. 
-Bookings
- For IT support, this is ideal to pre-collect info (device type, issue category, etc.).
-
-Teams integration
-Enabling "Add Online Meeting" for a service auto-creates a unique Teams meeting space per appointment, with the join link included in both the confirmation email and calendar invite. 
-Bookings
- Enable the Teams waiting room for any external-facing bookings.
-
-Power Automate integration (relevant for you)
-Power Automate connectors for Bookings let you automate tasks like posting to a Teams channel when an appointment is created, or syncing data with other apps. 
-Microsoft Learn
- You could wire this into your existing IT support → Jira flow — a new booking triggering a Jira ticket automatically.
-
-Security / admin controls (M365 admin angle)
-From the M365 admin center → Settings → Org settings → Bookings, you can restrict shared bookings to authenticated internal users only, and prevent booking pages from appearing in search engine results. 
-Microsoft Community Hub
- Worth locking down if Bookings is only meant for internal use at Oqtima.
-
-Practical use cases for your environment
-IT support slot booking — staff books a 30-min troubleshooting session, pre-fills device/issue info via custom fields, auto-creates Teams link
-Room/desk reservations — Bookings can act as a simple resource booking layer on top of Exchange calendars
-Onboarding sessions — HR or IT schedules structured onboarding slots without email back-and-forth
-The key differentiator vs. just using Outlook's scheduling assistant is the self-service public/internal page — no need for the booker to have calendar visibility over the staff member.
-
-I have room resouces already for microsoft, could i use this for a tablet to hang on a meeting room ?
-
-Mar 18
-
-Evaluated Bookings limitations against purpose-built room display solutions
-Evaluated Bookings limitations against purpose-built room display solutions
-Short answer: not really well — Bookings is a scheduling tool, not a room display panel. Here's the distinction:
-
-What Bookings gives you on a tablet
-A booking interface where someone can walk up and schedule the room for a future time
-It reads from the room resource's Exchange calendar for availability
-No real-time "🟢 Available / 🔴 In Use" status panel
-No current meeting name, end time countdown, or "book now for 30 min" quick-tap flow
-The UI is designed for desktops — not optimized for a portrait tablet mounted on a wall
-What you actually need for a door panel
-A proper room display shows:
-
-Current status at a glance (colour-coded)
-Who booked it and until when
-Next upcoming meeting
-Quick ad-hoc booking button
-That's exactly what you spent time evaluating before — SyncSign was your top pick for the two-room wireless glass-mounted setup at Oqtima, integrated with M365. That remains the right tool for this.
-
-The realistic Bookings + tablet scenario
-The one case where Bookings on a tablet does make sense is a reception/lobby kiosk — a shared screen where visitors or staff can browse and book rooms themselves. Not a door panel, but a booking station. Even then, the UX isn't great for touch.
-
-Bottom line
-Need	Microsoft Bookings	SyncSign / Joan / Roomzilla
-Door panel display	❌	✅
-Real-time room status	❌	✅
-Walk-up booking	⚠️ Clunky	✅
-Syncs with M365 room resources	✅	✅
-Cost	Included in M365	Extra hardware/subscription
-If budget is the constraint and you want to avoid extra spend, the closest free workaround would be displaying the Outlook Web App calendar view for the room resource in kiosk mode — but it's ugly and not purpose-built. SyncSign is still the cleaner answer.
-
-Want me to revisit the SyncSign vs Roomzilla comparison for the final CEO document, or are you exploring this as a cost-saving angle?
-
-please what other room booking systems are there
-
-Mar 18
-
-Contextualized user needs and prepared tailored comparison
-Contextualized user needs and prepared tailored comparison
-Here's a broad map of the market, split by category — since "room booking system" means different things depending on whether you want door panel hardware, software-only, or an all-in-one platform.
-
-🖥️ Door Panel / Display Hardware (tablet on the wall)
-These are purpose-built for the physical panel outside a room:
-
-Product	M365 sync	Hardware	Price
-SyncSign	✅	E-ink display, battery, wireless	~€200–300/panel + small sub
-Joan (Visionect)	✅	E-ink, battery, elegant	~€350–500/panel + sub
-Logitech Tap Scheduler	✅	Dedicated Android tablet	~€400–500/panel
-Evoko Naso	✅	Dedicated Android tablet	~€500–600/panel
-ROOMZ	✅	E-ink, battery	~€250–400/panel
-Neat Pad	✅ (Teams)	Teams-certified tablet	€600+
-You already evaluated most of these — SyncSign came out on top for your wireless glass-mount needs.
-
-💻 Software-Only (use any tablet you already have)
-These run as an app on an existing iPad/Android tablet — cheaper entry point:
-
-Meeting Room 365 — simple, affordable at $9/display/month, integrates with M365/Exchange, with multiple display themes. Users praise it for being easy to set up and stable. 
-Meeting Room 365
- Good option if you want to repurpose an existing tablet.
-
-Yoffix — M365-integrated, supports room displays, digital signage, and kiosk mode, with auto-release rules for no-shows. 
-Yoffix
-
-Roomzilla — free for limited rooms, paid plans at a low monthly rate. Good for small teams. 
-DeskFlex
- You already confirmed this works with M365 bidirectional sync.
-
-AskCody — deep Outlook/Exchange integration, room displays and dashboards, can report faulty in-room equipment from the tablet, and shows availability at a glance. 
-AskCody
- More enterprise-focused.
-
-🏢 Full Workspace Platforms (booking + analytics + desk management)
-Overkill for 2 rooms but worth knowing:
-
-Robin — starts at ~$5/seat/month, modern UI, M365/Teams/Slack integrations, real-time analytics and occupancy tracking. 
-Gable
- Popular with hybrid teams.
-
-Condeco — strong Microsoft partner, deeply integrated with Teams and Outlook, but targets larger orgs — minimum 250 employees and enterprise pricing. 
-Getofficely
-
-Teem (by Eptura) — desk and room booking, visitor management, digital signage, integrates with Outlook and Google Calendar. 
-London Daily News
-
-YAROOMS — M365 integration with two-way sync, centralized admin dashboard, room photos, capacity settings, and department-level booking restrictions. 
-YAROOMS
-
-For Oqtima's situation specifically
-Given 2 rooms, existing M365 room resources, Spain office, and budget awareness — the realistic shortlist is:
-
-SyncSign — hardware + software, wireless, already your top pick
-Meeting Room 365 — if you want to reuse an existing tablet cheaply ($9/month)
-Roomzilla — free tier might cover both rooms, already tested with your M365 setup
-Want me to do a quick cost comparison across these three for a 2-room setup over 12 months?
-
-could you build a room booking thing ?
-
-Mar 18
-
-Assessed requirements and prepared clarifying questions
-Assessed requirements and prepared clarifying questions
-Before I build, a few quick questions to make sure it's actually useful for you:
-
-Let me know what you're after and I'll build it straight away!
-
-Q: What do you want it to do? (Select all that apply)
-A: All of the above
-
-Q: How should it connect to your calendars?
-A: Connect to M365 via Graph API (real data)
-
-Q: How many rooms to include?
-A: 2 rooms (current setup)
-
-Mar 18
-
-Architected comprehensive M365 room booking system with authentication and real-time scheduling
-Architected comprehensive M365 room booking system with authentication and real-time scheduling
-Here's your room booking system — a single HTML file you can host anywhere or run locally.
-
-What's included:
-
-Panel view — real-time status display (Available / In Use), current meeting + time remaining, next meeting, auto-refreshes every 60 seconds. Has a "Book Now" button for walk-up bookings.
-Book a Room — pick room, date, duration (30/60/90/120 min), visual timeline of the day, slot picker that greys out busy/past times, confirm form that creates the event in your calendar with the room as attendee.
-Admin view — both rooms side by side, utilisation % stat, full event list with organiser, cancel button per booking.
-Persistent config — your room names/emails are remembered between sessions via artifact storage.
-To connect it to your M365 rooms, you'll need:
-
-Azure AD app registration → go to portal.azure.com → App registrations → New registration
-Set type to Single-page application (SPA), paste the file's URL as redirect URI
-Add delegated permissions: Calendars.ReadWrite + Place.Read.All
-Grant the signed-in user delegate / editor access to both room mailboxes in Exchange Online admin (this is what allows reading their calendars)
-Quickest test path: Skip the app registration entirely — grab a token from Graph Explorer (it signs you in automatically), paste it into the token field. Valid for ~1 hour, enough to validate everything works with your real room emails.
-
-Room booking
-Code · HTML 
-can i host on render ?
-
-Mar 18
-
-Assessed static file hosting feasibility on Render
-Assessed static file hosting feasibility on Render
-Yes, easily — it's a single HTML file so it's about as simple as static hosting gets.
-
-Quickest way on Render:
-
-Push the room-booking.html file to a GitHub repo (even a private one with just that file)
-Go to render.com → New → Static Site
-Connect your GitHub repo
-Set these:
-Build command: (leave blank)
-Publish directory: . (or wherever the file sits)
-Deploy — Render gives you a https://your-app.onrender.com URL
-That's it. Free tier works fine for this.
-
-One important step after: Take the Render URL and add it as a redirect URI in your Azure AD app registration:
-
-App registrations → your app → Authentication → Add URI → https://your-app.onrender.com/room-booking.html
-
-Without this, the Microsoft login popup will throw a redirect_uri_mismatch error.
-
-Tip for the door tablet: Once hosted, open the URL on the tablet, set it to the Panel view, and use the browser's "Add to Home Screen" / kiosk mode. On Android you can use Fully Kiosk Browser to lock it to that one page and keep the screen on — works well for a mounted display.
-
-Not Found
-for the site
-
-Mar 18
-
-Diagnosed file naming mismatch causing deployment error
-Diagnosed file naming mismatch causing deployment error
-That's because Render expects the main file to be named index.html. Let me rename it for you.
-
-
-Ran a command, read a file
-Ran a command, read a file
-Download this index.html, replace the file in your GitHub repo with it, and Render will redeploy automatically.
-
-Also make sure your Render redirect URI in Azure AD is just: https://your-app.onrender.com (no filename at the end — since it'll now serve from the root).
-
-Index
-Code · HTML 
-so just to check a couple thing, 
-this will intergrate with microsoft room resources ?
-booking from the site will feed over to the calender ?
-
-Mar 18
-
-Identified user's dual verification questions regarding integration
-Identified user's dual verification questions regarding integration
-Yes to both — here's exactly what happens under the hood:
-
-1. Room resource integration
-
-The app reads directly from the room mailbox calendars via the Microsoft Graph API (/users/{room-email}/calendarView). So whatever is booked in Outlook against those rooms shows up in the app — no separate sync needed.
-
-2. Bookings feed back to the calendar
-
-When you book through the app it calls /me/calendar/events and adds the room as an attendee. This is exactly how Outlook does it natively — Exchange's resource booking automaton picks it up and accepts the invite on behalf of the room, blocking the slot in the room's calendar.
-
-So the flow is:
-
-App books → Graph API creates event in your calendar 
-         → Room resource receives invite 
-         → Exchange auto-accepts 
-         → Room calendar blocked ✓
-         → Shows as busy in Outlook for everyone ✓
-One thing to verify in Exchange: Make sure your room resources have "Auto Accept" enabled (it's on by default for room mailboxes, but worth checking). In Exchange Online admin:
-
-Resources → select room → Booking options → Automatically accept meeting requests ✓
-
-If that's off, bookings made from the app will show as tentative until manually accepted.
-
-when you say azura you mean entra ?
-
-Mar 18
-
-Thinking about clarifying the relationship between Azura and Entra
-Thinking about clarifying the relationship between Azura and Entra
-Yes, exactly — Microsoft rebranded Azure Active Directory (Azure AD) to Microsoft Entra ID in 2023. Same thing, new name.
-
-So when I said:
-
-App registrations → your app → Authentication
-
-That's in Entra admin center → entra.microsoft.com → Applications → App registrations
-
-Or you can still get there via the Azure portal (portal.azure.com) — it redirects to the same place. Either works, Entra admin center is just the cleaner route now.
-
-wont these feed from the intergration 
-
-Room Resources
-Room 1 Name
-Room 1 Email
-Room 2 Name
-Room 2 Email
-Room 1 Capacity
-Room 2 Capacity
-
-Mar 18
-
-Architected automatic room data retrieval from Microsoft Graph API integration
-Architected automatic room data retrieval from Microsoft Graph API integration
-Good point — yes, they can. Microsoft Graph has a Places API (/places/microsoft.graph.room) that returns all your room resources including name, email address, and capacity automatically.
-
-The setup flow would become:
-
-Enter Tenant ID + Client ID
-Sign in with Microsoft
-App fetches your rooms from Entra/Exchange
-You pick which 2 to use
-Want me to update the app to do it that way? You'd just enter the IDs, sign in, and select from a dropdown of your actual room resources — no manual typing of emails or names.
-
-please update
-
-Mar 18
-
-Architected revised workflow integrating room selection functionality
-Architected revised workflow integrating room selection functionality
-Updated. The setup flow is now:
-
-Enter Tenant ID + Client ID → Sign in with Microsoft
-App calls GET /places/microsoft.graph.room and pulls back all your room resources — name, email, capacity, building, floor — automatically
-Tick the rooms you want (up to 4) from the list and confirm
-Done — straight into the panel
-A couple of extras added:
-
-"Change Rooms" button in the nav so you can swap which rooms are shown any time without signing out
-Manual fallback — if the Places API fails (e.g. permission not yet granted), it shows input fields so you can type the emails directly and still get going
-Your room selection is remembered, so on next visit it pre-ticks your previously chosen rooms
-Index
-Code · HTML 
-ok and will there be any secuirty issues with putting in this informaiton ?
-
-Mar 18
-
-Evaluated security implications of credential entry
-Evaluated security implications of credential entry
-Good question to ask. Here's an honest breakdown:
-
-What's safe ✅
-Tenant ID and Client ID are not secrets. They're the equivalent of a username — they identify your app but can't be used to do anything without authentication. Microsoft publishes them in OAuth flows openly. Fine to have in a hosted app.
-
-The MSAL sign-in flow is secure. When you click "Sign in with Microsoft" the authentication happens entirely on Microsoft's servers — the app never sees your password. The token comes back directly to your browser, not via any server.
-
-There's no backend. This is a pure static HTML file. Nothing is sent to Render's servers except the file itself being served. All Graph API calls go browser → Microsoft directly.
-
-What needs care ⚠️
-The token paste mode — if you paste a Graph Explorer token, it lives in the browser session only and expires in ~1 hour. Don't use this on a shared/public computer.
-
-Who can access the hosted URL. Right now the site is open to anyone with the link. Someone who knows the URL could reach the sign-in page. They'd still need valid Oqtima credentials to actually log in, so the data is protected — but worth noting.
-
-The Calendars.ReadWrite permission scope — the signed-in user can read and write calendars for the rooms they have delegate access to. That's intentional and needed, but means the app has real write access. Worth restricting Exchange delegate access to only the users who should use this tool.
-
-What I'd recommend for Oqtima
-Action	Why
-Add a login requirement in Entra (require user assignment on the app registration)	Only specific users can authenticate
-Don't share the Render URL publicly	Keep it internal
-Use MSAL sign-in, not token paste, for anything permanent	Tokens auto-refresh and expire properly
-Keep the app registration to minimum permissions	Only Calendars.ReadWrite + Place.Read.All — nothing else
-The short version: the credentials you're entering are safe to put in, the main thing to manage is who you share the URL with.
-
-ok where do i get these ID´s ?
-
-Mar 18
-
-Charted pathway to locate Azure authentication credentials
-Charted pathway to locate Azure authentication credentials
-Both come from Entra admin center — here's exactly where:
-
-Tenant ID
-Go to entra.microsoft.com
-Sign in with your Oqtima admin account
-Left menu → Identity → Overview
-You'll see Tenant ID right there on the overview page — copy it
-Client ID (requires creating an App Registration first)
-Still in entra.microsoft.com
-Left menu → Applications → App registrations
-Click New registration
-Fill in:
-Name: Room Booking (anything you like)
-Supported account types: Accounts in this organisational directory only
-Redirect URI: Select Single-page application (SPA) from the dropdown, then paste your Render URL e.g. https://your-app.onrender.com
-Click Register
-You're now on the app's overview page — Application (client) ID is right at the top — copy it
-Then add the permissions
-Still on that app registration page:
-
-Left menu → API permissions
-Add a permission → Microsoft Graph → Delegated permissions
-Search and add:
-Calendars.ReadWrite
-Place.Read.All
-Click Grant admin consent for Oqtima (the button at the top of the permissions list)
-That's everything the app needs. Both IDs are then pasted into the setup screen when you first open the app.
-
-getting this error 
-
-Sign-in failed: MSAL library unavailable — use token mode.
-
-Mar 18
-
-Diagnosed CDN failure and identified alternative script sources
-Diagnosed CDN failure and identified alternative script sources
-The Microsoft CDN for MSAL is being blocked or failing to load. Easy fix — just swap it to a more reliable CDN. Let me update that one line:
-
-
-Edited a file, read a file
-Edited a file, read a file
-Replace the file in your GitHub repo with this one — Render will redeploy in about 30 seconds.
-
-If it still fails after that, open your browser's developer console (F12 → Console tab) before clicking sign in and let me know what error appears there — that'll tell us exactly what's being blocked.
-
-Index
-Code · HTML 
-Sign-in failed: uninitialized_public_client_application: You must call and await the initialize function before attempting to call any other MSAL API. For more visit: aka.ms/msaljs/browser-errors
-
-Mar 18
-
-Identified initialization sequencing issue and devised corrective measures
-Identified initialization sequencing issue and devised corrective measures
-MSAL v3 requires an explicit initialize() call before use. Let me fix that:
-
-
-Identified missing parameter and rectified tool configuration
-Identified missing parameter and rectified tool configuration
-Fixed. The issue was that MSAL v3 made initialize() mandatory before any other calls — the old v2 code skipped that step.
-
-Replace the file in your GitHub repo and once Render redeploys, the Microsoft sign-in popup should work properly.
-
-Index
-Code · HTML 
-NEXT ERROR 
-
-Sign-in failed: invalid_request: Error(s): 9002326 - Timestamp: 2026-03-18 13:39:24Z - Description: AADSTS9002326: Cross-origin token redemption is permitted only for the 'Single-Page Application' client-type. Request origin: 'https://room-booking-system-es1f.onrender.com'. Trace ID: 0ccd2411-0b53-489a-ba9d-c2d4c43b2100 Correlation ID: af4379ad-1f40-4535-9ec2-a83b710526bf Timestamp: 2026-03-18 13:39:24Z - Correlation ID: af4379ad-1f40-4535-9ec2-a83b710526bf - Trace ID: 0ccd2411-0b53-489a-ba9d-c2d4c43b2100
-
-Mar 18
-
-Pinpointed app registration platform misconfiguration in Entra
-Pinpointed app registration platform misconfiguration in Entra
-This isn't a code issue — it's the app registration type in Entra. The redirect URI was registered as Web instead of Single-Page Application (SPA). Easy fix:
-
-In Entra admin center:
-
-Go to entra.microsoft.com → App registrations → your Room Booking app
-Left menu → Authentication
-Look under Platform configurations — you'll see your Render URL listed under Web (wrong)
-Click Add a platform → choose Single-page application
-Paste your URL: https://room-booking-system-es1f.onrender.com
-Click Configure
-Then delete the old Web entry that has the same URL (the one under the Web section)
-Click Save
-The difference matters because SPA uses the PKCE auth flow which works from a browser without a backend secret. The Web type expects a server-side secret exchange, which is why it blocks cross-origin requests from your hosted page.
-
-Try signing in again after saving — no code change needed.
-
-1773841429418_image.png
-it found the rooms but, on the panel page it shows this error 
-
-⚠ Access is denied. Check credentials and try again.
-
-Mar 18
-
-Diagnosed permissions issue preventing calendar access retrieval
-Diagnosed permissions issue preventing calendar access retrieval
-Good progress — sign-in worked and rooms were found. This new error is coming from the calendar read step, not auth.
-
-The signed-in user doesn't have delegate access to the room mailboxes in Exchange Online. That's the missing piece.
-
-Fix in Exchange Online admin:
-
-Go to admin.exchange.microsoft.com
-Recipients → Resources
-Click on Room 1 → Delegation tab (or Edit → Delegates)
-Under Read and manage (Full Access) — add your user account
-Repeat for Room 2
-Save
-Alternative — quicker via PowerShell if you have Exchange admin:
-
-powershell
-Add-MailboxPermission -Identity "room1@oqtima.com" -User "yourname@oqtima.com" -AccessRights FullAccess -AutoMapping $false
-Add-MailboxPermission -Identity "room2@oqtima.com" -User "yourname@oqtima.com" -AccessRights FullAccess -AutoMapping $false
-Once that's done, hit Retry on the panel — no redeployment needed. The permission change can take a few minutes to propagate in Exchange so if it doesn't work immediately, wait 2–3 minutes and try again.
-
-this was already done ?
-
-Mar 18
-
-Investigated alternative API endpoints and admin consent requirements
-Investigated alternative API endpoints and admin consent requirements
-OK so the mailbox delegation is done. The issue is more likely one of these:
-
-Most likely — Admin consent not granted for the API permissions
-
-In Entra → App registrations → your app → API permissions, check if there's a green tick or a warning next to Calendars.ReadWrite and Place.Read.All. If there's no admin consent granted:
-
-Click Grant admin consent for Oqtima
-Confirm yes
-Both permissions should show a green ✓
-Second possibility — Token doesn't include the right scopes
-
-Your current session token was issued before everything was set up correctly. Try:
-
-Click Sign out in the top right of the app
-Sign back in
-This forces a fresh token with the correct scopes
-Third possibility — Delegate access type
-
-Exchange has two different things:
-
-Full Access (mailbox level) — lets you open the mailbox in Outlook
-Calendar delegate (calendar level) — what Graph API needs for /users/{room}/calendarView
-These are separate. Full Access alone isn't always enough for the Graph calendar endpoint. To add calendar-specific delegate access via PowerShell:
-
-powershell
-Add-MailboxFolderPermission -Identity "room1@oqtima.com:\Calendar" -User "yourname@oqtima.com" -AccessRights Editor
-Add-MailboxFolderPermission -Identity "room2@oqtima.com:\Calendar" -User "yourname@oqtima.com" -AccessRights Editor
-Try the sign out/in first as it's quickest — that alone often fixes it.
-
-1773841782590_image.png
-signed in and out 
-
-whats the code to connect to the exchange via power shell
-
-Mar 18
-
-Diagnosed permission issue and prepared PowerShell solution
-Diagnosed permission issue and prepared PowerShell solution
-Permissions all look good ✅. So it's the calendar-level delegate access. Here's the PowerShell:
-
-Connect to Exchange Online first:
-
-powershell
-Install-Module ExchangeOnlineManagement -Force
-Connect-ExchangeOnline -UserPrincipalName yourname@oqtima.com
-Then add calendar permissions for each room:
-
-powershell
-Add-MailboxFolderPermission -Identity "room1@oqtima.com:\Calendar" -User "yourname@oqtima.com" -AccessRights Editor
-
-Add-MailboxFolderPermission -Identity "room2@oqtima.com:\Calendar" -User "yourname@oqtima.com" -AccessRights Editor
-Replace room1@oqtima.com / room2@oqtima.com with your actual room resource email addresses, and yourname@oqtima.com with the account you sign into the app with.
-
-If you already ran Add-MailboxPermission (Full Access) earlier and get an error saying the user already exists, use Set-MailboxFolderPermission instead:
-
-powershell
-Set-MailboxFolderPermission -Identity "room1@oqtima.com:\Calendar" -User "yourname@oqtima.com" -AccessRights Editor
-After running, wait 2–3 minutes then hit Retry in the app.
-
-----------------------------------------------------------------------------------------
-PS C:\Windows\system32> Add-MailboxFolderPermission -Identity "the.arena-room@oqtima.com:\Calendar" -User "s.carter@oqtima.com" -AccessRights Editor
->>
-FolderName           User                 AccessRights                           SharingPermissionFlags
-----------           ----                 ------------                           ----------------------
-Calendar             Stuart Carter        {Editor}
-PS C:\Windows\system32>
-
-Mar 18
-
-Verified successful permission configuration completion
-Verified successful permission configuration completion
-That worked perfectly. Now:
-
-Go back to the app
-Hit Retry on the panel
-It should pull the calendar data through now. Do the same command for your second room if you haven't already:
-
-powershell
-Add-MailboxFolderPermission -Identity "room2@oqtima.com:\Calendar" -User "s.carter@oqtima.com" -AccessRights Editor
-⚠ Access is denied. Check credentials and try again.
-
-Mar 18
-
-Diagnosed permission mismatch; identified missing shared calendar access scope
-Diagnosed permission mismatch; identified missing shared calendar access scope
-The issue is the API permission scope. Reading another user's calendar (even with delegate access) requires Calendars.ReadWrite.Shared — not just Calendars.ReadWrite. These are different scopes in Graph.
-
-Fix in Entra — add the missing permission:
-
-Entra → App registrations → Room Booking → API permissions
-Add a permission → Microsoft Graph → Delegated
-Search for Calendars.ReadWrite.Shared → tick it → Add
-Click Grant admin consent for Oqtima
-Then sign out and back into the app to get a fresh token that includes the new scope.
-
-The difference:
-
-Permission	What it covers
-Calendars.ReadWrite	Only the signed-in user's own calendar
-Calendars.ReadWrite.Shared	Calendars the user has been delegated access to — i.e. your room mailboxes
-That should be the last missing piece.
-
-working now, on the panel page can you make the room look more user friendly? plus a inpromet booking, 
-
-also change the color to white and 
-#44ff00, 
-
-plus make  the room green if available. 
-
-also does this page auto refressh to keep it real time
-
-Mar 18
-
-Retrieving current file to implement panel updates
-Retrieving current file to implement panel updates
-Yes it auto-refreshes every 60 seconds currently — I'll bump that up to 30 seconds too. Let me read and update the panel section:
-
-
-Architected UI overhaul with color scheme, availability indicators, and real-time refresh
-Architected UI overhaul with color scheme, availability indicators, and real-time refresh
-Here's what changed:
-
-Colors
-
-White text throughout, 
-#44ff00 as the accent colour everywhere
-Available room — full green treatment:
-
-Dark green background gradient
-Green glowing border
-Green status bar across the top
-"Available" in large glowing 
-#44ff00 text
-Shows "Free for X min/hours" countdown to next meeting
-Busy room — red treatment with time remaining shown as a pill badge
-
-⚡ Book Now (impromptu booking) — clicking it opens a modal overlay right on the panel page:
-
-Title input
-Duration picker (15 / 30 / 45 / 60 min)
-Live preview showing exact start → end time
-Confirm books it instantly and returns to panel
-Auto-refresh — now every 30 seconds (was 60), with a small label showing this on the panel header
-
-Push to GitHub and Render will redeploy in ~30 seconds.
-
-Index
-Code · HTML 
-oqtima.png
-can you make it white background, plus the room box a lot bigger ? 
-
-also the logo in the top right change to attached photo ?
-
-Mar 18
-
-Thinking about modifying design elements: background color, component sizing, and logo replacement
-Thinking about modifying design elements: background color, component sizing, and logo replacement
-Here's what changed:
-
-White background — full light mode throughout: white cards, light grey page background, dark text, shadows instead of glows
-
-Much bigger room boxes — minimum height of 380px, larger padding (32px), bigger room name (30px → was 24px), bigger "Available" text (52px), roomier layout overall
-
-Oqtima logo — embedded directly in the nav (no external URL needed, won't break if the file moves), replaces the ◈ ROOMS text
-
-Colours adjusted for light mode:
-
-Available = proper dark green (
-#1a9900) — readable on white
-Busy = brand red (
-#e8002d)
-Book Now button = Oqtima orange (
-#e84300) to match the logo
-Green status bar still runs across the top of available rooms
-Push to GitHub and it'll redeploy. The logo is baked into the file so no separate image hosting needed.
-
-Index
-Code · HTML 
-1773845089786_image.png
-1773845134286_image.png
-create it with the same colour semec as this site 
-
-also make this box soild green when its avaiable and soild red when the room is in a meeting
-
-Mar 18
-
-Identified color scheme requirements and room availability states
-Identified color scheme requirements and room availability states
-Here's what changed:
-
-Oqtima brand colours:
-
-Nav bar is now solid Oqtima orange (
-#d94000) — matching your IT helpdesk exactly
-All buttons, accents, focus states use the same orange
-White page background with light grey body
-Solid room panels:
-
-Available = solid green (
-#1db300 gradient) — all text white inside
-Busy = solid red (
-#cc0022 gradient) — all text white inside
-"Book Now" button is white with green text when available, so it pops off the green background
-"AVAILABLE" / "IN USE" badges are frosted white on the coloured panel
-Push to GitHub and it'll deploy. Should look very consistent with the rest of your Oqtima tooling now.
-
-Index
-Code · HTML 
-when signing in from a tablet, error messgae "sign-in failed: user_cancelled: user cancelled the flow ?
-
-Mar 18
-
-Diagnosed tablet sign-in popup issue, identified redirect solution
-Diagnosed tablet sign-in popup issue, identified redirect solution
-This is because mobile/tablet browsers block popups by default — MSAL's loginPopup() gets killed before it opens. The fix is to use redirect flow on mobile instead of popup.
-
-
-Ran a command, read a file
-Ran a command, read a file
-Push this to GitHub. What it now does:
-
-Desktop (wide screen / non-mobile browser) → popup flow as before
-Tablet / mobile (iPad, Android tablet, anything under 900px wide) → redirect flow — Microsoft login opens in the same tab, then redirects back to your app automatically after signing in
-No extra Entra config needed — the redirect URI you already registered covers this. The sign-in on tablet should now work cleanly.
-
-Index
-Code · HTML 
-could anyone use this site with there own room booking system ? and is there any secuirty issues ?
-
-Mar 18
-Good question to think through properly.
-
-Could anyone use it with their own system?
-Yes, technically anyone could. The app just asks for a Tenant ID, Client ID and Microsoft credentials — there's nothing Oqtima-specific hardcoded into it except the logo. Anyone with their own Microsoft 365 tenant could:
-
-Register their own Entra app
-Point it at their own Render deployment
-Sign in and use it with their own rooms
-That's actually a feature — it's a generic M365 room booking app. But if you don't want that, it's easy to lock down.
-
-Security issues to be aware of
-No authentication on the URL itself Anyone who knows your Render URL can reach the sign-in page. They'd still need valid Oqtima Microsoft credentials to log in and see anything — but the page is publicly reachable.
-
-Tenant is open to any Microsoft account Currently the app allows any Microsoft account to attempt sign-in. If someone had valid Oqtima credentials they could use it.
-
-Calendar write access The signed-in user can create and cancel bookings on the room calendars. If a non-IT staff member signs in, they have the same booking power as an admin.
-
-No role separation Everyone sees the Admin tab including the cancel buttons. There's no read-only mode for the door panel tablet vs a staff booking view.
-
-Token stored in sessionStorage The access token lives in the browser session — cleared when the tab closes. Reasonably safe but worth knowing.
-
-How to lock it down properly
-Action	How
-Restrict to Oqtima accounts only	In Entra → App registration → Authentication → set "Supported account types" to Accounts in this organisational directory only — already the default if you set it up correctly
-Restrict which users can sign in	Entra → Enterprise applications → Room Booking → Properties → User assignment required = Yes → then assign only specific users/groups
-Hide the URL	Add HTTP basic auth in Render (paid feature) or move to a private network
-Read-only panel mode	I can add a ?kiosk URL parameter that locks the tablet to panel-only view with no booking or admin tabs — good for the door tablet
-The biggest practical risk right now is any Oqtima employee could sign in and cancel someone else's meeting. Want me to add the kiosk mode and restrict the admin tab to specific users?
-
-help center banner.png
-Screenshot 2025-09-17 140527.png
-1773905030204_image.png
-can you put this banner along the top and incertain this logo in the top left, 
-
-also can you make the green box big enough to fit a samsung glaxy 9 tablet ?
-
-8:24 AM
-
-Architecting layout with banner, logo, and tablet-sized panels
-Architecting layout with banner, logo, and tablet-sized panels
-Here's what changed:
-
-Banner — the full orange Oqtima banner sits across the very top, with the OQ logo overlaid in the top left, just like your helpdesk site
-
-Nav bar — sits underneath the banner on a white strip with an orange bottom border. Tabs and sign-out buttons are dark text now (readable on white)
-
-Samsung Galaxy Tab S9 sizing — the two room panels now fill the full viewport height (100vh - 200px), so on a Tab S9 in landscape they fill the screen without scrolling. Room name and "Available" text scale responsively with clamp() so they look right at any tablet resolution. Both panels sit side by side in landscape — on a phone they stack vertically
-
-Push to GitHub and test on the tablet. If the panels are slightly too tall or short on the Tab S9 let me know and I can fine-tune the height offset.
-
-Index
-Code · HTML 
-can you remove the banner ?,
-
-8:36 AM
-
-Deliberated selective removal of banner while preserving logo
-Deliberated selective removal of banner while preserving logo
-Done — banner removed. Nav bar is now a clean white strip with the OQ logo on the left, tabs in the middle, and sign out on the right. The room panels fill the full tablet screen height correctly without the banner offset. Push to GitHub to deploy.
-
-Index
-Code · HTML 
-can you make the green box, wider to the right ? 
-
-also change times " 16:00 – 16:30" & "👥 9 people" to the oqtima orange #ff44000
-
-8:39 AM
-
-Parsed requests to expand panel and recolor text elements
-Parsed requests to expand panel and recolor text elements
-Done. Changes made:
-
-Panels wider — removed the max-width cap so they stretch full width of the screen, more room on the right
-Times (e.g. 16:00 – 16:30) → 
-#ff4400 orange, bold
-👥 9 people → 
-#ff4400 orange, bold
-Time remaining pill (e.g. "45 min left") → also orange to match
-Push to GitHub to deploy.
-
-Index
-Code · HTML 
-"UP NEXT" change to 
-#44ff00
-times of meetings "16:00 – 16:30" next to the name to 
-#44ff00
-
-8:47 AM
-
-Identified color scheme requirements for UI elements
-Identified color scheme requirements for UI elements
-Claude's response was interrupted
-"UP NEXT" change to #ff4400 times of meetings "16:00 – 16:30" next to the name to #ff4400
-
-8:47 AM
-
-Ran a command, read a file
-Ran a command, read a file
-Done — both UP NEXT and the meeting times 16:00 – 16:30 are now 
-#ff4400. Push to deploy.
-
-Index
-Code · HTML 
-can you make the room green box a little shorter and for it to sreach across the whole screen ?
-
-9:30 AM
-
-Ran a command, read a file
-Ran a command, read a file
-Done — panels are shorter and stretch edge to edge with minimal side padding. Push to deploy and let me know if you need them a touch taller or shorter still.
-
-Index
-Code · HTML 
-can you change all font to sofia pro please
-
-9:37 AM
-
-Navigated font licensing constraints and weighed implementation options
-Navigated font licensing constraints and weighed implementation options
-Done — but Sofia Pro is a paid Adobe Font so there's one extra step needed:
-
-To activate Sofia Pro:
-
-Go to fonts.adobe.com
-Add Sofia Pro to a Web Project (requires Adobe Creative Cloud subscription)
-Adobe gives you a kit embed code like https://use.typekit.net/abc1234.css
-In the HTML file, replace YOUR_KIT_ID with your actual kit ID
-In the meantime the app will display in DM Sans — a very similar clean sans-serif that looks close to Sofia Pro until the Adobe kit is connected.
-
-If Oqtima already uses Adobe Fonts for the brand (which is likely given Sofia Pro is in your branding), your IT team should already have a kit ID you can drop straight in.
-
-Index
-Code · HTML 
-also change 9 people and the next meetings teams back to white
-
-9:39 AM
-
-Ran a command, read a file
-Ran a command, read a file
-Done — 👥 9 people and the next meeting name are back to white. Push to deploy.
-
-Index
-Code · HTML 
-the green room bax needs to be sreech across the whole screen ?
-
-9:41 AM
-
-Investigated layout constraints preventing full-width box expansion
-Investigated layout constraints preventing full-width box expansion
-Done — panels now stretch fully edge to edge across the whole screen with no padding or gaps. There's just a 4px grey line between the two rooms so they're visually separated. Push to deploy.
-
-Index
-Code · HTML 
-Oqtima_meetin-board-logo_338x184.png
-also incert this logo
-
-9:44 AM
-
-Deciphered logo insertion request and understood replacement intent
-Deciphered logo insertion request and understood replacement intent
-Done — new Oqtima logo is in the nav. Note the logo has a black background in the image file itself, so it'll show a black rectangle on the white nav bar. If you have a version with a transparent background that would look much cleaner — just send it over and I'll swap it in.
-
-Index
-Code · HTML 
-
-
-Want to be notified when Claude responds?
-
-
-
-
-
-Claude is AI and can make mistakes. Please double-check responses.
-Index · HTML
-Copy
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -1068,10 +172,10 @@ input,button{font-family:inherit}
 <script>
 const App=(()=>{
 let S={view:'setup',config:null,msalInstance:null,account:null,token:null,rooms:[],discovered:[],picked:[],selRoom:0,bookDate:new Date(),bookStart:null,bookDur:60,bookMsg:null,err:null,refreshId:null,clockId:null,qb:null,qbDur:30,qbErr:null};
- 
+
 async function loadCfg(){try{const r=await window.storage.get('oq-rooms-cfg');if(r)return JSON.parse(r.value);}catch(e){}return null;}
 async function saveCfg(c){try{await window.storage.set('oq-rooms-cfg',JSON.stringify(c));}catch(e){}}
- 
+
 async function initMsal(tid,cid){
   if(window.__msalFailed||!window.msal)return false;
   try{
@@ -1113,7 +217,7 @@ async function gPost(p,body){
   return r.status===204?null:r.json();
 }
 async function gDelete(p){const t=await getToken();const r=await fetch(`https://graph.microsoft.com/v1.0${p}`,{method:'DELETE',headers:{Authorization:`Bearer ${t}`}});if(!r.ok)throw new Error(`HTTP ${r.status}`);}
- 
+
 async function discoverRooms(tk){
   try{const d=await gGet('/places/microsoft.graph.room?$top=100&$select=displayName,emailAddress,capacity,building,floorNumber',tk);
     return(d.value||[]).map(r=>({name:r.displayName||r.emailAddress,email:r.emailAddress,capacity:r.capacity||'',building:r.building||'',floor:r.floorNumber||''}));}
@@ -1128,7 +232,7 @@ async function createBooking(re,subj,start,end){
   return gPost('/me/calendar/events',{subject:subj,start:{dateTime:start.toISOString().replace('Z',''),timeZone:'UTC'},end:{dateTime:end.toISOString().replace('Z',''),timeZone:'UTC'},attendees:[{emailAddress:{address:re},type:'required'}]});
 }
 async function cancelEvent(re,eid){await gDelete(`/users/${encodeURIComponent(re)}/calendar/events/${eid}`);}
- 
+
 const parseT=s=>new Date(s.endsWith('Z')?s:s+'Z');
 const fmt=d=>d.toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'});
 const fmtDate=d=>d.toLocaleDateString('en-GB',{weekday:'long',day:'numeric',month:'long'});
@@ -1141,7 +245,7 @@ const prog=ev=>{const s=parseT(ev.start.dateTime).getTime(),e=parseT(ev.end.date
 const isBusy=(evs,s,e)=>evs.some(ev=>!(e<=parseT(ev.start.dateTime)||s>=parseT(ev.end.dateTime)));
 const tkKey=d=>`${d.getFullYear()}-${d.getMonth()}-${d.getDate()}-${d.getHours()}-${d.getMinutes()}`;
 const fromKey=k=>{const[y,mo,d,h,m]=k.split('-').map(Number);return new Date(y,mo,d,h,m,0);};
- 
+
 async function loadRoom(i,date){
   S.rooms[i]={...(S.rooms[i]||{}),loading:true,error:null};render();
   try{S.rooms[i].events=await getRoomEvents(S.config.rooms[i].email,date);S.rooms[i].loading=false;}
@@ -1149,7 +253,7 @@ async function loadRoom(i,date){
   render();
 }
 async function loadAll(date){await Promise.all(S.config.rooms.map((_,i)=>loadRoom(i,date)));}
- 
+
 function render(){
   const app=document.getElementById('app');if(!app)return;
   if(S.view==='setup'){app.innerHTML=rSetup();bindSetup();return;}
@@ -1158,7 +262,7 @@ function render(){
   app.innerHTML=rNav()+`<div class="main">${S.view==='panel'?rPanel():S.view==='booking'?rBooking():rAdmin()}</div>`;
   bindMain();
 }
- 
+
 function rSetup(){
   const uri=location.href.split('?')[0].split('#')[0];
   return`<div class="main"><div class="setup-wrap">
@@ -1186,9 +290,9 @@ function rSetup(){
     </div>
   </div></div>`;
 }
- 
+
 function rDisc(){return`<div class="main" style="padding-top:80px"><div class="loading"><div class="spinner"></div><div style="font-size:15px;font-weight:700;margin-bottom:6px">Discovering room resources…</div><div style="font-size:12px;color:var(--tx3)">Reading your Microsoft 365 Places directory</div></div></div>`;}
- 
+
 function rPicker(){
   const rooms=S.discovered;
   return`<div class="main"><div class="picker-wrap">
@@ -1214,7 +318,7 @@ function rPicker(){
     ${rooms.length>0?`<button class="btn btn-primary btn-full" id="btn-use" style="margin-top:10px" ${S.picked.length===0?'disabled':''}>Use ${S.picked.length} selected room${S.picked.length!==1?'s':''}</button>`:''}
   </div></div>`;
 }
- 
+
 function rNav(){
   const user=S.account?(S.account.name||S.account.username):'Token mode';
   return`<nav class="nav">
@@ -1233,7 +337,7 @@ function rNav(){
     </div>
   </nav>`;
 }
- 
+
 function rPanel(){
   const n=now();
   return`${rQB()}<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:24px">
@@ -1243,7 +347,7 @@ function rPanel(){
     <button class="icon-btn" id="btn-ref" title="Refresh now">&#8635;</button>
   </div><div class="panel-grid">${S.config.rooms.map((_,i)=>rRP(i)).join('')}</div>`;
 }
- 
+
 function rRP(i){
   const room=S.config.rooms[i],d=S.rooms[i]||{events:[],loading:true};
   if(d.loading)return`<div class="room-panel loading-panel"><div class="loading"><div class="spinner"></div>Loading ${room.name}&hellip;</div></div>`;
@@ -1284,7 +388,7 @@ function rRP(i){
     </div>
   </div>`;
 }
- 
+
 function rQB(){
   if(S.qb===null)return'';
   const room=S.config.rooms[S.qb],dur=S.qbDur||30;
@@ -1311,7 +415,7 @@ function rQB(){
     </div>
   </div>`;
 }
- 
+
 function rBooking(){
   const isToday=S.bookDate.toDateString()===now().toDateString();
   const ev=(S.rooms[S.selRoom]||{events:[]}).events||[];
@@ -1357,7 +461,7 @@ function rBooking(){
     </div>
   </div>`;
 }
- 
+
 function rTL(date,evs){
   const SH=8,EH=20,total=(EH-SH)*60,n=now();
   const isToday=date.toDateString()===n.toDateString();
@@ -1372,7 +476,7 @@ function rTL(date,evs){
   }).join('');
   return`<div><div class="tl-labels">${hrs}</div><div class="tl-track">${nowPct>=0?`<div class="tl-now" style="left:${nowPct}%"></div>`:''}${blocks}</div></div>`;
 }
- 
+
 function genSlots(date,evs){
   const slots=[],d=new Date(date);d.setHours(8,0,0,0);const end=new Date(date);end.setHours(19,0,0,0);const n=now();
   while(d<end){
@@ -1383,7 +487,7 @@ function genSlots(date,evs){
   }
   return slots;
 }
- 
+
 function rConfirm(){
   const s=fromKey(S.bookStart),e=new Date(s.getTime()+S.bookDur*60000),room=S.config.rooms[S.selRoom];
   return`<div class="card" style="border-color:var(--ab)"><div class="card-title">Confirm Booking</div>
@@ -1401,7 +505,7 @@ function rConfirm(){
     </div>
   </div>`;
 }
- 
+
 function rAdmin(){
   const allEvs=S.config.rooms.flatMap((_,i)=>(S.rooms[i]||{events:[]}).events||[]);
   const busyMins=allEvs.reduce((a,e)=>a+(parseT(e.end.dateTime)-parseT(e.start.dateTime))/60000,0);
@@ -1418,7 +522,7 @@ function rAdmin(){
   </div>
   <div class="admin-grid">${S.config.rooms.map((_,i)=>rAR(i)).join('')}</div>`;
 }
- 
+
 function rAR(i){
   const room=S.config.rooms[i],d=S.rooms[i]||{events:[],loading:true};
   if(d.loading)return`<div class="card"><div class="loading"><div class="spinner"></div></div></div>`;
@@ -1442,7 +546,7 @@ function rAR(i){
     ${rTL(now(),evs)}<div class="ev-list">${evHtml}</div>
   </div>`;
 }
- 
+
 function bindSetup(){
   document.getElementById('btn-signin')?.addEventListener('click',async()=>{
     const tid=document.getElementById('s-tid')?.value?.trim(),cid=document.getElementById('s-cid')?.value?.trim();
@@ -1464,7 +568,7 @@ function bindSetup(){
     s('s-tid',cfg.tenantId);s('s-cid',cfg.clientId);
   });
 }
- 
+
 async function afterAuth(base,tk){
   const found=await discoverRooms(tk);
   S.discovered=found;S.config={...base,rooms:[]};
@@ -1472,7 +576,7 @@ async function afterAuth(base,tk){
   if(found.length<=2){S.config.rooms=found;await finish();}
   else{S.picked=[0,1];S.view='picker';render();}
 }
- 
+
 function bindPicker(){
   document.getElementById('btn-back')?.addEventListener('click',()=>{
     S.view='setup';S.config=null;S.token=null;S.discovered=[];S.picked=[];render();
@@ -1482,13 +586,13 @@ function bindPicker(){
     S.config.rooms=S.picked.map(i=>S.discovered[i]);await finish();
   });
 }
- 
+
 async function finish(){
   S.rooms=S.config.rooms.map(()=>({events:[],loading:false,error:null}));
   S.selRoom=0;S.view='panel';await saveCfg(S.config);render();
   await loadAll(new Date());render();startRefresh();
 }
- 
+
 function bindMain(){
   document.querySelectorAll('.nav-tab').forEach(b=>b.addEventListener('click',()=>{
     S.view=b.dataset.v;S.bookMsg=null;loadAll(S.view==='booking'?S.bookDate:new Date()).then(render);render();
@@ -1523,14 +627,14 @@ function bindMain(){
     }catch(e){S.bookMsg={ok:false,text:`Booking failed: ${e.message}`};render();}
   });
 }
- 
+
 function startRefresh(){
   stopRefresh();
   S.refreshId=setInterval(async()=>{if(S.view==='panel'||S.view==='admin'){await loadAll(new Date());render();}},30000);
   S.clockId=setInterval(()=>{const el=document.getElementById('pclock');if(el)el.textContent=fmt(now());},1000);
 }
 function stopRefresh(){if(S.refreshId){clearInterval(S.refreshId);S.refreshId=null;}if(S.clockId){clearInterval(S.clockId);S.clockId=null;}}
- 
+
 return{
   togglePick:(i)=>{if(S.picked.includes(i))S.picked=S.picked.filter(x=>x!==i);else if(S.picked.length<2)S.picked=[...S.picked,i];render();},
   retry:(i)=>{loadRoom(i,S.view==='booking'?S.bookDate:new Date()).then(render);},
@@ -1579,5 +683,3 @@ window.A=App;App.init();
 </script>
 </body>
 </html>
- 
-
