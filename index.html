@@ -1,11 +1,913 @@
+
+Room booking system
+/
+best way to use https://outlook.office.com/bookings/homepage
+
+Mar 18
+
+Synthesized comprehensive Microsoft Bookings guidance for administrative implementation
+Synthesized comprehensive Microsoft Bookings guidance for administrative implementation
+Here's a practical breakdown of getting the most out of Microsoft Bookings, keeping your M365/Oqtima context in mind:
+
+Two modes — pick the right one
+Personal Bookings — your own shareable scheduling link. Great for ad-hoc "book time with me" links you put in your email signature. You define your availability, create meeting types, publish a page, and share the link — anyone can then see your free slots and book directly. 
+Microsoft Learn
+
+Shared Bookings — team/department-level. You add multiple staff members, define various services, and manage appointments for the whole group 
+Meetergo
+ — useful if Oqtima wants a centralized "IT support slot booking" or meeting room booking flow.
+
+Setup best practices
+Custom domain — the default domain uses .onmicrosoft.com, which can cause booking confirmation emails to land in spam. Change it to something like @bookings.oqtima.com for deliverability and professionalism. 
+Microsoft Learn
+
+Multiple admins — always have at least two administrators on your Bookings calendar to avoid lockout situations if one person is unavailable or leaves. 
+University of Oregon
+
+Buffer time — enable buffer time per service to add extra breathing room on staff calendars between appointments 
+Princeton
+ — handy for IT support sessions.
+
+Lead time — configure a minimum lead time so you're not getting same-day bookings you can't handle.
+
+Intake form / custom fields — you can add dropdown, multiple-choice, or open-ended text questions to the intake form per service, and mark them as required. 
+Bookings
+ For IT support, this is ideal to pre-collect info (device type, issue category, etc.).
+
+Teams integration
+Enabling "Add Online Meeting" for a service auto-creates a unique Teams meeting space per appointment, with the join link included in both the confirmation email and calendar invite. 
+Bookings
+ Enable the Teams waiting room for any external-facing bookings.
+
+Power Automate integration (relevant for you)
+Power Automate connectors for Bookings let you automate tasks like posting to a Teams channel when an appointment is created, or syncing data with other apps. 
+Microsoft Learn
+ You could wire this into your existing IT support → Jira flow — a new booking triggering a Jira ticket automatically.
+
+Security / admin controls (M365 admin angle)
+From the M365 admin center → Settings → Org settings → Bookings, you can restrict shared bookings to authenticated internal users only, and prevent booking pages from appearing in search engine results. 
+Microsoft Community Hub
+ Worth locking down if Bookings is only meant for internal use at Oqtima.
+
+Practical use cases for your environment
+IT support slot booking — staff books a 30-min troubleshooting session, pre-fills device/issue info via custom fields, auto-creates Teams link
+Room/desk reservations — Bookings can act as a simple resource booking layer on top of Exchange calendars
+Onboarding sessions — HR or IT schedules structured onboarding slots without email back-and-forth
+The key differentiator vs. just using Outlook's scheduling assistant is the self-service public/internal page — no need for the booker to have calendar visibility over the staff member.
+
+I have room resouces already for microsoft, could i use this for a tablet to hang on a meeting room ?
+
+Mar 18
+
+Evaluated Bookings limitations against purpose-built room display solutions
+Evaluated Bookings limitations against purpose-built room display solutions
+Short answer: not really well — Bookings is a scheduling tool, not a room display panel. Here's the distinction:
+
+What Bookings gives you on a tablet
+A booking interface where someone can walk up and schedule the room for a future time
+It reads from the room resource's Exchange calendar for availability
+No real-time "🟢 Available / 🔴 In Use" status panel
+No current meeting name, end time countdown, or "book now for 30 min" quick-tap flow
+The UI is designed for desktops — not optimized for a portrait tablet mounted on a wall
+What you actually need for a door panel
+A proper room display shows:
+
+Current status at a glance (colour-coded)
+Who booked it and until when
+Next upcoming meeting
+Quick ad-hoc booking button
+That's exactly what you spent time evaluating before — SyncSign was your top pick for the two-room wireless glass-mounted setup at Oqtima, integrated with M365. That remains the right tool for this.
+
+The realistic Bookings + tablet scenario
+The one case where Bookings on a tablet does make sense is a reception/lobby kiosk — a shared screen where visitors or staff can browse and book rooms themselves. Not a door panel, but a booking station. Even then, the UX isn't great for touch.
+
+Bottom line
+Need	Microsoft Bookings	SyncSign / Joan / Roomzilla
+Door panel display	❌	✅
+Real-time room status	❌	✅
+Walk-up booking	⚠️ Clunky	✅
+Syncs with M365 room resources	✅	✅
+Cost	Included in M365	Extra hardware/subscription
+If budget is the constraint and you want to avoid extra spend, the closest free workaround would be displaying the Outlook Web App calendar view for the room resource in kiosk mode — but it's ugly and not purpose-built. SyncSign is still the cleaner answer.
+
+Want me to revisit the SyncSign vs Roomzilla comparison for the final CEO document, or are you exploring this as a cost-saving angle?
+
+please what other room booking systems are there
+
+Mar 18
+
+Contextualized user needs and prepared tailored comparison
+Contextualized user needs and prepared tailored comparison
+Here's a broad map of the market, split by category — since "room booking system" means different things depending on whether you want door panel hardware, software-only, or an all-in-one platform.
+
+🖥️ Door Panel / Display Hardware (tablet on the wall)
+These are purpose-built for the physical panel outside a room:
+
+Product	M365 sync	Hardware	Price
+SyncSign	✅	E-ink display, battery, wireless	~€200–300/panel + small sub
+Joan (Visionect)	✅	E-ink, battery, elegant	~€350–500/panel + sub
+Logitech Tap Scheduler	✅	Dedicated Android tablet	~€400–500/panel
+Evoko Naso	✅	Dedicated Android tablet	~€500–600/panel
+ROOMZ	✅	E-ink, battery	~€250–400/panel
+Neat Pad	✅ (Teams)	Teams-certified tablet	€600+
+You already evaluated most of these — SyncSign came out on top for your wireless glass-mount needs.
+
+💻 Software-Only (use any tablet you already have)
+These run as an app on an existing iPad/Android tablet — cheaper entry point:
+
+Meeting Room 365 — simple, affordable at $9/display/month, integrates with M365/Exchange, with multiple display themes. Users praise it for being easy to set up and stable. 
+Meeting Room 365
+ Good option if you want to repurpose an existing tablet.
+
+Yoffix — M365-integrated, supports room displays, digital signage, and kiosk mode, with auto-release rules for no-shows. 
+Yoffix
+
+Roomzilla — free for limited rooms, paid plans at a low monthly rate. Good for small teams. 
+DeskFlex
+ You already confirmed this works with M365 bidirectional sync.
+
+AskCody — deep Outlook/Exchange integration, room displays and dashboards, can report faulty in-room equipment from the tablet, and shows availability at a glance. 
+AskCody
+ More enterprise-focused.
+
+🏢 Full Workspace Platforms (booking + analytics + desk management)
+Overkill for 2 rooms but worth knowing:
+
+Robin — starts at ~$5/seat/month, modern UI, M365/Teams/Slack integrations, real-time analytics and occupancy tracking. 
+Gable
+ Popular with hybrid teams.
+
+Condeco — strong Microsoft partner, deeply integrated with Teams and Outlook, but targets larger orgs — minimum 250 employees and enterprise pricing. 
+Getofficely
+
+Teem (by Eptura) — desk and room booking, visitor management, digital signage, integrates with Outlook and Google Calendar. 
+London Daily News
+
+YAROOMS — M365 integration with two-way sync, centralized admin dashboard, room photos, capacity settings, and department-level booking restrictions. 
+YAROOMS
+
+For Oqtima's situation specifically
+Given 2 rooms, existing M365 room resources, Spain office, and budget awareness — the realistic shortlist is:
+
+SyncSign — hardware + software, wireless, already your top pick
+Meeting Room 365 — if you want to reuse an existing tablet cheaply ($9/month)
+Roomzilla — free tier might cover both rooms, already tested with your M365 setup
+Want me to do a quick cost comparison across these three for a 2-room setup over 12 months?
+
+could you build a room booking thing ?
+
+Mar 18
+
+Assessed requirements and prepared clarifying questions
+Assessed requirements and prepared clarifying questions
+Before I build, a few quick questions to make sure it's actually useful for you:
+
+Let me know what you're after and I'll build it straight away!
+
+Q: What do you want it to do? (Select all that apply)
+A: All of the above
+
+Q: How should it connect to your calendars?
+A: Connect to M365 via Graph API (real data)
+
+Q: How many rooms to include?
+A: 2 rooms (current setup)
+
+Mar 18
+
+Architected comprehensive M365 room booking system with authentication and real-time scheduling
+Architected comprehensive M365 room booking system with authentication and real-time scheduling
+Here's your room booking system — a single HTML file you can host anywhere or run locally.
+
+What's included:
+
+Panel view — real-time status display (Available / In Use), current meeting + time remaining, next meeting, auto-refreshes every 60 seconds. Has a "Book Now" button for walk-up bookings.
+Book a Room — pick room, date, duration (30/60/90/120 min), visual timeline of the day, slot picker that greys out busy/past times, confirm form that creates the event in your calendar with the room as attendee.
+Admin view — both rooms side by side, utilisation % stat, full event list with organiser, cancel button per booking.
+Persistent config — your room names/emails are remembered between sessions via artifact storage.
+To connect it to your M365 rooms, you'll need:
+
+Azure AD app registration → go to portal.azure.com → App registrations → New registration
+Set type to Single-page application (SPA), paste the file's URL as redirect URI
+Add delegated permissions: Calendars.ReadWrite + Place.Read.All
+Grant the signed-in user delegate / editor access to both room mailboxes in Exchange Online admin (this is what allows reading their calendars)
+Quickest test path: Skip the app registration entirely — grab a token from Graph Explorer (it signs you in automatically), paste it into the token field. Valid for ~1 hour, enough to validate everything works with your real room emails.
+
+Room booking
+Code · HTML 
+can i host on render ?
+
+Mar 18
+
+Assessed static file hosting feasibility on Render
+Assessed static file hosting feasibility on Render
+Yes, easily — it's a single HTML file so it's about as simple as static hosting gets.
+
+Quickest way on Render:
+
+Push the room-booking.html file to a GitHub repo (even a private one with just that file)
+Go to render.com → New → Static Site
+Connect your GitHub repo
+Set these:
+Build command: (leave blank)
+Publish directory: . (or wherever the file sits)
+Deploy — Render gives you a https://your-app.onrender.com URL
+That's it. Free tier works fine for this.
+
+One important step after: Take the Render URL and add it as a redirect URI in your Azure AD app registration:
+
+App registrations → your app → Authentication → Add URI → https://your-app.onrender.com/room-booking.html
+
+Without this, the Microsoft login popup will throw a redirect_uri_mismatch error.
+
+Tip for the door tablet: Once hosted, open the URL on the tablet, set it to the Panel view, and use the browser's "Add to Home Screen" / kiosk mode. On Android you can use Fully Kiosk Browser to lock it to that one page and keep the screen on — works well for a mounted display.
+
+Not Found
+for the site
+
+Mar 18
+
+Diagnosed file naming mismatch causing deployment error
+Diagnosed file naming mismatch causing deployment error
+That's because Render expects the main file to be named index.html. Let me rename it for you.
+
+
+Ran a command, read a file
+Ran a command, read a file
+Download this index.html, replace the file in your GitHub repo with it, and Render will redeploy automatically.
+
+Also make sure your Render redirect URI in Azure AD is just: https://your-app.onrender.com (no filename at the end — since it'll now serve from the root).
+
+Index
+Code · HTML 
+so just to check a couple thing, 
+this will intergrate with microsoft room resources ?
+booking from the site will feed over to the calender ?
+
+Mar 18
+
+Identified user's dual verification questions regarding integration
+Identified user's dual verification questions regarding integration
+Yes to both — here's exactly what happens under the hood:
+
+1. Room resource integration
+
+The app reads directly from the room mailbox calendars via the Microsoft Graph API (/users/{room-email}/calendarView). So whatever is booked in Outlook against those rooms shows up in the app — no separate sync needed.
+
+2. Bookings feed back to the calendar
+
+When you book through the app it calls /me/calendar/events and adds the room as an attendee. This is exactly how Outlook does it natively — Exchange's resource booking automaton picks it up and accepts the invite on behalf of the room, blocking the slot in the room's calendar.
+
+So the flow is:
+
+App books → Graph API creates event in your calendar 
+         → Room resource receives invite 
+         → Exchange auto-accepts 
+         → Room calendar blocked ✓
+         → Shows as busy in Outlook for everyone ✓
+One thing to verify in Exchange: Make sure your room resources have "Auto Accept" enabled (it's on by default for room mailboxes, but worth checking). In Exchange Online admin:
+
+Resources → select room → Booking options → Automatically accept meeting requests ✓
+
+If that's off, bookings made from the app will show as tentative until manually accepted.
+
+when you say azura you mean entra ?
+
+Mar 18
+
+Thinking about clarifying the relationship between Azura and Entra
+Thinking about clarifying the relationship between Azura and Entra
+Yes, exactly — Microsoft rebranded Azure Active Directory (Azure AD) to Microsoft Entra ID in 2023. Same thing, new name.
+
+So when I said:
+
+App registrations → your app → Authentication
+
+That's in Entra admin center → entra.microsoft.com → Applications → App registrations
+
+Or you can still get there via the Azure portal (portal.azure.com) — it redirects to the same place. Either works, Entra admin center is just the cleaner route now.
+
+wont these feed from the intergration 
+
+Room Resources
+Room 1 Name
+Room 1 Email
+Room 2 Name
+Room 2 Email
+Room 1 Capacity
+Room 2 Capacity
+
+Mar 18
+
+Architected automatic room data retrieval from Microsoft Graph API integration
+Architected automatic room data retrieval from Microsoft Graph API integration
+Good point — yes, they can. Microsoft Graph has a Places API (/places/microsoft.graph.room) that returns all your room resources including name, email address, and capacity automatically.
+
+The setup flow would become:
+
+Enter Tenant ID + Client ID
+Sign in with Microsoft
+App fetches your rooms from Entra/Exchange
+You pick which 2 to use
+Want me to update the app to do it that way? You'd just enter the IDs, sign in, and select from a dropdown of your actual room resources — no manual typing of emails or names.
+
+please update
+
+Mar 18
+
+Architected revised workflow integrating room selection functionality
+Architected revised workflow integrating room selection functionality
+Updated. The setup flow is now:
+
+Enter Tenant ID + Client ID → Sign in with Microsoft
+App calls GET /places/microsoft.graph.room and pulls back all your room resources — name, email, capacity, building, floor — automatically
+Tick the rooms you want (up to 4) from the list and confirm
+Done — straight into the panel
+A couple of extras added:
+
+"Change Rooms" button in the nav so you can swap which rooms are shown any time without signing out
+Manual fallback — if the Places API fails (e.g. permission not yet granted), it shows input fields so you can type the emails directly and still get going
+Your room selection is remembered, so on next visit it pre-ticks your previously chosen rooms
+Index
+Code · HTML 
+ok and will there be any secuirty issues with putting in this informaiton ?
+
+Mar 18
+
+Evaluated security implications of credential entry
+Evaluated security implications of credential entry
+Good question to ask. Here's an honest breakdown:
+
+What's safe ✅
+Tenant ID and Client ID are not secrets. They're the equivalent of a username — they identify your app but can't be used to do anything without authentication. Microsoft publishes them in OAuth flows openly. Fine to have in a hosted app.
+
+The MSAL sign-in flow is secure. When you click "Sign in with Microsoft" the authentication happens entirely on Microsoft's servers — the app never sees your password. The token comes back directly to your browser, not via any server.
+
+There's no backend. This is a pure static HTML file. Nothing is sent to Render's servers except the file itself being served. All Graph API calls go browser → Microsoft directly.
+
+What needs care ⚠️
+The token paste mode — if you paste a Graph Explorer token, it lives in the browser session only and expires in ~1 hour. Don't use this on a shared/public computer.
+
+Who can access the hosted URL. Right now the site is open to anyone with the link. Someone who knows the URL could reach the sign-in page. They'd still need valid Oqtima credentials to actually log in, so the data is protected — but worth noting.
+
+The Calendars.ReadWrite permission scope — the signed-in user can read and write calendars for the rooms they have delegate access to. That's intentional and needed, but means the app has real write access. Worth restricting Exchange delegate access to only the users who should use this tool.
+
+What I'd recommend for Oqtima
+Action	Why
+Add a login requirement in Entra (require user assignment on the app registration)	Only specific users can authenticate
+Don't share the Render URL publicly	Keep it internal
+Use MSAL sign-in, not token paste, for anything permanent	Tokens auto-refresh and expire properly
+Keep the app registration to minimum permissions	Only Calendars.ReadWrite + Place.Read.All — nothing else
+The short version: the credentials you're entering are safe to put in, the main thing to manage is who you share the URL with.
+
+ok where do i get these ID´s ?
+
+Mar 18
+
+Charted pathway to locate Azure authentication credentials
+Charted pathway to locate Azure authentication credentials
+Both come from Entra admin center — here's exactly where:
+
+Tenant ID
+Go to entra.microsoft.com
+Sign in with your Oqtima admin account
+Left menu → Identity → Overview
+You'll see Tenant ID right there on the overview page — copy it
+Client ID (requires creating an App Registration first)
+Still in entra.microsoft.com
+Left menu → Applications → App registrations
+Click New registration
+Fill in:
+Name: Room Booking (anything you like)
+Supported account types: Accounts in this organisational directory only
+Redirect URI: Select Single-page application (SPA) from the dropdown, then paste your Render URL e.g. https://your-app.onrender.com
+Click Register
+You're now on the app's overview page — Application (client) ID is right at the top — copy it
+Then add the permissions
+Still on that app registration page:
+
+Left menu → API permissions
+Add a permission → Microsoft Graph → Delegated permissions
+Search and add:
+Calendars.ReadWrite
+Place.Read.All
+Click Grant admin consent for Oqtima (the button at the top of the permissions list)
+That's everything the app needs. Both IDs are then pasted into the setup screen when you first open the app.
+
+getting this error 
+
+Sign-in failed: MSAL library unavailable — use token mode.
+
+Mar 18
+
+Diagnosed CDN failure and identified alternative script sources
+Diagnosed CDN failure and identified alternative script sources
+The Microsoft CDN for MSAL is being blocked or failing to load. Easy fix — just swap it to a more reliable CDN. Let me update that one line:
+
+
+Edited a file, read a file
+Edited a file, read a file
+Replace the file in your GitHub repo with this one — Render will redeploy in about 30 seconds.
+
+If it still fails after that, open your browser's developer console (F12 → Console tab) before clicking sign in and let me know what error appears there — that'll tell us exactly what's being blocked.
+
+Index
+Code · HTML 
+Sign-in failed: uninitialized_public_client_application: You must call and await the initialize function before attempting to call any other MSAL API. For more visit: aka.ms/msaljs/browser-errors
+
+Mar 18
+
+Identified initialization sequencing issue and devised corrective measures
+Identified initialization sequencing issue and devised corrective measures
+MSAL v3 requires an explicit initialize() call before use. Let me fix that:
+
+
+Identified missing parameter and rectified tool configuration
+Identified missing parameter and rectified tool configuration
+Fixed. The issue was that MSAL v3 made initialize() mandatory before any other calls — the old v2 code skipped that step.
+
+Replace the file in your GitHub repo and once Render redeploys, the Microsoft sign-in popup should work properly.
+
+Index
+Code · HTML 
+NEXT ERROR 
+
+Sign-in failed: invalid_request: Error(s): 9002326 - Timestamp: 2026-03-18 13:39:24Z - Description: AADSTS9002326: Cross-origin token redemption is permitted only for the 'Single-Page Application' client-type. Request origin: 'https://room-booking-system-es1f.onrender.com'. Trace ID: 0ccd2411-0b53-489a-ba9d-c2d4c43b2100 Correlation ID: af4379ad-1f40-4535-9ec2-a83b710526bf Timestamp: 2026-03-18 13:39:24Z - Correlation ID: af4379ad-1f40-4535-9ec2-a83b710526bf - Trace ID: 0ccd2411-0b53-489a-ba9d-c2d4c43b2100
+
+Mar 18
+
+Pinpointed app registration platform misconfiguration in Entra
+Pinpointed app registration platform misconfiguration in Entra
+This isn't a code issue — it's the app registration type in Entra. The redirect URI was registered as Web instead of Single-Page Application (SPA). Easy fix:
+
+In Entra admin center:
+
+Go to entra.microsoft.com → App registrations → your Room Booking app
+Left menu → Authentication
+Look under Platform configurations — you'll see your Render URL listed under Web (wrong)
+Click Add a platform → choose Single-page application
+Paste your URL: https://room-booking-system-es1f.onrender.com
+Click Configure
+Then delete the old Web entry that has the same URL (the one under the Web section)
+Click Save
+The difference matters because SPA uses the PKCE auth flow which works from a browser without a backend secret. The Web type expects a server-side secret exchange, which is why it blocks cross-origin requests from your hosted page.
+
+Try signing in again after saving — no code change needed.
+
+1773841429418_image.png
+it found the rooms but, on the panel page it shows this error 
+
+⚠ Access is denied. Check credentials and try again.
+
+Mar 18
+
+Diagnosed permissions issue preventing calendar access retrieval
+Diagnosed permissions issue preventing calendar access retrieval
+Good progress — sign-in worked and rooms were found. This new error is coming from the calendar read step, not auth.
+
+The signed-in user doesn't have delegate access to the room mailboxes in Exchange Online. That's the missing piece.
+
+Fix in Exchange Online admin:
+
+Go to admin.exchange.microsoft.com
+Recipients → Resources
+Click on Room 1 → Delegation tab (or Edit → Delegates)
+Under Read and manage (Full Access) — add your user account
+Repeat for Room 2
+Save
+Alternative — quicker via PowerShell if you have Exchange admin:
+
+powershell
+Add-MailboxPermission -Identity "room1@oqtima.com" -User "yourname@oqtima.com" -AccessRights FullAccess -AutoMapping $false
+Add-MailboxPermission -Identity "room2@oqtima.com" -User "yourname@oqtima.com" -AccessRights FullAccess -AutoMapping $false
+Once that's done, hit Retry on the panel — no redeployment needed. The permission change can take a few minutes to propagate in Exchange so if it doesn't work immediately, wait 2–3 minutes and try again.
+
+this was already done ?
+
+Mar 18
+
+Investigated alternative API endpoints and admin consent requirements
+Investigated alternative API endpoints and admin consent requirements
+OK so the mailbox delegation is done. The issue is more likely one of these:
+
+Most likely — Admin consent not granted for the API permissions
+
+In Entra → App registrations → your app → API permissions, check if there's a green tick or a warning next to Calendars.ReadWrite and Place.Read.All. If there's no admin consent granted:
+
+Click Grant admin consent for Oqtima
+Confirm yes
+Both permissions should show a green ✓
+Second possibility — Token doesn't include the right scopes
+
+Your current session token was issued before everything was set up correctly. Try:
+
+Click Sign out in the top right of the app
+Sign back in
+This forces a fresh token with the correct scopes
+Third possibility — Delegate access type
+
+Exchange has two different things:
+
+Full Access (mailbox level) — lets you open the mailbox in Outlook
+Calendar delegate (calendar level) — what Graph API needs for /users/{room}/calendarView
+These are separate. Full Access alone isn't always enough for the Graph calendar endpoint. To add calendar-specific delegate access via PowerShell:
+
+powershell
+Add-MailboxFolderPermission -Identity "room1@oqtima.com:\Calendar" -User "yourname@oqtima.com" -AccessRights Editor
+Add-MailboxFolderPermission -Identity "room2@oqtima.com:\Calendar" -User "yourname@oqtima.com" -AccessRights Editor
+Try the sign out/in first as it's quickest — that alone often fixes it.
+
+1773841782590_image.png
+signed in and out 
+
+whats the code to connect to the exchange via power shell
+
+Mar 18
+
+Diagnosed permission issue and prepared PowerShell solution
+Diagnosed permission issue and prepared PowerShell solution
+Permissions all look good ✅. So it's the calendar-level delegate access. Here's the PowerShell:
+
+Connect to Exchange Online first:
+
+powershell
+Install-Module ExchangeOnlineManagement -Force
+Connect-ExchangeOnline -UserPrincipalName yourname@oqtima.com
+Then add calendar permissions for each room:
+
+powershell
+Add-MailboxFolderPermission -Identity "room1@oqtima.com:\Calendar" -User "yourname@oqtima.com" -AccessRights Editor
+
+Add-MailboxFolderPermission -Identity "room2@oqtima.com:\Calendar" -User "yourname@oqtima.com" -AccessRights Editor
+Replace room1@oqtima.com / room2@oqtima.com with your actual room resource email addresses, and yourname@oqtima.com with the account you sign into the app with.
+
+If you already ran Add-MailboxPermission (Full Access) earlier and get an error saying the user already exists, use Set-MailboxFolderPermission instead:
+
+powershell
+Set-MailboxFolderPermission -Identity "room1@oqtima.com:\Calendar" -User "yourname@oqtima.com" -AccessRights Editor
+After running, wait 2–3 minutes then hit Retry in the app.
+
+----------------------------------------------------------------------------------------
+PS C:\Windows\system32> Add-MailboxFolderPermission -Identity "the.arena-room@oqtima.com:\Calendar" -User "s.carter@oqtima.com" -AccessRights Editor
+>>
+FolderName           User                 AccessRights                           SharingPermissionFlags
+----------           ----                 ------------                           ----------------------
+Calendar             Stuart Carter        {Editor}
+PS C:\Windows\system32>
+
+Mar 18
+
+Verified successful permission configuration completion
+Verified successful permission configuration completion
+That worked perfectly. Now:
+
+Go back to the app
+Hit Retry on the panel
+It should pull the calendar data through now. Do the same command for your second room if you haven't already:
+
+powershell
+Add-MailboxFolderPermission -Identity "room2@oqtima.com:\Calendar" -User "s.carter@oqtima.com" -AccessRights Editor
+⚠ Access is denied. Check credentials and try again.
+
+Mar 18
+
+Diagnosed permission mismatch; identified missing shared calendar access scope
+Diagnosed permission mismatch; identified missing shared calendar access scope
+The issue is the API permission scope. Reading another user's calendar (even with delegate access) requires Calendars.ReadWrite.Shared — not just Calendars.ReadWrite. These are different scopes in Graph.
+
+Fix in Entra — add the missing permission:
+
+Entra → App registrations → Room Booking → API permissions
+Add a permission → Microsoft Graph → Delegated
+Search for Calendars.ReadWrite.Shared → tick it → Add
+Click Grant admin consent for Oqtima
+Then sign out and back into the app to get a fresh token that includes the new scope.
+
+The difference:
+
+Permission	What it covers
+Calendars.ReadWrite	Only the signed-in user's own calendar
+Calendars.ReadWrite.Shared	Calendars the user has been delegated access to — i.e. your room mailboxes
+That should be the last missing piece.
+
+working now, on the panel page can you make the room look more user friendly? plus a inpromet booking, 
+
+also change the color to white and 
+#44ff00, 
+
+plus make  the room green if available. 
+
+also does this page auto refressh to keep it real time
+
+Mar 18
+
+Retrieving current file to implement panel updates
+Retrieving current file to implement panel updates
+Yes it auto-refreshes every 60 seconds currently — I'll bump that up to 30 seconds too. Let me read and update the panel section:
+
+
+Architected UI overhaul with color scheme, availability indicators, and real-time refresh
+Architected UI overhaul with color scheme, availability indicators, and real-time refresh
+Here's what changed:
+
+Colors
+
+White text throughout, 
+#44ff00 as the accent colour everywhere
+Available room — full green treatment:
+
+Dark green background gradient
+Green glowing border
+Green status bar across the top
+"Available" in large glowing 
+#44ff00 text
+Shows "Free for X min/hours" countdown to next meeting
+Busy room — red treatment with time remaining shown as a pill badge
+
+⚡ Book Now (impromptu booking) — clicking it opens a modal overlay right on the panel page:
+
+Title input
+Duration picker (15 / 30 / 45 / 60 min)
+Live preview showing exact start → end time
+Confirm books it instantly and returns to panel
+Auto-refresh — now every 30 seconds (was 60), with a small label showing this on the panel header
+
+Push to GitHub and Render will redeploy in ~30 seconds.
+
+Index
+Code · HTML 
+oqtima.png
+can you make it white background, plus the room box a lot bigger ? 
+
+also the logo in the top right change to attached photo ?
+
+Mar 18
+
+Thinking about modifying design elements: background color, component sizing, and logo replacement
+Thinking about modifying design elements: background color, component sizing, and logo replacement
+Here's what changed:
+
+White background — full light mode throughout: white cards, light grey page background, dark text, shadows instead of glows
+
+Much bigger room boxes — minimum height of 380px, larger padding (32px), bigger room name (30px → was 24px), bigger "Available" text (52px), roomier layout overall
+
+Oqtima logo — embedded directly in the nav (no external URL needed, won't break if the file moves), replaces the ◈ ROOMS text
+
+Colours adjusted for light mode:
+
+Available = proper dark green (
+#1a9900) — readable on white
+Busy = brand red (
+#e8002d)
+Book Now button = Oqtima orange (
+#e84300) to match the logo
+Green status bar still runs across the top of available rooms
+Push to GitHub and it'll redeploy. The logo is baked into the file so no separate image hosting needed.
+
+Index
+Code · HTML 
+1773845089786_image.png
+1773845134286_image.png
+create it with the same colour semec as this site 
+
+also make this box soild green when its avaiable and soild red when the room is in a meeting
+
+Mar 18
+
+Identified color scheme requirements and room availability states
+Identified color scheme requirements and room availability states
+Here's what changed:
+
+Oqtima brand colours:
+
+Nav bar is now solid Oqtima orange (
+#d94000) — matching your IT helpdesk exactly
+All buttons, accents, focus states use the same orange
+White page background with light grey body
+Solid room panels:
+
+Available = solid green (
+#1db300 gradient) — all text white inside
+Busy = solid red (
+#cc0022 gradient) — all text white inside
+"Book Now" button is white with green text when available, so it pops off the green background
+"AVAILABLE" / "IN USE" badges are frosted white on the coloured panel
+Push to GitHub and it'll deploy. Should look very consistent with the rest of your Oqtima tooling now.
+
+Index
+Code · HTML 
+when signing in from a tablet, error messgae "sign-in failed: user_cancelled: user cancelled the flow ?
+
+Mar 18
+
+Diagnosed tablet sign-in popup issue, identified redirect solution
+Diagnosed tablet sign-in popup issue, identified redirect solution
+This is because mobile/tablet browsers block popups by default — MSAL's loginPopup() gets killed before it opens. The fix is to use redirect flow on mobile instead of popup.
+
+
+Ran a command, read a file
+Ran a command, read a file
+Push this to GitHub. What it now does:
+
+Desktop (wide screen / non-mobile browser) → popup flow as before
+Tablet / mobile (iPad, Android tablet, anything under 900px wide) → redirect flow — Microsoft login opens in the same tab, then redirects back to your app automatically after signing in
+No extra Entra config needed — the redirect URI you already registered covers this. The sign-in on tablet should now work cleanly.
+
+Index
+Code · HTML 
+could anyone use this site with there own room booking system ? and is there any secuirty issues ?
+
+Mar 18
+Good question to think through properly.
+
+Could anyone use it with their own system?
+Yes, technically anyone could. The app just asks for a Tenant ID, Client ID and Microsoft credentials — there's nothing Oqtima-specific hardcoded into it except the logo. Anyone with their own Microsoft 365 tenant could:
+
+Register their own Entra app
+Point it at their own Render deployment
+Sign in and use it with their own rooms
+That's actually a feature — it's a generic M365 room booking app. But if you don't want that, it's easy to lock down.
+
+Security issues to be aware of
+No authentication on the URL itself Anyone who knows your Render URL can reach the sign-in page. They'd still need valid Oqtima Microsoft credentials to log in and see anything — but the page is publicly reachable.
+
+Tenant is open to any Microsoft account Currently the app allows any Microsoft account to attempt sign-in. If someone had valid Oqtima credentials they could use it.
+
+Calendar write access The signed-in user can create and cancel bookings on the room calendars. If a non-IT staff member signs in, they have the same booking power as an admin.
+
+No role separation Everyone sees the Admin tab including the cancel buttons. There's no read-only mode for the door panel tablet vs a staff booking view.
+
+Token stored in sessionStorage The access token lives in the browser session — cleared when the tab closes. Reasonably safe but worth knowing.
+
+How to lock it down properly
+Action	How
+Restrict to Oqtima accounts only	In Entra → App registration → Authentication → set "Supported account types" to Accounts in this organisational directory only — already the default if you set it up correctly
+Restrict which users can sign in	Entra → Enterprise applications → Room Booking → Properties → User assignment required = Yes → then assign only specific users/groups
+Hide the URL	Add HTTP basic auth in Render (paid feature) or move to a private network
+Read-only panel mode	I can add a ?kiosk URL parameter that locks the tablet to panel-only view with no booking or admin tabs — good for the door tablet
+The biggest practical risk right now is any Oqtima employee could sign in and cancel someone else's meeting. Want me to add the kiosk mode and restrict the admin tab to specific users?
+
+help center banner.png
+Screenshot 2025-09-17 140527.png
+1773905030204_image.png
+can you put this banner along the top and incertain this logo in the top left, 
+
+also can you make the green box big enough to fit a samsung glaxy 9 tablet ?
+
+8:24 AM
+
+Architecting layout with banner, logo, and tablet-sized panels
+Architecting layout with banner, logo, and tablet-sized panels
+Here's what changed:
+
+Banner — the full orange Oqtima banner sits across the very top, with the OQ logo overlaid in the top left, just like your helpdesk site
+
+Nav bar — sits underneath the banner on a white strip with an orange bottom border. Tabs and sign-out buttons are dark text now (readable on white)
+
+Samsung Galaxy Tab S9 sizing — the two room panels now fill the full viewport height (100vh - 200px), so on a Tab S9 in landscape they fill the screen without scrolling. Room name and "Available" text scale responsively with clamp() so they look right at any tablet resolution. Both panels sit side by side in landscape — on a phone they stack vertically
+
+Push to GitHub and test on the tablet. If the panels are slightly too tall or short on the Tab S9 let me know and I can fine-tune the height offset.
+
+Index
+Code · HTML 
+can you remove the banner ?,
+
+8:36 AM
+
+Deliberated selective removal of banner while preserving logo
+Deliberated selective removal of banner while preserving logo
+Done — banner removed. Nav bar is now a clean white strip with the OQ logo on the left, tabs in the middle, and sign out on the right. The room panels fill the full tablet screen height correctly without the banner offset. Push to GitHub to deploy.
+
+Index
+Code · HTML 
+can you make the green box, wider to the right ? 
+
+also change times " 16:00 – 16:30" & "👥 9 people" to the oqtima orange #ff44000
+
+8:39 AM
+
+Parsed requests to expand panel and recolor text elements
+Parsed requests to expand panel and recolor text elements
+Done. Changes made:
+
+Panels wider — removed the max-width cap so they stretch full width of the screen, more room on the right
+Times (e.g. 16:00 – 16:30) → 
+#ff4400 orange, bold
+👥 9 people → 
+#ff4400 orange, bold
+Time remaining pill (e.g. "45 min left") → also orange to match
+Push to GitHub to deploy.
+
+Index
+Code · HTML 
+"UP NEXT" change to 
+#44ff00
+times of meetings "16:00 – 16:30" next to the name to 
+#44ff00
+
+8:47 AM
+
+Identified color scheme requirements for UI elements
+Identified color scheme requirements for UI elements
+Claude's response was interrupted
+"UP NEXT" change to #ff4400 times of meetings "16:00 – 16:30" next to the name to #ff4400
+
+8:47 AM
+
+Ran a command, read a file
+Ran a command, read a file
+Done — both UP NEXT and the meeting times 16:00 – 16:30 are now 
+#ff4400. Push to deploy.
+
+Index
+Code · HTML 
+can you make the room green box a little shorter and for it to sreach across the whole screen ?
+
+9:30 AM
+
+Ran a command, read a file
+Ran a command, read a file
+Done — panels are shorter and stretch edge to edge with minimal side padding. Push to deploy and let me know if you need them a touch taller or shorter still.
+
+Index
+Code · HTML 
+can you change all font to sofia pro please
+
+9:37 AM
+
+Navigated font licensing constraints and weighed implementation options
+Navigated font licensing constraints and weighed implementation options
+Done — but Sofia Pro is a paid Adobe Font so there's one extra step needed:
+
+To activate Sofia Pro:
+
+Go to fonts.adobe.com
+Add Sofia Pro to a Web Project (requires Adobe Creative Cloud subscription)
+Adobe gives you a kit embed code like https://use.typekit.net/abc1234.css
+In the HTML file, replace YOUR_KIT_ID with your actual kit ID
+In the meantime the app will display in DM Sans — a very similar clean sans-serif that looks close to Sofia Pro until the Adobe kit is connected.
+
+If Oqtima already uses Adobe Fonts for the brand (which is likely given Sofia Pro is in your branding), your IT team should already have a kit ID you can drop straight in.
+
+Index
+Code · HTML 
+also change 9 people and the next meetings teams back to white
+
+9:39 AM
+
+Ran a command, read a file
+Ran a command, read a file
+Done — 👥 9 people and the next meeting name are back to white. Push to deploy.
+
+Index
+Code · HTML 
+the green room bax needs to be sreech across the whole screen ?
+
+9:41 AM
+
+Investigated layout constraints preventing full-width box expansion
+Investigated layout constraints preventing full-width box expansion
+Done — panels now stretch fully edge to edge across the whole screen with no padding or gaps. There's just a 4px grey line between the two rooms so they're visually separated. Push to deploy.
+
+Index
+Code · HTML 
+Oqtima_meetin-board-logo_338x184.png
+also incert this logo
+
+9:44 AM
+
+Deciphered logo insertion request and understood replacement intent
+Deciphered logo insertion request and understood replacement intent
+Done — new Oqtima logo is in the nav. Note the logo has a black background in the image file itself, so it'll show a black rectangle on the white nav bar. If you have a version with a transparent background that would look much cleaner — just send it over and I'll swap it in.
+
+Index
+Code · HTML 
+
+
+Want to be notified when Claude responds?
+
+
+
+
+
+Claude is AI and can make mistakes. Please double-check responses.
+Index · HTML
+Copy
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Room Booking · Oqtima</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+<!-- Sofia Pro via Adobe Fonts - replace YOUR_KIT_ID with your Adobe Fonts kit ID -->
+<link rel="stylesheet" href="https://use.typekit.net/YOUR_KIT_ID.css">
+<!-- Fallback: load similar font if Adobe Fonts not configured -->
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+/* If Adobe Fonts kit is configured, Sofia Pro will load automatically */
+/* Otherwise DM Sans is used as a close fallback */
+</style>
 <script src="https://cdn.jsdelivr.net/npm/@azure/msal-browser@3.26.1/lib/msal-browser.min.js" onerror="window.__msalFailed=true"></script>
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
@@ -17,7 +919,7 @@
   --red:#cc0022;--rd:rgba(204,0,34,0.08);--rb:rgba(204,0,34,0.2);
   --green:#1db300;--gd:rgba(29,179,0,0.08);--gb:rgba(29,179,0,0.2);
   --amber:#f59e0b;--tx:#1a1a1a;--tx2:#5a6070;--tx3:#9aa0aa;
-  --ff:'Syne',sans-serif;--fm:'JetBrains Mono',monospace;--r:10px;--r2:14px;
+  --ff:'sofia-pro','Sofia Pro','DM Sans',sans-serif;--fm:'JetBrains Mono',monospace;--r:10px;--r2:14px;
 }
 html,body{min-height:100%;background:var(--bg);color:var(--tx);font-family:var(--ff)}
 a{color:var(--accent);text-decoration:none}
@@ -32,7 +934,7 @@ input,button{font-family:inherit}
 .nav-user{font-size:12px;color:var(--tx2);font-family:var(--fm)}
 .btn-nav{background:none;border:1px solid var(--bdr2);color:var(--tx2);padding:5px 14px;border-radius:6px;font-size:12px;cursor:pointer;transition:all .15s;font-weight:600}
 .btn-nav:hover{border-color:var(--red);color:var(--red)}
-.main{padding:20px 16px;max-width:100%;margin:0 auto}
+.main{padding:20px 0;max-width:100%;margin:0}
 .btn{padding:10px 22px;border-radius:var(--r);border:none;cursor:pointer;font-family:var(--ff);font-size:13px;font-weight:700;transition:all .15s;display:inline-flex;align-items:center;gap:8px}
 .btn-primary{background:#d94000;color:#fff}
 .btn-primary:hover{background:#c03800}
@@ -75,8 +977,8 @@ input,button{font-family:inherit}
 .dot-busy{background:#ffffff;animation:pr 2s infinite}
 @keyframes pg{0%,100%{box-shadow:0 0 0 0 rgba(255,255,255,.6)}50%{box-shadow:0 0 0 8px rgba(255,255,255,0)}}
 @keyframes pr{0%,100%{box-shadow:0 0 0 0 rgba(255,255,255,.5)}50%{box-shadow:0 0 0 6px rgba(255,255,255,0)}}
-.panel-grid{display:grid;grid-template-columns:1fr 1fr;gap:24px;height:calc(100vh - 180px);width:100%}
-.room-panel{border-radius:24px;overflow:hidden;transition:all .4s;position:relative;height:100%;display:flex;flex-direction:column}
+.panel-grid{display:grid;grid-template-columns:1fr 1fr;gap:4px;height:calc(100vh - 180px);width:100vw;background:#e8e8e8}
+.room-panel{border-radius:0;overflow:hidden;transition:all .4s;position:relative;height:100%;display:flex;flex-direction:column}
 .room-panel.available{background:linear-gradient(160deg,#1db300 0%,#178f00 100%);border:none;box-shadow:0 12px 48px rgba(29,179,0,0.35),0 3px 14px rgba(0,0,0,0.1)}
 .room-panel.busy{background:linear-gradient(160deg,#cc0022 0%,#a80018 100%);border:none;box-shadow:0 12px 48px rgba(204,0,34,0.35),0 3px 14px rgba(0,0,0,0.1)}
 .room-panel.loading-panel{background:#ffffff;border:1px solid var(--bdr);min-height:380px}
@@ -85,7 +987,7 @@ input,button{font-family:inherit}
 .rp-status-bar.busy{background:rgba(255,255,255,0.15)}
 .rp-head{padding:30px 32px 20px;display:flex;justify-content:space-between;align-items:flex-start}
 .rp-name{font-size:clamp(24px,3vw,36px);font-weight:800;letter-spacing:-.02em;color:#ffffff}
-.rp-cap{font-size:13px;color:#ff4400;margin-top:6px;display:flex;align-items:center;gap:4px;font-weight:700}
+.rp-cap{font-size:13px;color:#ffffff;margin-top:6px;display:flex;align-items:center;gap:4px;font-weight:600}
 .rp-body{padding:0 32px 26px;flex:1;display:flex;flex-direction:column;justify-content:center}
 .rp-div{border:none;border-top:1px solid rgba(255,255,255,0.15);margin:0 0 24px}
 .rp-lbl{font-size:10px;font-weight:700;color:rgba(255,255,255,0.6);text-transform:uppercase;letter-spacing:.15em;margin-bottom:10px}
@@ -93,7 +995,7 @@ input,button{font-family:inherit}
 .rp-meta{font-family:var(--fm);font-size:14px;color:#ff4400;font-weight:700}
 .rp-free{font-size:clamp(42px,5vw,64px);font-weight:800;color:#ffffff;margin-bottom:4px;letter-spacing:-.03em;line-height:1}
 .rp-free-sub{font-size:15px;color:rgba(255,255,255,0.8);margin-bottom:4px;font-weight:600}
-.rp-next{font-size:14px;color:rgba(255,255,255,0.8);margin-top:16px;padding:14px 18px;background:rgba(0,0,0,0.12);border-radius:12px;border:1px solid rgba(255,255,255,0.15)}
+.rp-next{font-size:14px;color:#ffffff;margin-top:16px;padding:14px 18px;background:rgba(0,0,0,0.12);border-radius:12px;border:1px solid rgba(255,255,255,0.15)}
 .rp-next strong{color:#ffffff}
 .progress{height:6px;background:rgba(0,0,0,0.2);border-radius:3px;margin-top:16px;overflow:hidden}
 .progress-fill{height:100%;border-radius:3px;transition:width 1s linear;background:rgba(255,255,255,0.5)}
@@ -166,10 +1068,10 @@ input,button{font-family:inherit}
 <script>
 const App=(()=>{
 let S={view:'setup',config:null,msalInstance:null,account:null,token:null,rooms:[],discovered:[],picked:[],selRoom:0,bookDate:new Date(),bookStart:null,bookDur:60,bookMsg:null,err:null,refreshId:null,clockId:null,qb:null,qbDur:30,qbErr:null};
-
+ 
 async function loadCfg(){try{const r=await window.storage.get('oq-rooms-cfg');if(r)return JSON.parse(r.value);}catch(e){}return null;}
 async function saveCfg(c){try{await window.storage.set('oq-rooms-cfg',JSON.stringify(c));}catch(e){}}
-
+ 
 async function initMsal(tid,cid){
   if(window.__msalFailed||!window.msal)return false;
   try{
@@ -211,7 +1113,7 @@ async function gPost(p,body){
   return r.status===204?null:r.json();
 }
 async function gDelete(p){const t=await getToken();const r=await fetch(`https://graph.microsoft.com/v1.0${p}`,{method:'DELETE',headers:{Authorization:`Bearer ${t}`}});if(!r.ok)throw new Error(`HTTP ${r.status}`);}
-
+ 
 async function discoverRooms(tk){
   try{const d=await gGet('/places/microsoft.graph.room?$top=100&$select=displayName,emailAddress,capacity,building,floorNumber',tk);
     return(d.value||[]).map(r=>({name:r.displayName||r.emailAddress,email:r.emailAddress,capacity:r.capacity||'',building:r.building||'',floor:r.floorNumber||''}));}
@@ -226,7 +1128,7 @@ async function createBooking(re,subj,start,end){
   return gPost('/me/calendar/events',{subject:subj,start:{dateTime:start.toISOString().replace('Z',''),timeZone:'UTC'},end:{dateTime:end.toISOString().replace('Z',''),timeZone:'UTC'},attendees:[{emailAddress:{address:re},type:'required'}]});
 }
 async function cancelEvent(re,eid){await gDelete(`/users/${encodeURIComponent(re)}/calendar/events/${eid}`);}
-
+ 
 const parseT=s=>new Date(s.endsWith('Z')?s:s+'Z');
 const fmt=d=>d.toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'});
 const fmtDate=d=>d.toLocaleDateString('en-GB',{weekday:'long',day:'numeric',month:'long'});
@@ -239,7 +1141,7 @@ const prog=ev=>{const s=parseT(ev.start.dateTime).getTime(),e=parseT(ev.end.date
 const isBusy=(evs,s,e)=>evs.some(ev=>!(e<=parseT(ev.start.dateTime)||s>=parseT(ev.end.dateTime)));
 const tkKey=d=>`${d.getFullYear()}-${d.getMonth()}-${d.getDate()}-${d.getHours()}-${d.getMinutes()}`;
 const fromKey=k=>{const[y,mo,d,h,m]=k.split('-').map(Number);return new Date(y,mo,d,h,m,0);};
-
+ 
 async function loadRoom(i,date){
   S.rooms[i]={...(S.rooms[i]||{}),loading:true,error:null};render();
   try{S.rooms[i].events=await getRoomEvents(S.config.rooms[i].email,date);S.rooms[i].loading=false;}
@@ -247,7 +1149,7 @@ async function loadRoom(i,date){
   render();
 }
 async function loadAll(date){await Promise.all(S.config.rooms.map((_,i)=>loadRoom(i,date)));}
-
+ 
 function render(){
   const app=document.getElementById('app');if(!app)return;
   if(S.view==='setup'){app.innerHTML=rSetup();bindSetup();return;}
@@ -256,7 +1158,7 @@ function render(){
   app.innerHTML=rNav()+`<div class="main">${S.view==='panel'?rPanel():S.view==='booking'?rBooking():rAdmin()}</div>`;
   bindMain();
 }
-
+ 
 function rSetup(){
   const uri=location.href.split('?')[0].split('#')[0];
   return`<div class="main"><div class="setup-wrap">
@@ -284,9 +1186,9 @@ function rSetup(){
     </div>
   </div></div>`;
 }
-
+ 
 function rDisc(){return`<div class="main" style="padding-top:80px"><div class="loading"><div class="spinner"></div><div style="font-size:15px;font-weight:700;margin-bottom:6px">Discovering room resources…</div><div style="font-size:12px;color:var(--tx3)">Reading your Microsoft 365 Places directory</div></div></div>`;}
-
+ 
 function rPicker(){
   const rooms=S.discovered;
   return`<div class="main"><div class="picker-wrap">
@@ -312,12 +1214,12 @@ function rPicker(){
     ${rooms.length>0?`<button class="btn btn-primary btn-full" id="btn-use" style="margin-top:10px" ${S.picked.length===0?'disabled':''}>Use ${S.picked.length} selected room${S.picked.length!==1?'s':''}</button>`:''}
   </div></div>`;
 }
-
+ 
 function rNav(){
   const user=S.account?(S.account.name||S.account.username):'Token mode';
   return`<nav class="nav">
     <div style="display:flex;align-items:center;gap:16px">
-      <img src="data:image/png;base64,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" alt="OQ" style="height:38px;width:auto">
+      <img src="data:image/png;base64,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l0rWRRyPa1oZECGtAGBzyVyVv0MBipWRSDUAAqIxWrbUV8tRCdC4kcDv0Wk9A6woNU24FrmQ18bfy9MXcR+k3q393Ir81XoTT2o5TUVdO+CqPOop3bj3d/Ag95GVnKlqJ6SoZUUs0kMzDlj43FrmnzEKb2natqmiibFUGkr2gY3p4yH+1pHvBVYqcu1EE3i0L7dL2I6X4jur1RZzo6unFPi0e11tcHrbge3uU2otj9gin36mur6hgORHvNYCOhIGfZhSi41dg0Pp0vEcNHTRg+CgZ8qV/Qdriep7yqqrdr2pJoiynpbfTOP02xucR3Zdj3FQe8XW43isNXc6yWqmPDeeeQ6AcgPMF9ZguIVjh6dJ9UcL/sea8y5nwfDY3fwqH654kWt7dT23LUdoqXVtqo6x7Qx08DJS0cgXNBx71mbW3lne/tGo+8cutb9ouraGhhooLi3wULAyPfgY4ho4AZI4qL1dRNV1U1VUSGSaZ7pJHnm5xOSfaVv4Lg8tBNI95Fjutfn2UVmfMlPi9NDHEHbTdTcDl0JXqREVjVKREREREREREREREREREREREREREREREREREREREREREREREREREREREREREREREREREREREREREREREREREREREREREREREREREREREREREREREREREREREREREREREREREREREREREREREREREREREREREREREREREREREREREREREREREREREREREREREREREREREREREREREREREREREREREREREREREREREREREREREREREREREREREREREREREREREREREREREREREREREREREREREREREREREREREREREREREREREREREREREREREREREREREREREREREREREREREREREREREREX/9k=" alt="Oqtima" style="height:42px;width:auto">
       <div class="nav-tabs">
         <button class="nav-tab${S.view==='panel'?' active':''}" data-v="panel">Panel</button>
         <button class="nav-tab${S.view==='booking'?' active':''}" data-v="booking">Book a Room</button>
@@ -331,7 +1233,7 @@ function rNav(){
     </div>
   </nav>`;
 }
-
+ 
 function rPanel(){
   const n=now();
   return`${rQB()}<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:24px">
@@ -341,7 +1243,7 @@ function rPanel(){
     <button class="icon-btn" id="btn-ref" title="Refresh now">&#8635;</button>
   </div><div class="panel-grid">${S.config.rooms.map((_,i)=>rRP(i)).join('')}</div>`;
 }
-
+ 
 function rRP(i){
   const room=S.config.rooms[i],d=S.rooms[i]||{events:[],loading:true};
   if(d.loading)return`<div class="room-panel loading-panel"><div class="loading"><div class="spinner"></div>Loading ${room.name}&hellip;</div></div>`;
@@ -382,7 +1284,7 @@ function rRP(i){
     </div>
   </div>`;
 }
-
+ 
 function rQB(){
   if(S.qb===null)return'';
   const room=S.config.rooms[S.qb],dur=S.qbDur||30;
@@ -409,7 +1311,7 @@ function rQB(){
     </div>
   </div>`;
 }
-
+ 
 function rBooking(){
   const isToday=S.bookDate.toDateString()===now().toDateString();
   const ev=(S.rooms[S.selRoom]||{events:[]}).events||[];
@@ -455,7 +1357,7 @@ function rBooking(){
     </div>
   </div>`;
 }
-
+ 
 function rTL(date,evs){
   const SH=8,EH=20,total=(EH-SH)*60,n=now();
   const isToday=date.toDateString()===n.toDateString();
@@ -470,7 +1372,7 @@ function rTL(date,evs){
   }).join('');
   return`<div><div class="tl-labels">${hrs}</div><div class="tl-track">${nowPct>=0?`<div class="tl-now" style="left:${nowPct}%"></div>`:''}${blocks}</div></div>`;
 }
-
+ 
 function genSlots(date,evs){
   const slots=[],d=new Date(date);d.setHours(8,0,0,0);const end=new Date(date);end.setHours(19,0,0,0);const n=now();
   while(d<end){
@@ -481,7 +1383,7 @@ function genSlots(date,evs){
   }
   return slots;
 }
-
+ 
 function rConfirm(){
   const s=fromKey(S.bookStart),e=new Date(s.getTime()+S.bookDur*60000),room=S.config.rooms[S.selRoom];
   return`<div class="card" style="border-color:var(--ab)"><div class="card-title">Confirm Booking</div>
@@ -499,7 +1401,7 @@ function rConfirm(){
     </div>
   </div>`;
 }
-
+ 
 function rAdmin(){
   const allEvs=S.config.rooms.flatMap((_,i)=>(S.rooms[i]||{events:[]}).events||[]);
   const busyMins=allEvs.reduce((a,e)=>a+(parseT(e.end.dateTime)-parseT(e.start.dateTime))/60000,0);
@@ -516,7 +1418,7 @@ function rAdmin(){
   </div>
   <div class="admin-grid">${S.config.rooms.map((_,i)=>rAR(i)).join('')}</div>`;
 }
-
+ 
 function rAR(i){
   const room=S.config.rooms[i],d=S.rooms[i]||{events:[],loading:true};
   if(d.loading)return`<div class="card"><div class="loading"><div class="spinner"></div></div></div>`;
@@ -540,7 +1442,7 @@ function rAR(i){
     ${rTL(now(),evs)}<div class="ev-list">${evHtml}</div>
   </div>`;
 }
-
+ 
 function bindSetup(){
   document.getElementById('btn-signin')?.addEventListener('click',async()=>{
     const tid=document.getElementById('s-tid')?.value?.trim(),cid=document.getElementById('s-cid')?.value?.trim();
@@ -562,7 +1464,7 @@ function bindSetup(){
     s('s-tid',cfg.tenantId);s('s-cid',cfg.clientId);
   });
 }
-
+ 
 async function afterAuth(base,tk){
   const found=await discoverRooms(tk);
   S.discovered=found;S.config={...base,rooms:[]};
@@ -570,7 +1472,7 @@ async function afterAuth(base,tk){
   if(found.length<=2){S.config.rooms=found;await finish();}
   else{S.picked=[0,1];S.view='picker';render();}
 }
-
+ 
 function bindPicker(){
   document.getElementById('btn-back')?.addEventListener('click',()=>{
     S.view='setup';S.config=null;S.token=null;S.discovered=[];S.picked=[];render();
@@ -580,13 +1482,13 @@ function bindPicker(){
     S.config.rooms=S.picked.map(i=>S.discovered[i]);await finish();
   });
 }
-
+ 
 async function finish(){
   S.rooms=S.config.rooms.map(()=>({events:[],loading:false,error:null}));
   S.selRoom=0;S.view='panel';await saveCfg(S.config);render();
   await loadAll(new Date());render();startRefresh();
 }
-
+ 
 function bindMain(){
   document.querySelectorAll('.nav-tab').forEach(b=>b.addEventListener('click',()=>{
     S.view=b.dataset.v;S.bookMsg=null;loadAll(S.view==='booking'?S.bookDate:new Date()).then(render);render();
@@ -621,14 +1523,14 @@ function bindMain(){
     }catch(e){S.bookMsg={ok:false,text:`Booking failed: ${e.message}`};render();}
   });
 }
-
+ 
 function startRefresh(){
   stopRefresh();
   S.refreshId=setInterval(async()=>{if(S.view==='panel'||S.view==='admin'){await loadAll(new Date());render();}},30000);
   S.clockId=setInterval(()=>{const el=document.getElementById('pclock');if(el)el.textContent=fmt(now());},1000);
 }
 function stopRefresh(){if(S.refreshId){clearInterval(S.refreshId);S.refreshId=null;}if(S.clockId){clearInterval(S.clockId);S.clockId=null;}}
-
+ 
 return{
   togglePick:(i)=>{if(S.picked.includes(i))S.picked=S.picked.filter(x=>x!==i);else if(S.picked.length<2)S.picked=[...S.picked,i];render();},
   retry:(i)=>{loadRoom(i,S.view==='booking'?S.bookDate:new Date()).then(render);},
@@ -677,3 +1579,5 @@ window.A=App;App.init();
 </script>
 </body>
 </html>
+ 
+
