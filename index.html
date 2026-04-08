@@ -276,18 +276,7 @@ function rSetup(){
       <div class="form-group"><label class="form-label">Client ID</label><input class="form-input" id="s-cid" placeholder="xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"></div>
     </div>
     <button class="btn btn-primary btn-full" id="btn-signin">Sign in with Microsoft → Discover Rooms</button>
-    <div class="divider-or">or use a Graph Explorer token</div>
-    <div class="form-group"><label class="form-label">Access Token</label>
-      <input class="form-input" id="s-tok" type="password" placeholder="eyJ0eX… (needs Calendars.ReadWrite + Place.Read.All)"></div>
-    <button class="btn btn-ghost btn-full" id="btn-tok">Connect with Token → Discover Rooms</button>
-    <div class="hint-box">
-      <strong style="color:var(--accent)">One-time Entra ID setup:</strong><br>
-      1. <a href="https://entra.microsoft.com/#view/Microsoft_AAD_RegisteredApps" target="_blank">entra.microsoft.com</a> → App registrations → New registration<br>
-      2. Platform: <strong>Single-page application (SPA)</strong><br>
-      3. Redirect URI: <code>${uri}</code><br>
-      4. API permissions → Delegated: <code>Calendars.ReadWrite</code> + <code>Place.Read.All</code><br>
-      5. In Exchange: grant signed-in user <strong>delegate access</strong> to each room mailbox
-    </div>
+
   </div></div>`;
 }
 
@@ -555,13 +544,7 @@ function bindSetup(){
     try{const tk=await signIn(tid,cid);await afterAuth({tenantId:tid,clientId:cid},tk);}
     catch(e){S.err=`Sign-in failed: ${e.message}`;S.view='setup';S.config=null;render();}
   });
-  document.getElementById('btn-tok')?.addEventListener('click',async()=>{
-    const tok=document.getElementById('s-tok')?.value?.trim();
-    if(!tok){S.err='Please paste an access token.';render();return;}
-    S.err=null;S.token=tok;S.view='discovering';render();
-    try{await afterAuth({tenantId:'',clientId:''},tok);}
-    catch(e){S.err=`Connection failed: ${e.message}`;S.view='setup';S.config=null;S.token=null;render();}
-  });
+
   loadCfg().then(cfg=>{
     if(!cfg)return;
     const s=(id,v)=>{const el=document.getElementById(id);if(el&&v)el.value=v;};
