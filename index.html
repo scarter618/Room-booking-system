@@ -331,7 +331,7 @@ function rPanel(){
   return`${rQB()}<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:24px">
     <div><h2 style="font-size:24px;font-weight:800">Room Status</h2>
       <div style="color:var(--tx2);font-size:13px;margin-top:3px">${fmtDate(n)} &nbsp;&middot;&nbsp; <span id="pclock" style="font-family:var(--fm)">${fmt(n)}</span>
-      <span style="margin-left:12px;font-size:11px;color:var(--tx3)">&#8635; auto-refreshes every 30s</span></div></div>
+      <span style="margin-left:12px;font-size:11px;color:var(--tx3)">&#8635; auto-refreshes every 60s</span></div></div>
     <button class="icon-btn" id="btn-ref" title="Refresh now">&#8635;</button>
   </div><div class="panel-grid">${S.config.rooms.map((_,i)=>rRP(i)).join('')}</div>`;
 }
@@ -361,7 +361,7 @@ function rRP(i){
       <div class="rp-next"><div style="font-size:10px;font-weight:700;color:#ffffff;text-transform:uppercase;letter-spacing:.12em;margin-bottom:5px">UP NEXT</div><strong>${nxt.subject||'Meeting'}</strong> &nbsp;<span style="font-family:var(--fm);font-size:12px;color:#ffffff;font-weight:600">${fmt(parseT(nxt.start.dateTime))} &ndash; ${fmt(parseT(nxt.end.dateTime))}</span></div>`;
   }else{
     body=`<div class="rp-free">Available</div><div class="rp-free-sub">Free all day</div>
-      <div class="rp-next" style="color:var(--tx3);background:transparent;border-color:transparent">No upcoming meetings today</div>`;
+      <div class="rp-next" style="color:#ffffff;background:transparent;border-color:transparent">No upcoming meetings today</div>`;
   }
   return`<div class="room-panel ${st}">
     <div class="rp-status-bar ${st}"></div>
