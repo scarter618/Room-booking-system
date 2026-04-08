@@ -372,8 +372,8 @@ function rRP(i){
     </div>
     <hr class="rp-div"><div class="rp-body">${body}</div>
     <div class="rp-foot">
-      <button class="btn btn-sm${st==='available'?' btn-primary':' btn-ghost'}" onclick="A.openQB(${i})" ${st==='busy'?'disabled':''} style="${st==='available'?'background:#44ff00;color:#07111e;font-weight:800':''}">&#9889; Book Now</button>
-      <button class="btn btn-ghost btn-sm" onclick="A.goBook(${i})" style="background:rgba(255,255,255,0.15);border-color:rgba(255,255,255,0.3);color:#fff">Schedule</button>
+      <button class="btn${st==='available'?' btn-primary':' btn-ghost'}" onclick="A.openQB(${i})" ${st==='busy'?'disabled':''} style="flex:1;justify-content:center;font-size:15px;padding:13px 18px;${st==='available'?'background:#44ff00;color:#07111e;font-weight:800':''}">&#9889; Book Now</button>
+      <button class="btn btn-ghost" onclick="A.goBook(${i})" style="flex:1;justify-content:center;font-size:15px;padding:13px 18px;background:rgba(255,255,255,0.15);border-color:rgba(255,255,255,0.3);color:#fff">Schedule</button>
     </div>
   </div>`;
 }
@@ -632,7 +632,7 @@ function bindMain(){
 
 function startRefresh(){
   stopRefresh();
-  S.refreshId=setInterval(async()=>{if(S.view==='panel'||S.view==='admin'){await loadAll(new Date());render();}},30000);
+  S.refreshId=setInterval(async()=>{if(S.view==='panel'||S.view==='admin'){await loadAll(new Date());render();}},60000);
   S.clockId=setInterval(()=>{const el=document.getElementById('pclock');if(el)el.textContent=fmt(now());},1000);
 }
 function stopRefresh(){if(S.refreshId){clearInterval(S.refreshId);S.refreshId=null;}if(S.clockId){clearInterval(S.clockId);S.clockId=null;}}
