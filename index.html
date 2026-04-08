@@ -605,6 +605,7 @@ function bindMain(){
     if(S.discovered&&S.discovered.length>0){S.picked=S.config.rooms.map(r=>S.discovered.findIndex(d=>d.email===r.email)).filter(i=>i>=0);S.view='picker';render();}
     else{S.view='discovering';render();try{const tk=await getToken();const found=await discoverRooms(tk);S.discovered=found;S.picked=S.config.rooms.map(r=>found.findIndex(d=>d.email===r.email)).filter(i=>i>=0);S.view='picker';render();}catch(e){S.err='Could not reload rooms: '+e.message;S.view='panel';render();startRefresh();}}
   });
+  document.getElementById('btn-so')?.addEventListener('click',()=>{
     stopRefresh();Object.assign(S,{view:'setup',config:null,msalInstance:null,account:null,token:null,rooms:[],discovered:[],picked:[],err:null,bookMsg:null});render();
   });
   document.getElementById('btn-ref')?.addEventListener('click',()=>{loadAll(S.view==='booking'?S.bookDate:new Date()).then(render);});
