@@ -276,7 +276,6 @@ function rSetup(){
       <div class="form-group"><label class="form-label">Client ID</label><input class="form-input" id="s-cid" placeholder="xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"></div>
     </div>
     <button class="btn btn-primary btn-full" id="btn-signin">Sign in with Microsoft → Discover Rooms</button>
-
   </div></div>`;
 }
 
@@ -423,27 +422,17 @@ function rBooking(){
       <div class="card"><div class="card-title">Date</div>
         ${(()=>{
           const mon=new Date(S.bookDate);mon.setHours(0,0,0,0);mon.setDate(mon.getDate()-((mon.getDay()+6)%7));
-          const dayLabels=['M','T','W','T','F','S','S'];
-          const days=[];
+          const dl=['M','T','W','T','F','S','S'];const days=[];
           for(let i=0;i<7;i++){
             const d=new Date(mon.getTime()+i*86400000);
             const sel=d.toDateString()===S.bookDate.toDateString();
             const isT=d.toDateString()===now().toDateString();
-            days.push(`<div onclick="A.pickDate(${d.getTime()})" style="flex:1;text-align:center;padding:8px 3px;border-radius:9px;cursor:pointer;border:1.5px solid ${sel?'#d94000':'var(--bdr)'};background:${sel?'rgba(217,64,0,0.08)':'transparent'};transition:all .15s">
-              <div style="font-size:10px;font-weight:700;color:${sel?'#d94000':'var(--tx3)'};text-transform:uppercase;letter-spacing:.05em">${dayLabels[i]}</div>
-              <div style="font-size:15px;font-weight:800;color:${sel?'#d94000':isT?'var(--tx)':'var(--tx2)'};margin-top:2px">${d.getDate()}</div>
-              <div style="width:5px;height:5px;border-radius:50%;background:${isT?'#d94000':'transparent'};margin:3px auto 0"></div>
-            </div>`);
+            days.push('<div onclick="A.pickDate('+d.getTime()+'" style="flex:1;text-align:center;padding:8px 3px;border-radius:9px;cursor:pointer;border:1.5px solid '+(sel?'#d94000':'var(--bdr)')+';background:'+(sel?'rgba(217,64,0,0.08)':'transparent')+';transition:all .15s"><div style="font-size:10px;font-weight:700;color:'+(sel?'#d94000':'var(--tx3)')+'">'+(dl[i])+'</div><div style="font-size:15px;font-weight:800;color:'+(sel?'#d94000':isT?'var(--tx)':'var(--tx2)')+';margin-top:2px">'+d.getDate()+'</div><div style="width:5px;height:5px;border-radius:50%;background:'+(isT?'#d94000':'transparent')+';margin:3px auto 0"></div></div>');
           }
-          const monLabel=mon.toLocaleDateString('en-GB',{month:'short',day:'numeric'});
+          const mL=mon.toLocaleDateString('en-GB',{month:'short',day:'numeric'});
           const sun=new Date(mon.getTime()+6*86400000);
-          const sunLabel=sun.toLocaleDateString('en-GB',{month:'short',day:'numeric'});
-          return`<div style="display:flex;align-items:center;gap:6px;margin-bottom:8px">
-            <button class="date-nav-btn" id="btn-pw">&#8249;</button>
-            <div style="flex:1;text-align:center;font-size:12px;font-weight:600;color:var(--tx2)">${monLabel} – ${sunLabel}</div>
-            <button class="date-nav-btn" id="btn-nw">&#8250;</button>
-          </div>
-          <div style="display:flex;gap:5px">${days.join('')}</div>`;
+          const sL=sun.toLocaleDateString('en-GB',{month:'short',day:'numeric'});
+          return '<div style="display:flex;align-items:center;gap:6px;margin-bottom:8px"><button class="date-nav-btn" id="btn-pw">‹</button><div style="flex:1;text-align:center;font-size:12px;font-weight:600;color:var(--tx2)">'+mL+' – '+sL+'</div><button class="date-nav-btn" id="btn-nw">›</button></div><div style="display:flex;gap:5px">'+days.join('')+'</div>';
         })()}
         <div style="text-align:center;font-size:12px;color:var(--tx2);margin-top:8px">${fmtDate(S.bookDate)}</div>
       </div>
@@ -563,7 +552,6 @@ function bindSetup(){
     try{const tk=await signIn(tid,cid);await afterAuth({tenantId:tid,clientId:cid},tk);}
     catch(e){S.err=`Sign-in failed: ${e.message}`;S.view='setup';S.config=null;render();}
   });
-
   loadCfg().then(cfg=>{
     if(!cfg)return;
     const s=(id,v)=>{const el=document.getElementById(id);if(el&&v)el.value=v;};
@@ -581,8 +569,7 @@ async function afterAuth(base,tk){
 
 function bindPicker(){
   document.getElementById('btn-back')?.addEventListener('click',()=>{
-    if(S.config&&S.config.rooms&&S.config.rooms.length>0){S.view='panel';render();startRefresh();}
-    else{S.view='setup';S.config=null;S.token=null;S.discovered=[];S.picked=[];render();}
+    if(S.config&&S.config.rooms&&S.config.rooms.length>0){S.view='panel';render();startRefresh();}else{S.view='setup';S.config=null;S.token=null;S.discovered=[];S.picked=[];render();}
   });
   document.getElementById('btn-use')?.addEventListener('click',async()=>{
     if(S.picked.length===0){S.err='Select at least one room.';render();return;}
