@@ -581,7 +581,8 @@ async function afterAuth(base,tk){
 
 function bindPicker(){
   document.getElementById('btn-back')?.addEventListener('click',()=>{
-    S.view='setup';S.config=null;S.token=null;S.discovered=[];S.picked=[];render();
+    if(S.config&&S.config.rooms&&S.config.rooms.length>0){S.view='panel';render();startRefresh();}
+    else{S.view='setup';S.config=null;S.token=null;S.discovered=[];S.picked=[];render();}
   });
   document.getElementById('btn-use')?.addEventListener('click',async()=>{
     if(S.picked.length===0){S.err='Select at least one room.';render();return;}
@@ -599,7 +600,11 @@ function bindMain(){
   document.querySelectorAll('.nav-tab').forEach(b=>b.addEventListener('click',()=>{
     S.view=b.dataset.v;S.bookMsg=null;loadAll(S.view==='booking'?S.bookDate:new Date()).then(render);render();
   }));
-  document.getElementById('btn-so')?.addEventListener('click',()=>{
+  document.getElementById('btn-ch-rooms')?.addEventListener('click',async()=>{
+    stopRefresh();
+    if(S.discovered&&S.discovered.length>0){S.picked=S.config.rooms.map(r=>S.discovered.findIndex(d=>d.email===r.email)).filter(i=>i>=0);S.view='picker';render();}
+    else{S.view='discovering';render();try{const tk=await getToken();const found=await discoverRooms(tk);S.discovered=found;S.picked=S.config.rooms.map(r=>found.findIndex(d=>d.email===r.email)).filter(i=>i>=0);S.view='picker';render();}catch(e){S.err='Could not reload rooms: '+e.message;S.view='panel';render();startRefresh();}}
+  });
     stopRefresh();Object.assign(S,{view:'setup',config:null,msalInstance:null,account:null,token:null,rooms:[],discovered:[],picked:[],err:null,bookMsg:null});render();
   });
   document.getElementById('btn-ref')?.addEventListener('click',()=>{loadAll(S.view==='booking'?S.bookDate:new Date()).then(render);});
