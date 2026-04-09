@@ -25,7 +25,7 @@
   --amber:#f59e0b;--tx:#1a1a1a;--tx2:#5a6070;--tx3:#9aa0aa;
   --ff:'sofia-pro','Sofia Pro','DM Sans',sans-serif;--fm:'JetBrains Mono',monospace;--r:10px;--r2:14px;
 }
-html,body{min-height:100%;background:var(--bg);color:var(--tx);font-family:var(--ff);overflow:hidden}
+html{height:100%}body{min-height:100%;background:var(--bg);color:var(--tx);font-family:var(--ff)}
 a{color:var(--accent);text-decoration:none}
 input,button{font-family:inherit}
 .nav{display:flex;align-items:center;justify-content:space-between;padding:0 18px;height:48px;background:#ffffff;border-bottom:2px solid #d94000;position:sticky;top:0;z-index:100;box-shadow:0 2px 8px rgba(0,0,0,0.08)}
@@ -38,8 +38,8 @@ input,button{font-family:inherit}
 .nav-user{font-size:12px;color:var(--tx2);font-family:var(--fm)}
 .btn-nav{background:none;border:1px solid var(--bdr2);color:var(--tx2);padding:5px 14px;border-radius:6px;font-size:12px;cursor:pointer;transition:all .15s;font-weight:600}
 .btn-nav:hover{border-color:var(--red);color:var(--red)}
-.main{padding:6px 12px 0;max-width:100%;margin:0}
-.main.panel-view{padding:50px 50px 50px}
+.main{padding:6px 12px 0;max-width:100%;margin:0}.main.booking-view{padding:12px 16px 60px;overflow-y:auto}
+.main.panel-view{padding:50px 50px 50px}.body-panel{overflow:hidden}.body-booking{overflow-y:auto}
 .btn{padding:10px 22px;border-radius:var(--r);border:none;cursor:pointer;font-family:var(--ff);font-size:13px;font-weight:700;transition:all .15s;display:inline-flex;align-items:center;gap:8px}
 .btn-primary{background:#d94000;color:#fff}
 .btn-primary:hover{background:#c03800}
@@ -173,7 +173,7 @@ input,button{font-family:inherit}
 <script>document.addEventListener("DOMContentLoaded",function(){var l=document.getElementById("nav-logo");if(l&&localStorage.getItem("logo-hidden")==="1")l.style.opacity="0";});</script>
 <script>
 const App=(()=>{
-let S={view:'setup',config:null,msalInstance:null,account:null,token:null,rooms:[],discovered:[],picked:[],selRoom:0,bookDate:new Date(),bookStart:null,bookDur:60,bookMsg:null,err:null,refreshId:null,clockId:null,qb:null,qbDur:30,qbErr:null};
+let S={view:'setup',config:null,msalInstance:null,account:null,token:null,rooms:[],discovered:[],picked:[],selRoom:0,bookDate:new Date(),bookStart:null,bookDur:60,bookMsg:null,err:null,refreshId:null,clockId:null,qb:null,qbDur:30,qbErr:null,qbTitle:'',bookDurCustom:false};
 
 async function loadCfg(){try{const r=await window.storage.get('oq-rooms-cfg');if(r)return JSON.parse(r.value);}catch(e){}return null;}
 async function saveCfg(c){try{await window.storage.set('oq-rooms-cfg',JSON.stringify(c));}catch(e){}}
@@ -266,7 +266,7 @@ function render(){
   if(S.view==='setup'){app.innerHTML=rSetup();bindSetup();return;}
   if(S.view==='discovering'){app.innerHTML=rDisc();return;}
   if(S.view==='picker'){app.innerHTML=rPicker();bindPicker();return;}
-  app.innerHTML=rNav()+`<div class="main${S.view==='panel'?' panel-view':''}">${S.view==='panel'?rPanel():S.view==='booking'?rBooking():rAdmin()}</div>`;
+  document.body.className=S.view==='panel'?'body-panel':S.view==='booking'?'body-booking':'';app.innerHTML=rNav()+`<div class="main${S.view==='panel'?' panel-view':''} ${S.view==='booking'?'booking-view':''}">` + (S.view==='panel'?rPanel():S.view==='booking'?rBooking():rAdmin())+`</div>`;
   bindMain();
 }
 
@@ -394,16 +394,16 @@ function rQB(){
     <div class="qb-modal">
       <div class="qb-title">&#9889; Book Now</div>
       <div class="qb-sub">${room.name} &nbsp;&middot;&nbsp; Starting ${fmt(s)}</div>
-      <div class="form-group"><label class="form-label">Meeting Title</label>
-        <input class="form-input" id="qb-title" placeholder="e.g. Quick sync, Client call…" autofocus></div>
       <div class="form-label" style="margin-bottom:8px">Duration</div>
-      <div class="qb-dur-grid">
+      <div class="qb-dur-grid" style="margin-bottom:16px">
         ${[15,30,45,60].map(d=>`<div class="qb-dur${dur===d?' sel':''}" onclick="A.setQBDur(${d})">${d}m</div>`).join('')}
       </div>
-      <div style="background:#fff8f5;border:1px solid rgba(217,64,0,0.2);border-radius:12px;padding:14px 16px;margin-bottom:20px;font-family:var(--fm);font-size:14px">
+      <div style="background:#fff8f5;border:1px solid rgba(217,64,0,0.2);border-radius:12px;padding:12px 16px;margin-bottom:16px;font-family:var(--fm);font-size:14px">
         <span style="color:#d94000;font-weight:700">${fmt(s)}</span> <span style="color:var(--tx3)">→</span> <span style="color:#d94000;font-weight:700">${fmt(e)}</span>
         <span style="color:var(--tx3);margin-left:8px">${dur} min</span>
       </div>
+      <div class="form-group"><label class="form-label">Meeting Title</label>
+        <input class="form-input" id="qb-title" placeholder="e.g. Quick sync, Client call…" value="${S.qbTitle||''}" autofocus></div>
       <div style="display:flex;gap:10px">
         <button class="btn btn-primary btn-full" id="btn-qb-confirm" style="background:#d94000;color:#fff;font-weight:800">Confirm Booking</button>
         <button class="btn btn-ghost btn-sm" onclick="A.closeQB()">Cancel</button>
@@ -414,60 +414,67 @@ function rQB(){
 }
 
 function rBooking(){
-  const isToday=S.bookDate.toDateString()===now().toDateString();
   const ev=(S.rooms[S.selRoom]||{events:[]}).events||[];
-  const slots=genSlots(S.bookDate,ev);
-  return`${S.bookMsg?`<div class="${S.bookMsg.ok?'success-box':'error-box'}">${S.bookMsg.text}</div>`:''}
-  <div class="booking-layout">
-    <div>
-      <div class="card"><div class="card-title">Room</div>
-        ${S.config.rooms.map((r,i)=>{
-          const st=getCur((S.rooms[i]||{events:[]}).events||[])?'busy':'available';
-          return`<div class="room-opt${i===S.selRoom?' sel':''}" onclick="A.selRoom(${i})">
-            <div><div class="room-opt-name">${r.name}</div>${r.capacity?`<div style="font-size:11px;color:var(--tx3)">&#128101; ${r.capacity}</div>`:''}</div>
-            <div class="ros-${st}">${st==='busy'?'&#9679; Busy':'&#9679; Free'}</div></div>`;
-        }).join('')}
-      </div>
-      <div class="card"><div class="card-title">Date</div>
-        ${(()=>{
-          const mon=new Date(S.bookDate);mon.setHours(0,0,0,0);mon.setDate(mon.getDate()-((mon.getDay()+6)%7));
-          const dl=['M','T','W','T','F','S','S'];const days=[];
-          for(let i=0;i<7;i++){
-            const d=new Date(mon.getTime()+i*86400000);
-            const sel=d.toDateString()===S.bookDate.toDateString();
-            const isT=d.toDateString()===now().toDateString();
-            days.push('<div onclick="A.pickDate('+d.getTime()+')" style="flex:1;text-align:center;padding:8px 3px;border-radius:9px;cursor:pointer;border:1.5px solid '+(sel?'#d94000':'var(--bdr)')+';background:'+(sel?'rgba(217,64,0,0.08)':'transparent')+';transition:all .15s"><div style="font-size:10px;font-weight:700;color:'+(sel?'#d94000':'var(--tx3)')+'">'+dl[i]+'</div><div style="font-size:15px;font-weight:800;color:'+(sel?'#d94000':isT?'var(--tx)':'var(--tx2)')+';margin-top:2px">'+d.getDate()+'</div><div style="width:5px;height:5px;border-radius:50%;background:'+(isT?'#d94000':'transparent')+';margin:3px auto 0"></div></div>');
-          }
-          const mL=mon.toLocaleDateString('en-GB',{month:'short',day:'numeric'});
-          const sun=new Date(mon.getTime()+6*86400000);
-          const sL=sun.toLocaleDateString('en-GB',{month:'short',day:'numeric'});
-          return '<div style="display:flex;align-items:center;gap:6px;margin-bottom:8px"><button class="date-nav-btn" id="btn-pw">\u2039</button><div style="flex:1;text-align:center;font-size:12px;font-weight:600;color:var(--tx2)">'+mL+' \u2013 '+sL+'</div><button class="date-nav-btn" id="btn-nw">\u203a</button></div><div style="display:flex;gap:5px">'+days.join('')+'</div>';
-        })()}
-        <div style="text-align:center;font-size:12px;color:var(--tx2);margin-top:8px">${fmtDate(S.bookDate)}</div>
-      </div>
-      <div class="card"><div class="card-title">Duration</div>
-        <div class="dur-grid">${[15,30,60,90].map(d=>`<div class="dur-btn${S.bookDur===d?' sel':''}" onclick="A.setDur(${d})">${d<60?d+'m':(d/60)+'h'}</div>`).join('')}</div>
-      </div>
+  const room=S.config.rooms[S.selRoom];
+  const startH=S.bookStartH||'08:00';
+  return`${S.bookMsg?`<div class="${S.bookMsg.ok?'success-box':'error-box'}" style="margin-bottom:12px">${S.bookMsg.text}</div>`:''}
+  <div style="max-width:600px;margin:0 auto">
+    <div class="card"><div class="card-title">Room</div>
+      ${S.config.rooms.map((r,i)=>{
+        const st=getCur((S.rooms[i]||{events:[]}).events||[])?'busy':'available';
+        return`<div class="room-opt${i===S.selRoom?' sel':''}" onclick="A.selRoom(${i})">
+          <div><div class="room-opt-name">${r.name}</div>${r.capacity?`<div style="font-size:11px;color:var(--tx3)">&#128101; ${r.capacity}</div>`:''}</div>
+          <div class="ros-${st}">${st==='busy'?'&#9679; Busy':'&#9679; Free'}</div></div>`;
+      }).join('')}
     </div>
-    <div>
-      <div class="card"><div class="card-title" style="margin-bottom:6px">Timeline &mdash; ${S.config.rooms[S.selRoom].name}</div>
-        ${rTL(S.bookDate,ev)}
-        <div style="display:flex;gap:14px;margin-top:8px;font-size:11px;color:var(--tx3)">
-          <span><span style="color:var(--red)">&#9632;</span> Booked</span>
-          <span><span style="color:var(--amber)">|</span> Now</span>
+    <div class="card"><div class="card-title">Date</div>
+      ${(()=>{
+        const mon=new Date(S.bookDate);mon.setHours(0,0,0,0);mon.setDate(mon.getDate()-((mon.getDay()+6)%7));
+        const dl=['M','T','W','T','F','S','S'];const days=[];
+        for(let i=0;i<7;i++){
+          const d=new Date(mon.getTime()+i*86400000);
+          const sel=d.toDateString()===S.bookDate.toDateString();
+          const isT=d.toDateString()===now().toDateString();
+          days.push('<div onclick="A.pickDate('+d.getTime()+')" style="flex:1;text-align:center;padding:8px 3px;border-radius:9px;cursor:pointer;border:1.5px solid '+(sel?'#d94000':'var(--bdr)')+';background:'+(sel?'rgba(217,64,0,0.08)':'transparent')+';transition:all .15s"><div style="font-size:10px;font-weight:700;color:'+(sel?'#d94000':'var(--tx3)')+'">'+dl[i]+'</div><div style="font-size:15px;font-weight:800;color:'+(sel?'#d94000':isT?'var(--tx)':'var(--tx2)')+';margin-top:2px">'+d.getDate()+'</div><div style="width:5px;height:5px;border-radius:50%;background:'+(isT?'#d94000':'transparent')+';margin:3px auto 0"></div></div>');
+        }
+        const mL=mon.toLocaleDateString('en-GB',{month:'short',day:'numeric'});
+        const sun=new Date(mon.getTime()+6*86400000);
+        const sL=sun.toLocaleDateString('en-GB',{month:'short',day:'numeric'});
+        return '<div style="display:flex;align-items:center;gap:6px;margin-bottom:8px"><button class="date-nav-btn" id="btn-pw">\u2039</button><div style="flex:1;text-align:center;font-size:12px;font-weight:600;color:var(--tx2)">'+mL+' \u2013 '+sL+'</div><button class="date-nav-btn" id="btn-nw">\u203a</button></div><div style="display:flex;gap:5px">'+days.join('')+'</div>';
+      })()}
+      <div style="text-align:center;font-size:12px;color:var(--tx2);margin-top:8px">${fmtDate(S.bookDate)}</div>
+    </div>
+    <div class="card"><div class="card-title">Duration</div>
+      <div class="dur-grid">${[15,30,60,90].map(d=>`<div class="dur-btn${S.bookDur===d&&!S.bookDurCustom?' sel':''}" onclick="A.setDurPreset(${d})">${d<60?d+'m':(d/60)+'h'}</div>`).join('')}</div>
+      <div style="margin-top:8px">
+        <div class="dur-btn${S.bookDurCustom?' sel':''}" style="width:100%;text-align:center;display:flex;align-items:center;justify-content:center;gap:6px" onclick="A.toggleCustomDur()">
+          &#9998; ${S.bookDurCustom?(S.bookDur<60?S.bookDur+'m':Math.floor(S.bookDur/60)+'h'+(S.bookDur%60?S.bookDur%60+'m':'')):'Custom'}
         </div>
       </div>
-      <div class="card"><div class="card-title">Pick Start Time</div>
-        <div class="slot-grid">${slots.map(s=>{
-          const sel=S.bookStart&&tkKey(fromKey(S.bookStart))===s.key;
-          return`<div class="slot-btn${s.busy?' busy':sel?' sel':''}" onclick="${s.busy?'':'A.selSlot(\''+s.key+'\')'}">${s.lbl}</div>`;
-        }).join('')}</div>
-      </div>
-      ${S.bookStart?rConfirm():''}
+      ${S.bookDurCustom?`<div style="margin-top:10px;display:flex;align-items:center;gap:10px">
+        <input type="range" min="5" max="480" step="5" value="${S.bookDur}" oninput="A.setCustomDur(this.value)" onchange="A.setDur(parseInt(this.value))" style="flex:1;accent-color:#d94000">
+        <span id="custom-dur-lbl" style="font-family:var(--fm);font-size:13px;font-weight:700;color:#d94000;min-width:48px;text-align:right">${S.bookDur<60?S.bookDur+'m':Math.floor(S.bookDur/60)+'h'+(S.bookDur%60?S.bookDur%60+'m':'')}</span>
+      </div>`:''}
     </div>
+    <div class="card"><div class="card-title">Start Time</div>
+      <div style="display:flex;align-items:center;gap:12px">
+        <input type="time" id="book-time-picker" value="${startH}" min="08:00" max="19:00"
+          onchange="A.setBookTime(this.value)"
+          style="flex:1;padding:12px 14px;border-radius:var(--r);border:1.5px solid ${S.bookStart?'#d94000':'var(--bdr2)'};font-family:var(--fm);font-size:20px;font-weight:700;color:${S.bookStart?'#d94000':'var(--tx)'};outline:none;background:var(--bg);cursor:pointer">
+        ${S.bookStart?`<div style="font-size:12px;color:var(--tx2)">ends <strong style="color:#d94000">${fmt(new Date(fromKey(S.bookStart).getTime()+S.bookDur*60000))}</strong></div>`:'<div style="font-size:12px;color:var(--tx3)">pick a time</div>'}
+      </div>
+      ${(()=>{
+        const n=now();
+        const evHtml=ev.filter(e=>parseT(e.start.dateTime).toDateString()===S.bookDate.toDateString()).map(e=>{
+          const es=fmt(parseT(e.start.dateTime)),ee=fmt(parseT(e.end.dateTime));
+          return`<div style="margin-top:6px;padding:6px 10px;background:var(--rd);border-radius:6px;font-size:11px;color:var(--red);font-weight:600">&#9679; ${e.subject||'Booked'} &middot; ${es}\u2013${ee}</div>`;
+        }).join('');
+        return evHtml?`<div style="margin-top:10px">${evHtml}</div>`:'';
+      })()}
+    </div>
+    ${S.bookStart?rConfirm():''}
   </div>`;
 }
-
 function rTL(date,evs){
   const SH=8,EH=20,total=(EH-SH)*60,n=now();
   const isToday=date.toDateString()===n.toDateString();
@@ -607,7 +614,7 @@ function bindMain(){
   document.getElementById('btn-pw')?.addEventListener('click',()=>{S.bookDate=new Date(S.bookDate.getTime()-7*86400000);S.bookStart=null;loadAll(S.bookDate).then(render);render();});
   document.getElementById('btn-nw')?.addEventListener('click',()=>{S.bookDate=new Date(S.bookDate.getTime()+7*86400000);S.bookStart=null;loadAll(S.bookDate).then(render);render();});
   document.getElementById('btn-qb-confirm')?.addEventListener('click',async()=>{
-    const title=document.getElementById('qb-title')?.value?.trim();
+    const title=document.getElementById('qb-title')?.value?.trim()||S.qbTitle?.trim();
     if(!title){S.qbErr='Please enter a meeting title.';render();return;}
     const s=new Date(),e=new Date(s.getTime()+S.qbDur*60000),room=S.config.rooms[S.qb];
     try{
@@ -649,15 +656,19 @@ function stopRefresh(){if(S.refreshId){clearInterval(S.refreshId);S.refreshId=nu
 return{
   togglePick:(i)=>{if(S.picked.includes(i))S.picked=S.picked.filter(x=>x!==i);else if(S.picked.length<2)S.picked=[...S.picked,i];render();},
   retry:(i)=>{loadRoom(i,S.view==='booking'?S.bookDate:new Date()).then(render);},
-  openQB:(i)=>{S.qb=i;S.qbDur=30;S.qbErr=null;render();},
-  closeQB:()=>{S.qb=null;S.qbErr=null;render();},
-  setQBDur:(d)=>{S.qbDur=d;render();},
+  openQB:(i)=>{S.qb=i;S.qbDur=30;S.qbErr=null;S.qbTitle='';render();},
+  closeQB:()=>{S.qb=null;S.qbErr=null;S.qbTitle='';render();},
+  setQBDur:(d)=>{const el=document.getElementById('qb-title');if(el)S.qbTitle=el.value;S.qbDur=d;render();},
   quickBook:(i)=>{S.selRoom=i;S.view='booking';S.bookDate=new Date();loadAll(S.bookDate).then(render);render();},
   goBook:(i)=>{S.selRoom=i;S.view='booking';render();},
   selRoom:(i)=>{S.selRoom=i;S.bookStart=null;loadRoom(i,S.bookDate).then(render);render();},
-  setDur:(d)=>{S.bookDur=d;S.bookStart=null;render();},
+  setDur:(d)=>{S.bookDur=Math.min(480,Math.max(5,d));S.bookStart=null;render();},
+  setDurPreset:(d)=>{S.bookDur=Math.min(480,Math.max(5,d));S.bookDurCustom=false;S.bookStart=null;render();},
+  setCustomDur:(d)=>{S.bookDur=Math.min(480,Math.max(5,parseInt(d)));S.bookStart=null;const lbl=document.getElementById('custom-dur-lbl');if(lbl){const v=S.bookDur;lbl.textContent=v<60?v+'m':Math.floor(v/60)+'h'+(v%60?v%60+'m':'');}},
+  toggleCustomDur:()=>{S.bookDurCustom=!S.bookDurCustom;if(!S.bookDurCustom){S.bookDur=60;}S.bookStart=null;render();},
   selSlot:(k)=>{S.bookStart=k;render();},
-  pickDate:(ts)=>{S.bookDate=new Date(ts);S.bookStart=null;loadAll(S.bookDate).then(render);render();},
+  pickDate:(ts)=>{S.bookDate=new Date(ts);S.bookStart=null;S.bookStartH=null;loadAll(S.bookDate).then(render);render();},
+  setBookTime:(v)=>{if(!v)return;S.bookStartH=v;const[h,m]=v.split(':').map(Number);const d=new Date(S.bookDate);d.setHours(h,m,0,0);S.bookStart=tkKey(d);render();},
   clearBook:()=>{S.bookStart=null;render();},
   cancel:async(i,eid)=>{
     if(!confirm('Cancel this booking?'))return;
