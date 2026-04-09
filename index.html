@@ -28,7 +28,7 @@
 html,body{min-height:100%;background:var(--bg);color:var(--tx);font-family:var(--ff)}
 a{color:var(--accent);text-decoration:none}
 input,button{font-family:inherit}
-.nav{display:flex;align-items:center;justify-content:space-between;padding:0 28px;height:64px;background:#ffffff;border-bottom:2px solid #d94000;position:sticky;top:0;z-index:100;box-shadow:0 2px 8px rgba(0,0,0,0.08)}
+.nav{display:flex;align-items:center;justify-content:space-between;padding:0 18px;height:48px;background:#ffffff;border-bottom:2px solid #d94000;position:sticky;top:0;z-index:100;box-shadow:0 2px 8px rgba(0,0,0,0.08)}
 .nav-brand{display:none}
 .nav-tabs{display:flex;gap:4px}
 .nav-tab{padding:6px 16px;border-radius:7px;border:none;cursor:pointer;font-family:var(--ff);font-size:13px;font-weight:600;color:var(--tx2);background:transparent;transition:all .15s}
@@ -38,7 +38,7 @@ input,button{font-family:inherit}
 .nav-user{font-size:12px;color:var(--tx2);font-family:var(--fm)}
 .btn-nav{background:none;border:1px solid var(--bdr2);color:var(--tx2);padding:5px 14px;border-radius:6px;font-size:12px;cursor:pointer;transition:all .15s;font-weight:600}
 .btn-nav:hover{border-color:var(--red);color:var(--red)}
-.main{padding:16px 16px;max-width:100%;margin:0}
+.main{padding:8px 12px;max-width:100%;margin:0}
 .btn{padding:10px 22px;border-radius:var(--r);border:none;cursor:pointer;font-family:var(--ff);font-size:13px;font-weight:700;transition:all .15s;display:inline-flex;align-items:center;gap:8px}
 .btn-primary{background:#d94000;color:#fff}
 .btn-primary:hover{background:#c03800}
@@ -81,7 +81,7 @@ input,button{font-family:inherit}
 .dot-busy{background:#ffffff;animation:pr 2s infinite}
 @keyframes pg{0%,100%{box-shadow:0 0 0 0 rgba(255,255,255,.6)}50%{box-shadow:0 0 0 8px rgba(255,255,255,0)}}
 @keyframes pr{0%,100%{box-shadow:0 0 0 0 rgba(255,255,255,.5)}50%{box-shadow:0 0 0 6px rgba(255,255,255,0)}}
-.panel-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(400px,1fr));gap:16px;height:calc(100vh - 130px);width:100%}
+.panel-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(400px,1fr));gap:10px;height:calc(100vh - 80px);width:100%}
 .room-panel{border-radius:20px;overflow:hidden;transition:all .4s;position:relative;height:100%;display:flex;flex-direction:column}
 .room-panel.available{background:linear-gradient(160deg,#1db300 0%,#178f00 100%);border:none;box-shadow:0 12px 48px rgba(29,179,0,0.35),0 3px 14px rgba(0,0,0,0.1)}
 .room-panel.busy{background:linear-gradient(160deg,#cc0022 0%,#a80018 100%);border:none;box-shadow:0 12px 48px rgba(204,0,34,0.35),0 3px 14px rgba(0,0,0,0.1)}
@@ -89,21 +89,21 @@ input,button{font-family:inherit}
 .rp-status-bar{height:7px;width:100%}
 .rp-status-bar.available{background:rgba(255,255,255,0.25)}
 .rp-status-bar.busy{background:rgba(255,255,255,0.15)}
-.rp-head{padding:30px 32px 20px;display:flex;justify-content:space-between;align-items:flex-start}
+.rp-head{padding:16px 22px 12px;display:flex;justify-content:space-between;align-items:flex-start}
 .rp-name{font-size:clamp(24px,3vw,36px);font-weight:800;letter-spacing:-.02em;color:#ffffff}
 .rp-cap{font-size:13px;color:#ffffff;margin-top:6px;display:flex;align-items:center;gap:4px;font-weight:600}
-.rp-body{padding:0 32px 26px;flex:1;display:flex;flex-direction:column;justify-content:center}
-.rp-div{border:none;border-top:1px solid rgba(255,255,255,0.15);margin:0 0 24px}
+.rp-body{padding:0 22px 16px;flex:1;display:flex;flex-direction:column;justify-content:center}
+.rp-div{border:none;border-top:1px solid rgba(255,255,255,0.15);margin:0 0 14px}
 .rp-lbl{font-size:10px;font-weight:700;color:#ffffff;text-transform:uppercase;letter-spacing:.15em;margin-bottom:10px}
 .rp-mtitle{font-size:24px;font-weight:800;line-height:1.3;margin-bottom:10px;color:#ffffff}
 .rp-meta{font-family:var(--fm);font-size:14px;color:#ffffff;font-weight:600}
-.rp-free{font-size:clamp(42px,5vw,64px);font-weight:800;color:#ffffff;margin-bottom:4px;letter-spacing:-.03em;line-height:1}
+.rp-free{font-size:clamp(32px,4vw,52px);font-weight:800;color:#ffffff;margin-bottom:4px;letter-spacing:-.03em;line-height:1}
 .rp-free-sub{font-size:15px;color:#ffffff;margin-bottom:4px;font-weight:600}
 .rp-next{font-size:14px;color:#ffffff;margin-top:16px;padding:14px 18px;background:rgba(0,0,0,0.12);border-radius:12px;border:1px solid rgba(255,255,255,0.15)}
 .rp-next strong{color:#ffffff}
 .progress{height:6px;background:rgba(0,0,0,0.2);border-radius:3px;margin-top:16px;overflow:hidden}
 .progress-fill{height:100%;border-radius:3px;transition:width 1s linear;background:rgba(255,255,255,0.5)}
-.rp-foot{padding:20px 32px;border-top:1px solid rgba(255,255,255,0.15);display:flex;gap:10px;background:rgba(0,0,0,0.12);margin-top:auto}
+.rp-foot{padding:12px 22px;border-top:1px solid rgba(255,255,255,0.15);display:flex;gap:10px;background:rgba(0,0,0,0.12);margin-top:auto}
 .rp-time-left{display:inline-flex;align-items:center;gap:6px;padding:6px 14px;border-radius:14px;font-family:var(--fm);font-size:13px;font-weight:600;margin-top:12px}
 .rp-time-left.busy{background:rgba(0,0,0,0.2);color:#ff4400;border:1px solid rgba(255,64,0,0.4);font-weight:700}
 /* QUICK BOOK MODAL */
@@ -328,10 +328,10 @@ function rNav(){
 
 function rPanel(){
   const n=now();
-  return`${rQB()}<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:24px">
-    <div><h2 style="font-size:24px;font-weight:800">Room Status</h2>
-      <div style="color:var(--tx2);font-size:13px;margin-top:3px">${fmtDate(n)} &nbsp;&middot;&nbsp; <span id="pclock" style="font-family:var(--fm)">${fmt(n)}</span>
-      <span style="margin-left:12px;font-size:11px;color:var(--tx3)">&#8635; auto-refreshes every 60s</span></div></div>
+  return`${rQB()}<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+    <div><h2 style="font-size:16px;font-weight:800">Room Status</h2>
+      <div style="color:var(--tx2);font-size:11px;margin-top:1px">${fmtDate(n)} &nbsp;&middot;&nbsp; <span id="pclock" style="font-family:var(--fm)">${fmt(n)}</span>
+      <span style="margin-left:10px;font-size:10px;color:var(--tx3)">&#8635; auto-refreshes every 60s</span></div></div>
     <button class="icon-btn" id="btn-ref" title="Refresh now">&#8635;</button>
   </div><div class="panel-grid">${S.config.rooms.map((_,i)=>rRP(i)).join('')}</div>`;
 }
