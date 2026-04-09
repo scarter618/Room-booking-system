@@ -266,7 +266,7 @@ function render(){
   if(S.view==='setup'){app.innerHTML=rSetup();bindSetup();return;}
   if(S.view==='discovering'){app.innerHTML=rDisc();return;}
   if(S.view==='picker'){app.innerHTML=rPicker();bindPicker();return;}
-  document.body.className=S.view==='panel'?'body-panel':S.view==='booking'?'body-booking':'';app.innerHTML=rNav()+`<div class="main${S.view==='panel'?' panel-view':''} ${S.view==='booking'?'booking-view':''}">` + (S.view==='panel'?rPanel():S.view==='booking'?rBooking():rAdmin())+`</div>`;
+  document.body.className=S.view==='panel'?'body-panel':'';app.innerHTML=rNav()+`<div class="main${S.view==='panel'?' panel-view':''} ${S.view==='booking'?'booking-view':''}">` + (S.view==='panel'?rPanel():S.view==='booking'?rBooking():rAdmin())+`</div>`;
   bindMain();
 }
 
@@ -414,65 +414,66 @@ function rQB(){
 }
 
 function rBooking(){
+  const isToday=S.bookDate.toDateString()===now().toDateString();
   const ev=(S.rooms[S.selRoom]||{events:[]}).events||[];
-  const room=S.config.rooms[S.selRoom];
-  const startH=S.bookStartH||'08:00';
-  return`${S.bookMsg?`<div class="${S.bookMsg.ok?'success-box':'error-box'}" style="margin-bottom:12px">${S.bookMsg.text}</div>`:''}
-  <div style="max-width:600px;margin:0 auto">
-    <div class="card"><div class="card-title">Room</div>
-      ${S.config.rooms.map((r,i)=>{
-        const st=getCur((S.rooms[i]||{events:[]}).events||[])?'busy':'available';
-        return`<div class="room-opt${i===S.selRoom?' sel':''}" onclick="A.selRoom(${i})">
-          <div><div class="room-opt-name">${r.name}</div>${r.capacity?`<div style="font-size:11px;color:var(--tx3)">&#128101; ${r.capacity}</div>`:''}</div>
-          <div class="ros-${st}">${st==='busy'?'&#9679; Busy':'&#9679; Free'}</div></div>`;
-      }).join('')}
+  const slots=genSlots(S.bookDate,ev);
+  return`${S.bookMsg?`<div class="${S.bookMsg.ok?'success-box':'error-box'}">${S.bookMsg.text}</div>`:''}
+  <div class="booking-layout">
+    <div>
+      <div class="card"><div class="card-title">Room</div>
+        ${S.config.rooms.map((r,i)=>{
+          const st=getCur((S.rooms[i]||{events:[]}).events||[])?'busy':'available';
+          return`<div class="room-opt${i===S.selRoom?' sel':''}" onclick="A.selRoom(${i})">
+            <div><div class="room-opt-name">${r.name}</div>${r.capacity?`<div style="font-size:11px;color:var(--tx3)">&#128101; ${r.capacity}</div>`:''}</div>
+            <div class="ros-${st}">${st==='busy'?'&#9679; Busy':'&#9679; Free'}</div></div>`;
+        }).join('')}
+      </div>
+      <div class="card"><div class="card-title">Date</div>
+        ${(()=>{
+          const mon=new Date(S.bookDate);mon.setHours(0,0,0,0);mon.setDate(mon.getDate()-((mon.getDay()+6)%7));
+          const dl=['M','T','W','T','F','S','S'];const days=[];
+          for(let i=0;i<7;i++){
+            const d=new Date(mon.getTime()+i*86400000);
+            const sel=d.toDateString()===S.bookDate.toDateString();
+            const isT=d.toDateString()===now().toDateString();
+            days.push('<div onclick="A.pickDate('+d.getTime()+')" style="flex:1;text-align:center;padding:8px 3px;border-radius:9px;cursor:pointer;border:1.5px solid '+(sel?'#d94000':'var(--bdr)')+';background:'+(sel?'rgba(217,64,0,0.08)':'transparent')+';transition:all .15s"><div style="font-size:10px;font-weight:700;color:'+(sel?'#d94000':'var(--tx3)')+'">'+dl[i]+'</div><div style="font-size:15px;font-weight:800;color:'+(sel?'#d94000':isT?'var(--tx)':'var(--tx2)')+';margin-top:2px">'+d.getDate()+'</div><div style="width:5px;height:5px;border-radius:50%;background:'+(isT?'#d94000':'transparent')+';margin:3px auto 0"></div></div>');
+          }
+          const mL=mon.toLocaleDateString('en-GB',{month:'short',day:'numeric'});
+          const sun=new Date(mon.getTime()+6*86400000);
+          const sL=sun.toLocaleDateString('en-GB',{month:'short',day:'numeric'});
+          return '<div style="display:flex;align-items:center;gap:6px;margin-bottom:8px"><button class="date-nav-btn" id="btn-pw">\u2039</button><div style="flex:1;text-align:center;font-size:12px;font-weight:600;color:var(--tx2)">'+mL+' \u2013 '+sL+'</div><button class="date-nav-btn" id="btn-nw">\u203a</button></div><div style="display:flex;gap:5px">'+days.join('')+'</div>';
+        })()}
+        <div style="text-align:center;font-size:12px;color:var(--tx2);margin-top:8px">${fmtDate(S.bookDate)}</div>
+      </div>
+      <div class="card"><div class="card-title">Duration</div>
+        <div class="dur-grid">${[15,30,60,90].map(d=>`<div class="dur-btn${S.bookDur===d&&!S.bookDurCustom?' sel':''}" onclick="A.setDurPreset(${d})">${d<60?d+'m':(d/60)+'h'}</div>`).join('')}</div>
+        <div style="margin-top:8px">
+          <div class="dur-btn${S.bookDurCustom?' sel':''}" style="width:100%;text-align:center;display:flex;align-items:center;justify-content:center;gap:6px" onclick="A.toggleCustomDur()">
+            &#9998; ${S.bookDurCustom?(S.bookDur<60?S.bookDur+'m':Math.floor(S.bookDur/60)+'h'+(S.bookDur%60?S.bookDur%60+'m':'')):'Custom'}
+          </div>
+        </div>
+        ${S.bookDurCustom?`<div style="margin-top:10px;display:flex;align-items:center;gap:10px">
+          <input type="range" min="5" max="480" step="5" value="${S.bookDur}" oninput="A.setCustomDur(this.value)" onchange="A.setDur(parseInt(this.value))" style="flex:1;accent-color:#d94000">
+          <span id="custom-dur-lbl" style="font-family:var(--fm);font-size:13px;font-weight:700;color:#d94000;min-width:48px;text-align:right">${S.bookDur<60?S.bookDur+'m':Math.floor(S.bookDur/60)+'h'+(S.bookDur%60?S.bookDur%60+'m':'')}</span>
+        </div>`:''}
+      </div>
     </div>
-    <div class="card"><div class="card-title">Date</div>
-      ${(()=>{
-        const mon=new Date(S.bookDate);mon.setHours(0,0,0,0);mon.setDate(mon.getDate()-((mon.getDay()+6)%7));
-        const dl=['M','T','W','T','F','S','S'];const days=[];
-        for(let i=0;i<7;i++){
-          const d=new Date(mon.getTime()+i*86400000);
-          const sel=d.toDateString()===S.bookDate.toDateString();
-          const isT=d.toDateString()===now().toDateString();
-          days.push('<div onclick="A.pickDate('+d.getTime()+')" style="flex:1;text-align:center;padding:8px 3px;border-radius:9px;cursor:pointer;border:1.5px solid '+(sel?'#d94000':'var(--bdr)')+';background:'+(sel?'rgba(217,64,0,0.08)':'transparent')+';transition:all .15s"><div style="font-size:10px;font-weight:700;color:'+(sel?'#d94000':'var(--tx3)')+'">'+dl[i]+'</div><div style="font-size:15px;font-weight:800;color:'+(sel?'#d94000':isT?'var(--tx)':'var(--tx2)')+';margin-top:2px">'+d.getDate()+'</div><div style="width:5px;height:5px;border-radius:50%;background:'+(isT?'#d94000':'transparent')+';margin:3px auto 0"></div></div>');
-        }
-        const mL=mon.toLocaleDateString('en-GB',{month:'short',day:'numeric'});
-        const sun=new Date(mon.getTime()+6*86400000);
-        const sL=sun.toLocaleDateString('en-GB',{month:'short',day:'numeric'});
-        return '<div style="display:flex;align-items:center;gap:6px;margin-bottom:8px"><button class="date-nav-btn" id="btn-pw">\u2039</button><div style="flex:1;text-align:center;font-size:12px;font-weight:600;color:var(--tx2)">'+mL+' \u2013 '+sL+'</div><button class="date-nav-btn" id="btn-nw">\u203a</button></div><div style="display:flex;gap:5px">'+days.join('')+'</div>';
-      })()}
-      <div style="text-align:center;font-size:12px;color:var(--tx2);margin-top:8px">${fmtDate(S.bookDate)}</div>
-    </div>
-    <div class="card"><div class="card-title">Duration</div>
-      <div class="dur-grid">${[15,30,60,90].map(d=>`<div class="dur-btn${S.bookDur===d&&!S.bookDurCustom?' sel':''}" onclick="A.setDurPreset(${d})">${d<60?d+'m':(d/60)+'h'}</div>`).join('')}</div>
-      <div style="margin-top:8px">
-        <div class="dur-btn${S.bookDurCustom?' sel':''}" style="width:100%;text-align:center;display:flex;align-items:center;justify-content:center;gap:6px" onclick="A.toggleCustomDur()">
-          &#9998; ${S.bookDurCustom?(S.bookDur<60?S.bookDur+'m':Math.floor(S.bookDur/60)+'h'+(S.bookDur%60?S.bookDur%60+'m':'')):'Custom'}
+    <div>
+      <div class="card"><div class="card-title" style="margin-bottom:6px">Timeline &mdash; ${S.config.rooms[S.selRoom].name}</div>
+        ${rTL(S.bookDate,ev)}
+        <div style="display:flex;gap:14px;margin-top:8px;font-size:11px;color:var(--tx3)">
+          <span><span style="color:var(--red)">&#9632;</span> Booked</span>
+          <span><span style="color:var(--amber)">|</span> Now</span>
         </div>
       </div>
-      ${S.bookDurCustom?`<div style="margin-top:10px;display:flex;align-items:center;gap:10px">
-        <input type="range" min="5" max="480" step="5" value="${S.bookDur}" oninput="A.setCustomDur(this.value)" onchange="A.setDur(parseInt(this.value))" style="flex:1;accent-color:#d94000">
-        <span id="custom-dur-lbl" style="font-family:var(--fm);font-size:13px;font-weight:700;color:#d94000;min-width:48px;text-align:right">${S.bookDur<60?S.bookDur+'m':Math.floor(S.bookDur/60)+'h'+(S.bookDur%60?S.bookDur%60+'m':'')}</span>
-      </div>`:''}
-    </div>
-    <div class="card"><div class="card-title">Start Time</div>
-      <div style="display:flex;align-items:center;gap:12px">
-        <input type="time" id="book-time-picker" value="${startH}" min="08:00" max="19:00"
-          onchange="A.setBookTime(this.value)"
-          style="flex:1;padding:12px 14px;border-radius:var(--r);border:1.5px solid ${S.bookStart?'#d94000':'var(--bdr2)'};font-family:var(--fm);font-size:20px;font-weight:700;color:${S.bookStart?'#d94000':'var(--tx)'};outline:none;background:var(--bg);cursor:pointer">
-        ${S.bookStart?`<div style="font-size:12px;color:var(--tx2)">ends <strong style="color:#d94000">${fmt(new Date(fromKey(S.bookStart).getTime()+S.bookDur*60000))}</strong></div>`:'<div style="font-size:12px;color:var(--tx3)">pick a time</div>'}
+      <div class="card"><div class="card-title">Pick Start Time</div>
+        <div class="slot-grid">${slots.map(s=>{
+          const sel=S.bookStart&&tkKey(fromKey(S.bookStart))===s.key;
+          return`<div class="slot-btn${s.busy?' busy':sel?' sel':''}" onclick="${s.busy?'':'A.selSlot(\''+s.key+'\')'}">${s.lbl}</div>`;
+        }).join('')}</div>
       </div>
-      ${(()=>{
-        const n=now();
-        const evHtml=ev.filter(e=>parseT(e.start.dateTime).toDateString()===S.bookDate.toDateString()).map(e=>{
-          const es=fmt(parseT(e.start.dateTime)),ee=fmt(parseT(e.end.dateTime));
-          return`<div style="margin-top:6px;padding:6px 10px;background:var(--rd);border-radius:6px;font-size:11px;color:var(--red);font-weight:600">&#9679; ${e.subject||'Booked'} &middot; ${es}\u2013${ee}</div>`;
-        }).join('');
-        return evHtml?`<div style="margin-top:10px">${evHtml}</div>`:'';
-      })()}
+      ${S.bookStart?rConfirm():''}
     </div>
-    ${S.bookStart?rConfirm():''}
   </div>`;
 }
 function rTL(date,evs){
