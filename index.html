@@ -185,13 +185,10 @@ async function initMsal(tid,cid){
   }catch(e){console.error('MSAL init error:',e);return false;}
 }
 function isMobile(){return/Mobi|Android|iPad|iPhone|Tablet/i.test(navigator.userAgent)||window.innerWidth<900;}
-async function signOut(){
-  if(S.msalInstance&&S.account){
-    try{await S.msalInstance.logoutPopup({account:S.account});}catch(e){console.warn('MSAL logout error:',e);}
-  }
-  stopRefresh();
-  Object.assign(S,{view:'setup',config:null,msalInstance:null,account:null,token:null,rooms:[],discovered:[],picked:[],err:null,bookMsg:null});
-  render();
+function signOut(){
+  const reset=()=>{stopRefresh();Object.assign(S,{view:'setup',config:null,msalInstance:null,account:null,token:null,rooms:[],discovered:[],picked:[],err:null,bookMsg:null});render();};
+  if(S.msalInstance&&S.account){S.msalInstance.logoutPopup({account:S.account}).catch(()=>{}).finally(reset);}
+  else{reset();}
 }
 async function signIn(tid,cid){
   const ok=await initMsal(tid,cid);
@@ -581,6 +578,7 @@ function bindPicker(){
     if(S.config&&S.config.rooms&&S.config.rooms.length>0){S.view='panel';render();startRefresh();}else{S.view='setup';S.config=null;S.token=null;S.discovered=[];S.picked=[];render();}
   });
   document.getElementById('btn-picker-so')?.addEventListener('click',()=>{ signOut(); });
+  document.getElementById('btn-use')?.addEventListener('click',async()=>{
     if(S.picked.length===0){S.err='Select at least one room.';render();return;}
     S.config.rooms=S.picked.map(i=>S.discovered[i]);await finish();
   });
