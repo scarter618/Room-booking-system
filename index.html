@@ -185,6 +185,14 @@ async function initMsal(tid,cid){
   }catch(e){console.error('MSAL init error:',e);return false;}
 }
 function isMobile(){return/Mobi|Android|iPad|iPhone|Tablet/i.test(navigator.userAgent)||window.innerWidth<900;}
+async function signOut(){
+  if(S.msalInstance&&S.account){
+    try{await S.msalInstance.logoutPopup({account:S.account});}catch(e){console.warn('MSAL logout error:',e);}
+  }
+  stopRefresh();
+  Object.assign(S,{view:'setup',config:null,msalInstance:null,account:null,token:null,rooms:[],discovered:[],picked:[],err:null,bookMsg:null});
+  render();
+}
 async function signIn(tid,cid){
   const ok=await initMsal(tid,cid);
   if(!ok)throw new Error('MSAL library failed to load');
@@ -286,8 +294,9 @@ function rPicker(){
   return`<div class="main"><div class="picker-wrap">
     <div style="display:flex;align-items:center;gap:12px;margin-bottom:22px">
       <button class="icon-btn" id="btn-back">←</button>
-      <div><div style="font-size:19px;font-weight:800">Select Rooms</div>
+      <div style="flex:1"><div style="font-size:19px;font-weight:800">Select Rooms</div>
         <div style="font-size:13px;color:var(--tx2);margin-top:2px">${rooms.length} room${rooms.length!==1?'s':''} found · select up to 2</div></div>
+      <button class="btn-nav" id="btn-picker-so" style="color:var(--red);border-color:var(--rb)">Sign out</button>
     </div>
     ${S.err?`<div class="error-box">${S.err}</div>`:''}
     ${rooms.length===0?`<div class="empty" style="padding:20px 0">No room resources found.<br><span style="color:var(--tx3);font-size:12px">Check Exchange Online room configuration and Place.Read.All consent.</span></div>`:''}
@@ -571,7 +580,7 @@ function bindPicker(){
   document.getElementById('btn-back')?.addEventListener('click',()=>{
     if(S.config&&S.config.rooms&&S.config.rooms.length>0){S.view='panel';render();startRefresh();}else{S.view='setup';S.config=null;S.token=null;S.discovered=[];S.picked=[];render();}
   });
-  document.getElementById('btn-use')?.addEventListener('click',async()=>{
+  document.getElementById('btn-picker-so')?.addEventListener('click',()=>{ signOut(); });
     if(S.picked.length===0){S.err='Select at least one room.';render();return;}
     S.config.rooms=S.picked.map(i=>S.discovered[i]);await finish();
   });
@@ -592,9 +601,7 @@ function bindMain(){
     if(S.discovered&&S.discovered.length>0){S.picked=S.config.rooms.map(r=>S.discovered.findIndex(d=>d.email===r.email)).filter(i=>i>=0);S.view='picker';render();}
     else{S.view='discovering';render();try{const tk=await getToken();const found=await discoverRooms(tk);S.discovered=found;S.picked=S.config.rooms.map(r=>found.findIndex(d=>d.email===r.email)).filter(i=>i>=0);S.view='picker';render();}catch(e){S.err='Could not reload rooms: '+e.message;S.view='panel';render();startRefresh();}}
   });
-  document.getElementById('btn-so')?.addEventListener('click',()=>{
-    stopRefresh();Object.assign(S,{view:'setup',config:null,msalInstance:null,account:null,token:null,rooms:[],discovered:[],picked:[],err:null,bookMsg:null});render();
-  });
+  document.getElementById('btn-so')?.addEventListener('click',()=>{ signOut(); });
   document.getElementById('btn-ref')?.addEventListener('click',()=>{loadAll(S.view==='booking'?S.bookDate:new Date()).then(render);});
   document.getElementById('btn-pw')?.addEventListener('click',()=>{S.bookDate=new Date(S.bookDate.getTime()-7*86400000);S.bookStart=null;loadAll(S.bookDate).then(render);render();});
   document.getElementById('btn-nw')?.addEventListener('click',()=>{S.bookDate=new Date(S.bookDate.getTime()+7*86400000);S.bookStart=null;loadAll(S.bookDate).then(render);render();});
