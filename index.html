@@ -25,7 +25,7 @@
   --amber:#f59e0b;--tx:#1a1a1a;--tx2:#5a6070;--tx3:#9aa0aa;
   --ff:'sofia-pro','Sofia Pro','DM Sans',sans-serif;--fm:'JetBrains Mono',monospace;--r:10px;--r2:14px;
 }
-html,body{min-height:100%;background:var(--bg);color:var(--tx);font-family:var(--ff)}
+html,body{min-height:100%;background:var(--bg);color:var(--tx);font-family:var(--ff);overflow:hidden}
 a{color:var(--accent);text-decoration:none}
 input,button{font-family:inherit}
 .nav{display:flex;align-items:center;justify-content:space-between;padding:0 18px;height:48px;background:#ffffff;border-bottom:2px solid #d94000;position:sticky;top:0;z-index:100;box-shadow:0 2px 8px rgba(0,0,0,0.08)}
@@ -38,7 +38,8 @@ input,button{font-family:inherit}
 .nav-user{font-size:12px;color:var(--tx2);font-family:var(--fm)}
 .btn-nav{background:none;border:1px solid var(--bdr2);color:var(--tx2);padding:5px 14px;border-radius:6px;font-size:12px;cursor:pointer;transition:all .15s;font-weight:600}
 .btn-nav:hover{border-color:var(--red);color:var(--red)}
-.main{padding:8px 12px;max-width:100%;margin:0}
+.main{padding:6px 12px 0;max-width:100%;margin:0}
+.main.panel-view{padding:65px 65px 65px}
 .btn{padding:10px 22px;border-radius:var(--r);border:none;cursor:pointer;font-family:var(--ff);font-size:13px;font-weight:700;transition:all .15s;display:inline-flex;align-items:center;gap:8px}
 .btn-primary{background:#d94000;color:#fff}
 .btn-primary:hover{background:#c03800}
@@ -81,7 +82,7 @@ input,button{font-family:inherit}
 .dot-busy{background:#ffffff;animation:pr 2s infinite}
 @keyframes pg{0%,100%{box-shadow:0 0 0 0 rgba(255,255,255,.6)}50%{box-shadow:0 0 0 8px rgba(255,255,255,0)}}
 @keyframes pr{0%,100%{box-shadow:0 0 0 0 rgba(255,255,255,.5)}50%{box-shadow:0 0 0 6px rgba(255,255,255,0)}}
-.panel-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(400px,1fr));gap:10px;height:calc(100vh - 80px);width:100%}
+.panel-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(400px,1fr));gap:10px;width:100%;height:calc(100vh - 178px)}
 .room-panel{border-radius:20px;overflow:hidden;transition:all .4s;position:relative;height:100%;display:flex;flex-direction:column}
 .room-panel.available{background:linear-gradient(160deg,#1db300 0%,#178f00 100%);border:none;box-shadow:0 12px 48px rgba(29,179,0,0.35),0 3px 14px rgba(0,0,0,0.1)}
 .room-panel.busy{background:linear-gradient(160deg,#cc0022 0%,#a80018 100%);border:none;box-shadow:0 12px 48px rgba(204,0,34,0.35),0 3px 14px rgba(0,0,0,0.1)}
@@ -184,12 +185,12 @@ async function initMsal(tid,cid){
     return true;
   }catch(e){console.error('MSAL init error:',e);return false;}
 }
-function isMobile(){return/Mobi|Android|iPad|iPhone|Tablet/i.test(navigator.userAgent)||window.innerWidth<900;}
 function signOut(){
-  const reset=()=>{stopRefresh();Object.assign(S,{view:'setup',config:null,msalInstance:null,account:null,token:null,rooms:[],discovered:[],picked:[],err:null,bookMsg:null});render();};
-  if(S.msalInstance&&S.account){S.msalInstance.logoutPopup({account:S.account}).catch(()=>{}).finally(reset);}
+  var reset=function(){stopRefresh();Object.assign(S,{view:'setup',config:null,msalInstance:null,account:null,token:null,rooms:[],discovered:[],picked:[],err:null,bookMsg:null});render();};
+  if(S.msalInstance&&S.account){S.msalInstance.logoutPopup({account:S.account}).catch(function(){}).finally(reset);}
   else{reset();}
 }
+function isMobile(){return/Mobi|Android|iPad|iPhone|Tablet/i.test(navigator.userAgent)||window.innerWidth<900;}
 async function signIn(tid,cid){
   const ok=await initMsal(tid,cid);
   if(!ok)throw new Error('MSAL library failed to load');
@@ -264,7 +265,7 @@ function render(){
   if(S.view==='setup'){app.innerHTML=rSetup();bindSetup();return;}
   if(S.view==='discovering'){app.innerHTML=rDisc();return;}
   if(S.view==='picker'){app.innerHTML=rPicker();bindPicker();return;}
-  app.innerHTML=rNav()+`<div class="main">${S.view==='panel'?rPanel():S.view==='booking'?rBooking():rAdmin()}</div>`;
+  app.innerHTML=rNav()+`<div class="main${S.view==='panel'?' panel-view':''}">${S.view==='panel'?rPanel():S.view==='booking'?rBooking():rAdmin()}</div>`;
   bindMain();
 }
 
@@ -291,7 +292,7 @@ function rPicker(){
   return`<div class="main"><div class="picker-wrap">
     <div style="display:flex;align-items:center;gap:12px;margin-bottom:22px">
       <button class="icon-btn" id="btn-back">←</button>
-      <div style="flex:1"><div style="font-size:19px;font-weight:800">Select Rooms</div>
+      <div><div style="font-size:19px;font-weight:800">Select Rooms</div>
         <div style="font-size:13px;color:var(--tx2);margin-top:2px">${rooms.length} room${rooms.length!==1?'s':''} found · select up to 2</div></div>
       <button class="btn-nav" id="btn-picker-so" style="color:var(--red);border-color:var(--rb)">Sign out</button>
     </div>
@@ -327,19 +328,14 @@ function rNav(){
     <div class="nav-right">
       <span class="nav-user">${user}</span>
       <button style="background:none;border:1px solid var(--bdr2);color:var(--tx2);padding:5px 14px;border-radius:6px;font-size:12px;cursor:pointer;font-weight:600" id="btn-ch-rooms">Change Rooms</button>
+      <button style="background:none;border:1px solid var(--bdr2);color:var(--tx2);padding:5px 14px;border-radius:6px;font-size:12px;cursor:pointer;font-weight:600" id="btn-ch-rooms">Change Rooms</button>
       <button class="btn-nav" id="btn-so">Sign out</button>
     </div>
   </nav>`;
 }
 
 function rPanel(){
-  const n=now();
-  return`${rQB()}<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
-    <div><h2 style="font-size:16px;font-weight:800">Room Status</h2>
-      <div style="color:var(--tx2);font-size:11px;margin-top:1px">${fmtDate(n)} &nbsp;&middot;&nbsp; <span id="pclock" style="font-family:var(--fm)">${fmt(n)}</span>
-      <span style="margin-left:10px;font-size:10px;color:var(--tx3)">&#8635; auto-refreshes every 60s</span></div></div>
-    <button class="icon-btn" id="btn-ref" title="Refresh now">&#8635;</button>
-  </div><div class="panel-grid">${S.config.rooms.map((_,i)=>rRP(i)).join('')}</div>`;
+  return`${rQB()}<div class="panel-grid">${S.config.rooms.map((_,i)=>rRP(i)).join('')}</div>`;
 }
 
 function rRP(i){
@@ -372,7 +368,13 @@ function rRP(i){
   return`<div class="room-panel ${st}">
     <div class="rp-status-bar ${st}"></div>
     <div class="rp-head">
-      <div><div class="rp-name">${room.name}</div>${room.capacity?`<div class="rp-cap">&#128101; ${room.capacity} people</div>`:''}</div>
+      <div>
+        <div class="rp-name">${room.name}</div>
+        <div style="display:flex;align-items:center;gap:10px;margin-top:4px">
+          ${room.capacity?`<div class="rp-cap">&#128101; ${room.capacity} people</div>`:''}
+          <div style="font-size:12px;color:rgba(255,255,255,0.8);font-family:var(--fm)"><span id="pclock${i}" style="font-weight:700">${fmt(now())}</span> &nbsp;<span>${fmtDate(now())}</span></div>
+        </div>
+      </div>
       <div class="badge badge-${st}"><div class="dot dot-${st}"></div>${st==='busy'?'IN USE':'AVAILABLE'}</div>
     </div>
     <hr class="rp-div"><div class="rp-body">${body}</div>
@@ -433,12 +435,12 @@ function rBooking(){
             const d=new Date(mon.getTime()+i*86400000);
             const sel=d.toDateString()===S.bookDate.toDateString();
             const isT=d.toDateString()===now().toDateString();
-            days.push('<div onclick="A.pickDate('+d.getTime()+'" style="flex:1;text-align:center;padding:8px 3px;border-radius:9px;cursor:pointer;border:1.5px solid '+(sel?'#d94000':'var(--bdr)')+';background:'+(sel?'rgba(217,64,0,0.08)':'transparent')+';transition:all .15s"><div style="font-size:10px;font-weight:700;color:'+(sel?'#d94000':'var(--tx3)')+'">'+(dl[i])+'</div><div style="font-size:15px;font-weight:800;color:'+(sel?'#d94000':isT?'var(--tx)':'var(--tx2)')+';margin-top:2px">'+d.getDate()+'</div><div style="width:5px;height:5px;border-radius:50%;background:'+(isT?'#d94000':'transparent')+';margin:3px auto 0"></div></div>');
+            days.push('<div onclick="A.pickDate('+d.getTime()+')" style="flex:1;text-align:center;padding:8px 3px;border-radius:9px;cursor:pointer;border:1.5px solid '+(sel?'#d94000':'var(--bdr)')+';background:'+(sel?'rgba(217,64,0,0.08)':'transparent')+';transition:all .15s"><div style="font-size:10px;font-weight:700;color:'+(sel?'#d94000':'var(--tx3)')+'">'+dl[i]+'</div><div style="font-size:15px;font-weight:800;color:'+(sel?'#d94000':isT?'var(--tx)':'var(--tx2)')+';margin-top:2px">'+d.getDate()+'</div><div style="width:5px;height:5px;border-radius:50%;background:'+(isT?'#d94000':'transparent')+';margin:3px auto 0"></div></div>');
           }
           const mL=mon.toLocaleDateString('en-GB',{month:'short',day:'numeric'});
           const sun=new Date(mon.getTime()+6*86400000);
           const sL=sun.toLocaleDateString('en-GB',{month:'short',day:'numeric'});
-          return '<div style="display:flex;align-items:center;gap:6px;margin-bottom:8px"><button class="date-nav-btn" id="btn-pw">‹</button><div style="flex:1;text-align:center;font-size:12px;font-weight:600;color:var(--tx2)">'+mL+' – '+sL+'</div><button class="date-nav-btn" id="btn-nw">›</button></div><div style="display:flex;gap:5px">'+days.join('')+'</div>';
+          return '<div style="display:flex;align-items:center;gap:6px;margin-bottom:8px"><button class="date-nav-btn" id="btn-pw">\u2039</button><div style="flex:1;text-align:center;font-size:12px;font-weight:600;color:var(--tx2)">'+mL+' \u2013 '+sL+'</div><button class="date-nav-btn" id="btn-nw">\u203a</button></div><div style="display:flex;gap:5px">'+days.join('')+'</div>';
         })()}
         <div style="text-align:center;font-size:12px;color:var(--tx2);margin-top:8px">${fmtDate(S.bookDate)}</div>
       </div>
@@ -577,7 +579,7 @@ function bindPicker(){
   document.getElementById('btn-back')?.addEventListener('click',()=>{
     if(S.config&&S.config.rooms&&S.config.rooms.length>0){S.view='panel';render();startRefresh();}else{S.view='setup';S.config=null;S.token=null;S.discovered=[];S.picked=[];render();}
   });
-  document.getElementById('btn-picker-so')?.addEventListener('click',()=>{ signOut(); });
+  document.getElementById('btn-picker-so')?.addEventListener('click',function(){signOut();});
   document.getElementById('btn-use')?.addEventListener('click',async()=>{
     if(S.picked.length===0){S.err='Select at least one room.';render();return;}
     S.config.rooms=S.picked.map(i=>S.discovered[i]);await finish();
@@ -587,7 +589,7 @@ function bindPicker(){
 async function finish(){
   S.rooms=S.config.rooms.map(()=>({events:[],loading:false,error:null}));
   S.selRoom=0;S.view='panel';await saveCfg(S.config);render();
-  await loadAll(new Date());render();startRefresh();
+  await loadAll(new Date());render();fitGrid();startRefresh();
 }
 
 function bindMain(){
@@ -599,7 +601,7 @@ function bindMain(){
     if(S.discovered&&S.discovered.length>0){S.picked=S.config.rooms.map(r=>S.discovered.findIndex(d=>d.email===r.email)).filter(i=>i>=0);S.view='picker';render();}
     else{S.view='discovering';render();try{const tk=await getToken();const found=await discoverRooms(tk);S.discovered=found;S.picked=S.config.rooms.map(r=>found.findIndex(d=>d.email===r.email)).filter(i=>i>=0);S.view='picker';render();}catch(e){S.err='Could not reload rooms: '+e.message;S.view='panel';render();startRefresh();}}
   });
-  document.getElementById('btn-so')?.addEventListener('click',()=>{ signOut(); });
+  document.getElementById('btn-so')?.addEventListener('click',function(){signOut();});
   document.getElementById('btn-ref')?.addEventListener('click',()=>{loadAll(S.view==='booking'?S.bookDate:new Date()).then(render);});
   document.getElementById('btn-pw')?.addEventListener('click',()=>{S.bookDate=new Date(S.bookDate.getTime()-7*86400000);S.bookStart=null;loadAll(S.bookDate).then(render);render();});
   document.getElementById('btn-nw')?.addEventListener('click',()=>{S.bookDate=new Date(S.bookDate.getTime()+7*86400000);S.bookStart=null;loadAll(S.bookDate).then(render);render();});
@@ -612,7 +614,7 @@ function bindMain(){
       S.qb=null;S.qbErr=null;
       S.bookMsg={ok:true,text:`&#9889; "${title}" booked in ${room.name} &middot; ${fmt(s)} &ndash; ${fmt(e)}`};
       await loadAll(new Date());render();
-      setTimeout(()=>{S.bookMsg=null;render();},7000);
+      setTimeout(async()=>{await loadAll(new Date());render();},5000);
     }catch(err){S.qbErr=`Failed: ${err.message}`;render();}
   });
   document.getElementById('btn-confirm')?.addEventListener('click',async()=>{
@@ -623,15 +625,23 @@ function bindMain(){
       await createBooking(room.email,title,s,e);
       S.bookMsg={ok:true,text:`Booked "${title}" in ${room.name} from ${fmt(s)} to ${fmt(e)}`};
       S.bookStart=null;await loadAll(S.bookDate);render();
-      setTimeout(()=>{S.bookMsg=null;render();},6000);
+      setTimeout(async()=>{await loadAll(new Date());render();},5000);
     }catch(e){S.bookMsg={ok:false,text:`Booking failed: ${e.message}`};render();}
   });
 }
 
+function fitGrid(){
+  const g=document.querySelector('.panel-grid');
+  if(!g)return;
+  const top=g.getBoundingClientRect().top;
+  g.style.height=(window.innerHeight-top-8)+'px';
+}
 function startRefresh(){
   stopRefresh();
-  S.refreshId=setInterval(async()=>{if(S.view==='panel'||S.view==='admin'){await loadAll(new Date());render();}},60000);
-  S.clockId=setInterval(()=>{const el=document.getElementById('pclock');if(el)el.textContent=fmt(now());},1000);
+  S.refreshId=setInterval(async()=>{if(S.view==='panel'||S.view==='admin'){await loadAll(new Date());render();fitGrid();}},120000);
+  S.clockId=setInterval(()=>{const t=fmt(now());document.querySelectorAll('[id^="pclock"]').forEach(el=>el.textContent=t);},1000);
+  window.onresize=fitGrid;
+  setTimeout(fitGrid,50);
 }
 function stopRefresh(){if(S.refreshId){clearInterval(S.refreshId);S.refreshId=null;}if(S.clockId){clearInterval(S.clockId);S.clockId=null;}}
 
