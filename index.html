@@ -187,9 +187,21 @@ async function initMsal(tid,cid){
   }catch(e){console.error('MSAL init error:',e);return false;}
 }
 function signOut(){
-  var reset=function(){stopRefresh();Object.assign(S,{view:'setup',config:null,msalInstance:null,account:null,token:null,rooms:[],discovered:[],picked:[],err:null,bookMsg:null});render();};
-  if(S.msalInstance&&S.account){S.msalInstance.logoutPopup({account:S.account}).catch(function(){}).finally(reset);}
-  else{reset();}
+  try{window.storage&&window.storage.delete('oq-rooms-cfg');}catch(e){}
+  try{sessionStorage.clear();}catch(e){}
+  var reset=function(){
+    stopRefresh();
+    Object.assign(S,{view:'setup',config:null,msalInstance:null,account:null,token:null,rooms:[],discovered:[],picked:[],err:null,bookMsg:null,qb:null,qbErr:null});
+    render();
+  };
+  if(S.msalInstance&&S.account){
+    if(isMobile()){
+      reset();
+      try{S.msalInstance.logoutRedirect({account:S.account});}catch(e){}
+    }else{
+      S.msalInstance.logoutPopup({account:S.account}).catch(function(){}).finally(reset);
+    }
+  }else{reset();}
 }
 function isMobile(){return/Mobi|Android|iPad|iPhone|Tablet/i.test(navigator.userAgent)||window.innerWidth<900;}
 async function signIn(tid,cid){
@@ -699,6 +711,8 @@ return{
         console.error('Redirect handle error:',e);
       }
     }
+    // If redirect back with no result, clear pending and go to setup
+    sessionStorage.removeItem('oq-pending-cfg');
     render();
   }
 };
